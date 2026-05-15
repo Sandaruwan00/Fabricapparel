@@ -1,8 +1,25 @@
 <?php
 include_once '../commons/session.php';
+include_once '../model/order_model.php';
 
 //get user information from session
 $userrow = $_SESSION["user"];
+
+$orderObj = new Order();
+$orderresult = $orderObj->getAllOrders();
+
+$ongoingCount = 0;
+$pendingCount = 0;
+
+while ($row = $orderresult->fetch_assoc()) {
+
+    if ($row["status_id"] == 6) {
+        $ongoingCount++;
+    }
+    else if ($row["status_id"] == 5) {
+        $pendingCount++;
+    }
+}
 ?>
 <html>
 <head>
@@ -36,21 +53,21 @@ $userrow = $_SESSION["user"];
                     <div class="card-header">Production Completed</div>
                     <div class="card-body">
                         <h1 class="card-title">
-                            <?php echo "2"; ?> </h1>
+                            <?php echo "-"; ?> </h1>
                     </div>
                 </div>
         <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
-                    <div class="card-header">Current Productions</div>
+                    <div class="card-header">Ongoing Productions</div>
                     <div class="card-body">
                         <h1 class="card-title">
-                            <?php echo "2"; ?> </h1>
+                            <?php echo $ongoingCount; ?> </h1>
                     </div>
                 </div>
         <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
-                    <div class="card-header">-------------</div>
+                    <div class="card-header">Pending Productions</div>
                     <div class="card-body">
                         <h1 class="card-title">
-                            <?php echo "2"; ?>
+                            <?php echo $pendingCount; ?>
                         </h1>
                     </div>
                 </div>
@@ -58,7 +75,7 @@ $userrow = $_SESSION["user"];
                     <div class="card-header">-------------</div>
                     <div class="card-body">
                         <h1 class="card-title">
-                            <?php echo "2"; ?> </h1>
+                            <?php echo "-"; ?> </h1>
                     </div>
                 </div>
             </div>
