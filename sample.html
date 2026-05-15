@@ -1,0 +1,68 @@
+^\s*$\n
+
+CREATE TABLE buyer_company (
+    company_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    company_name VARCHAR(150) NOT NULL,
+    company_registration VARCHAR(100) NOT NULL UNIQUE,
+    business_type VARCHAR(50) NOT NULL,
+    website VARCHAR(255) NOT NULL,
+
+    company_address_line_1 VARCHAR(255) NOT NULL,
+    company_address_line_2 VARCHAR(255) NOT NULL,
+    company_city VARCHAR(100) NOT NULL,
+    company_postal_code VARCHAR(20) NOT NULL,
+    company_country VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE buyer_contact_person (
+    contact_person_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    company_id INT NOT NULL,
+
+    title VARCHAR(10) NOT NULL,
+    contact_name VARCHAR(150) NOT NULL,
+    job_title VARCHAR(100) NOT NULL,
+
+    contact_email VARCHAR(150) NOT NULL UNIQUE,
+    contact_phone VARCHAR(50) NOT NULL UNIQUE,
+
+    office_address_line_1 VARCHAR(255) NOT NULL,
+    office_address_line_2 VARCHAR(255) NOT NULL,
+    office_address_line_3 VARCHAR(255) NOT NULL,
+
+    contact_person_status INT(11)
+
+
+);
+
+CREATE TABLE buyer_contact_person (
+    contact_person_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    company_id INT NOT NULL,
+
+    title VARCHAR(10) NOT NULL,
+    contact_name VARCHAR(150) NOT NULL,
+    job_title VARCHAR(100) NOT NULL,
+
+    contact_email VARCHAR(150) NOT NULL UNIQUE,
+    contact_phone VARCHAR(50) NOT NULL UNIQUE,
+
+    office_address_line_1 VARCHAR(255) NOT NULL,
+    office_address_line_2 VARCHAR(255) NOT NULL,
+    office_address_line_3 VARCHAR(255) NOT NULL,
+
+    contact_person_status INT(11) NOT NULL DEFAULT 1
+);
+
+ALTER TABLE buyer_company
+ADD buyer_company_status INT(11) NOT NULL DEFAULT 1;
+
+$company_name, $company_registration, $business_type, $website, $company_address_line_1, $company_address_line_2, $company_city, $company_postal_code, $company_country
+
+$sql = "INSERT INTO buyer_contact_person (title, contact_name, job_title, contact_email, contact_phone, office_address_line_1, office_address_line_2, office_address_line_3) VALUES ('$title', '$contact_name', '$job_title', '$contact_email', '$contact_phone', '$office_address_line_1', '$office_address_line_2', '$office_address_line_3')";
+
+
+
+
+
