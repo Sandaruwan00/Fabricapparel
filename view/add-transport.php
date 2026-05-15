@@ -198,7 +198,7 @@ $driverResults = $transportObj->getAllAvailableDrivers();
     <div class="modal fade" id="assignModal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-success">
+                <div class="modal-header bg-success text-white">
                     <h5>Assign Confirmation</h5>
                 </div>
                 <form action="../controller/transport_controller.php?status=assign_transport" method="post">
