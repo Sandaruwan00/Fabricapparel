@@ -1,8 +1,5 @@
 <?php
 include_once '../commons/session.php';
-include_once '../model/module_model.php';
-include_once '../model/user_model.php';
-//get user information from session
 $userrow = $_SESSION["user"];
 ?>
 <html>
@@ -23,8 +20,8 @@ $userrow = $_SESSION["user"];
             <div class="col-md-8" style="text-align:right;">
                 <div class="btn-group">
                     <a href="add-expense.php" class="btn btn-outline-primary active">Add Expense</a>
-                    <a href="" class="btn btn-outline-success">View Expenses</a>
-                    <a href="" class="btn btn-outline-warning">Generate Finance Report</a>
+                    <a href="view-expenses.php" class="btn btn-outline-success">View Expenses</a>
+                    <a href="generate-finance-report.php" class="btn btn-outline-warning">Generate Finance Report</a>
                 </div>
             </div>
         </div>
@@ -62,23 +59,30 @@ $userrow = $_SESSION["user"];
                                 </select>
                             </div>
 
+                            
+
                             <div class="mb-3">
                                 <label class="form-label">Expense Amount</label>
+                                <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text" id="btnGroupAddon">Rs</div>
+                                </div>
                                 <input type="number" step="0.01" name="expense_amount" class="form-control" placeholder="Enter Amount" required>
+                            </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Expense Date</label>
-                                <input type="date" name="expense_date" class="form-control" required>
+                                <input type="date" name="expense_date" class="form-control" value="<?php echo date('Y-m-d'); ?>" required>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Description</label>
-                                <textarea name="description" rows="4" class="form-control" placeholder="Enter Expense Description"></textarea>
+                                <textarea name="expense_description" rows="4" class="form-control" placeholder="Enter Expense Description" required></textarea>
                             </div>
 
                             <div class="text-end">
-                                <button type="submit" name="btn_add" class="btn btn-danger px-4">Add Expense</button>
+                                <button type="submit" class="btn btn-danger px-4">Add Expense</button>
                             </div>
                         </form>
                     </div>

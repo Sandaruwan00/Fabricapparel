@@ -1,16 +1,29 @@
 <?php
-
 include_once '../commons/session.php';
-include_once '../model/module_model.php';
-include_once '../model/user_model.php';
+include '../model/finance_model.php';
+include_once '../model/order_model.php';
 
 //get user information from session
 $userrow = $_SESSION["user"];
 
+$financeObj = new Finance();
+$orderObj = new Order();
 
+$expensesResult = $financeObj->getAllExpenses();
+$totalExpense = 0;
+while ($expenserow = $expensesResult->fetch_assoc()) {
+  if ($expenserow["expense_status"] == "Approved") {
+    $totalExpense = $totalExpense + $expenserow["expense_amount"];
+  }
+}
 
+$incomeResult = $financeObj->getAllApprovedPayments();
+$totalIncome = 0;
+while ($incomerow = $incomeResult->fetch_assoc()) {
+  $totalIncome = $totalIncome + $incomerow["amount"];
+}
 
-
+$totalProfit = $totalIncome - $totalExpense;
 
 ?>
 
@@ -35,8 +48,8 @@ $userrow = $_SESSION["user"];
       <div class="col-md-8" style="text-align:right;">
         <div class="btn-group">
           <a href="add-expense.php" class="btn btn-outline-primary">Add Expense</a>
-          <a href="" class="btn btn-outline-success">View Expenses</a>
-          <a href="" class="btn btn-outline-warning">Generate Finance Report</a>
+          <a href="view-expenses.php" class="btn btn-outline-success">View Expenses</a>
+          <a href="generate-finance-report.php" class="btn btn-outline-warning">Generate Finance Report</a>
         </div>
       </div>
 
@@ -51,7 +64,7 @@ $userrow = $_SESSION["user"];
         <div class="p-3 rounded bg-light shadow-lg">
           <p class="text-muted mb-1 small">TOTAL INCOME</p>
           <p class="fs-4 fw-bold mb-0">
-            Rs 10,000.00
+            Rs <?php echo number_format($totalIncome, 2); ?>
           </p>
         </div>
       </div>
@@ -61,7 +74,7 @@ $userrow = $_SESSION["user"];
         <div class="p-3 rounded bg-light shadow-lg">
           <p class="text-muted mb-1 small">TOTAL EXPENSES</p>
           <p class="fs-4 fw-bold mb-0 text-danger">
-            Rs 10,000.00
+            Rs <?php echo number_format($totalExpense, 2); ?>
           </p>
         </div>
       </div>
@@ -71,7 +84,7 @@ $userrow = $_SESSION["user"];
         <div class="p-3 rounded bg-light shadow-lg">
           <p class="text-muted mb-1 small">TOTAL PROFIT</p>
           <p class="fs-4 fw-bold mb-0 text-success">
-            Rs 10,000.00
+            Rs <?php echo number_format($totalProfit, 2); ?>
           </p>
         </div>
       </div>

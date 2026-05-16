@@ -123,20 +123,10 @@ $driverResults = $transportObj->getAllAvailableDrivers();
                                 </td>
 
                                 <td>
-                                    <a href="#" class="btn btn-primary btn-sm"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#viewModal"
-                                        onclick="loadshipment('<?php echo $shipment_id; ?>');">
+                                    <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal" onclick="loadshipment('<?php echo $shipment_id; ?>');">
                                         <i class="bi bi-eye-fill"></i> View
                                     </a>
-                                    <a href="#" class="btn btn-success btn-sm"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#assignModal"
-                                        onclick="loadassign(
-                                        '<?php echo $shipment_id; ?>',
-                                        '<?php echo $Row['district_id']; ?>',
-                                        '<?php echo $shipment_id; ?>'
-                                    );">
+                                    <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadassign('<?php echo $shipment_id; ?>','<?php echo $Row['district_id']; ?>','<?php echo $shipment_id; ?>');">
                                         <i class="bi bi-link"></i> Assign
                                     </a>
                                 </td>
