@@ -29,22 +29,67 @@ $userrow = $_SESSION["user"];
 
     <div class="row">
       <div class="col-md-4" style="text-align:left;">
-                <a href="dashboard.php" type="button" class="btn btn-outline-secondary">Back</a>
+        <a href="dashboard.php" type="button" class="btn btn-outline-secondary">Back</a>
 
       </div>
-      <div class="col-md-4" style="text-align:center;">
-
+      <div class="col-md-8" style="text-align:right;">
+        <div class="btn-group">
+          <a href="add-expense.php" class="btn btn-outline-primary">Add Expense</a>
+          <a href="" class="btn btn-outline-success">View Expenses</a>
+          <a href="" class="btn btn-outline-warning">Generate Finance Report</a>
+        </div>
       </div>
-      
+
     </div>
- 
 
+    <div class="row">&nbsp;</div>
 
+    <div class="row cardgroupstyle">
 
+      <!-- TOTAL ORDER COST -->
+      <div class="col-md-4">
+        <div class="p-3 rounded bg-light shadow-lg">
+          <p class="text-muted mb-1 small">TOTAL INCOME</p>
+          <p class="fs-4 fw-bold mb-0">
+            Rs 10,000.00
+          </p>
+        </div>
+      </div>
 
+      <!-- TOTAL PAYMENTS -->
+      <div class="col-md-4">
+        <div class="p-3 rounded bg-light shadow-lg">
+          <p class="text-muted mb-1 small">TOTAL EXPENSES</p>
+          <p class="fs-4 fw-bold mb-0 text-danger">
+            Rs 10,000.00
+          </p>
+        </div>
+      </div>
 
+      <!-- DUE AMOUNT -->
+      <div class="col-md-4">
+        <div class="p-3 rounded bg-light shadow-lg">
+          <p class="text-muted mb-1 small">TOTAL PROFIT</p>
+          <p class="fs-4 fw-bold mb-0 text-success">
+            Rs 10,000.00
+          </p>
+        </div>
+      </div>
 
+    </div>
 
+    <div class="row">&nbsp;</div>
+
+    <div class="row cardgroupstyle">
+      <div class="col-md-3">
+        <a href="" class="text-decoration-none">
+          <div class="card shadow-sm text-center p-3">
+            <h4>Refund Management</h4>
+            <p>Handle customer refunds and transaction reversals</p>
+          </div>
+        </a>
+      </div>
+    </div>
 
 
 
