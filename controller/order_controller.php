@@ -224,12 +224,115 @@ switch ($status) {
             window.location = "../view/order-payments.php?msg=<?php echo $msg; ?>";
         </script>
 
-<?php
+        <?php
 
         break;
 
+
     case "order_refund_request":
 
+        $order_id = $_POST["order_id"];
+        $refund_amount = $_POST["refund_amount"];
+        $remarks = $_POST["remarks"];
+        $total_order_cost = $_POST["total_order_cost"];
+
+
+
+
+
+        try {
+
+            if ($total_order_cost < $refund_amount) {
+                throw new Exception("Refund amount exceeded");
+            }
+
+            $requestedrefund = 0;
+            $orderRefundResult = $orderObj->getAllOrderRefunds();
+            while ($row = $orderRefundResult->fetch_assoc()) {
+                if ($row["order_id"] == $order_id && $row["refund_status"] != "Rejected") {
+                    $requestedrefund = $requestedrefund + $row["refund_amount"];
+                }
+            }
+
+            if ($requestedrefund >= $refund_amount) {
+                throw new Exception("Already Requested Refund");
+            }
+
+            $orderObj->addOrderRefund($order_id, $refund_amount, $remarks);
+
+            $msg = "Refund Request Added";
+            $msg = base64_encode($msg);
+            $order_id = base64_encode($order_id);
+        ?>
+            <script>
+                window.location = "../view/view-order.php?order_id=<?php echo $order_id; ?>&msg=<?php echo urlencode($msg); ?>";
+            </script>
+        <?php
+
+        } catch (Exception $ex) {
+            $msg = $ex->getMessage();
+            $msg = base64_encode($msg);
+            $order_id = base64_encode($order_id);
+        ?>
+            <script>
+                window.location = "../view/view-order.php?order_id=<?php echo $order_id; ?>&msg=<?php echo urlencode($msg); ?>";
+            </script>
+        <?php
+        }
+        break;
+
+    case "reject_refund":
+
+        $refund_id = $_POST["refund_id"];
+
+        try {
+
+            $orderObj->rejectRefund($refund_id);
+
+            $msg = "Refund Rejected";
+            $msg = base64_encode($msg);
+        ?>
+            <script>
+                window.location = "../view/order-refund.php?msg=<?php echo $msg; ?>";
+            </script>
+        <?php
+
+        } catch (Exception $ex) {
+            $msg = $ex->getMessage();
+            $msg = base64_encode($msg);
+        ?>
+            <script>
+                window.location = "../view/order-refund.php?msg=<?php echo $msg; ?>";
+            </script>
+        <?php
+        }
+        break;
+
+    case "approve_refund":
+
+        $refund_id = $_POST["refund_id"];
+
+        try {
+
+            $orderObj->approveRefund($refund_id);
+
+            $msg = "Refund Approved";
+            $msg = base64_encode($msg);
+        ?>
+            <script>
+                window.location = "../view/order-refund.php?msg=<?php echo $msg; ?>";
+            </script>
+        <?php
+
+        } catch (Exception $ex) {
+            $msg = $ex->getMessage();
+            $msg = base64_encode($msg);
+        ?>
+            <script>
+                window.location = "../view/order-refund.php?msg=<?php echo $msg; ?>";
+            </script>
+<?php
+        }
         break;
 }
 

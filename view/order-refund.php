@@ -5,7 +5,7 @@ include_once '../model/order_model.php';
 $userrow = $_SESSION["user"];
 
 $orderObj = new Order();
-$orderPaymentResult = $orderObj->getAllOrderPayments();
+$orderPaymentRequestResult = $orderObj->getAllOrderRefunds();
 ?>
 
 <html>
@@ -36,37 +36,131 @@ $orderPaymentResult = $orderObj->getAllOrderPayments();
 
 
 
-        <!-- Message -->
-        <?php if (isset($_GET["msg"])) { ?>
-            <div class="row justify-content-center" id="msg">
-                <div class="col-md-6 alert alert-success text-center">
-                    <?php echo base64_decode($_GET["msg"]); ?>
-                </div>
-            </div>
-        <?php } ?>
-
+        
         <!-- Table -->
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover align-middle" id="ordertable">
+                    <table class="table table-striped table-bordered table-hover align-middle" id="refundtable">
                         <thead class="table-secondary text-center">
                             <tr>
                                 <th width="5%">#</th>
                                 <th width="15%">Order No.</th>
                                 <th width="20%">Company Name</th>
-                                <th width="13%">Order Amount</th>
-                                <th width="12%">Payments</th>
-                                <th width="15%" class="text-center">Payment Status</th>
+                                <th width="13%">Refund Amount (Rs)</th>
+                                <th width="15%" class="text-center">Refund Status</th>
                                 <th width="20%">&nbsp;</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                                <?php
+                                while ($row = $orderPaymentRequestResult->fetch_assoc()) {
+                                ?>
+                                    <tr>
+                                        <td><?php echo $row["refund_id"]; ?></td>
+                                        <td><?php echo "ORD".$row["order_id"]; ?></td>
+                                        <td><?php echo $row["company_name"]; ?></td>
+                                        <td><?php echo $row["refund_amount"]; ?></td>
+
+                                        <?php
+                                        if ($row["refund_status"] == "Pending") {
+                                            $bg = "bg-warning";
+                                        } elseif ($row["refund_status"] == "Approved") {
+                                            $bg = "bg-success";
+                                        } elseif ($row["refund_status"] == "Processed") {
+                                            $bg = "bg-info";
+                                        } else {
+                                            $bg = "bg-danger";
+                                        }
+                                        ?>
+
+                                        <td class="text-center <?php echo $bg; ?>"><?php echo $row["refund_status"]; ?></td>
+                                        <td>
+                                            <?php
+                                            if ($row["refund_status"] == "Pending") { ?>
+                                                <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#approveModal" onclick="approveRefund('<?php echo $row['refund_id']; ?>');">
+                                                    <i class="bi bi-check-circle"></i> Approve
+                                                </a>
+                                                <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rejectModal" onclick="rejectRefund('<?php echo $row['refund_id']; ?>');"><i class="bi bi-x-circle"></i> Reject</a>
+
+                                            <?php
+                                            }
+                                            ?>
+                                        </td>
+                                    </tr>
+                                <?php
+                                }
+                                ?>
+                            </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+
+
+     <!-- approve modal -->
+    <div class="modal fade" id="approveModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Approve Refund</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form action="../controller/order_controller.php?status=approve_refund" method="post">
+                    <input type="hidden" name="refund_id" id="approve_refund_id">
+
+                    <div class="modal-body">Are you sure you want to approve this refund?</div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function approveRefund(refund_id) {
+            document.getElementById("approve_refund_id").value = refund_id;
+        }
+    </script>
+
+    <!-- reject modal -->
+    <div class="modal fade" id="rejectModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Reject Refund</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form action="../controller/order_controller.php?status=reject_refund" method="post">
+                    <input type="hidden" name="refund_id" id="reject_refund_id">
+
+                    <div class="modal-body">Are you sure you want to refund this expense?</div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function rejectRefund(refund_id) {
+            document.getElementById("reject_refund_id").value = refund_id;
+        }
+    </script>
+    
 
     <?php include_once '../includes/footer_includes.php'; ?>
 
@@ -77,11 +171,13 @@ $orderPaymentResult = $orderObj->getAllOrderPayments();
 
 <script src="../js/jquery-3.7.1.js"></script>
 <script src="../bootstrap/dist/js/bootstrap.js"></script>
+<script src="../js/datatable/bootstrap.bundle.min.js"></script>
+<script src="../js/datatable/dataTables.bootstrap5.js"></script>
 <script src="../js/datatable/dataTables.js"></script>
 
 <script>
     $(document).ready(function() {
-        $("#ordertable").DataTable();
+        $("#refundtable").DataTable();
     });
 
     // Hide message
@@ -90,6 +186,36 @@ $orderPaymentResult = $orderObj->getAllOrderPayments();
         if (msg) msg.style.display = "none";
     }, 3000);
 </script>
+
+<!-- alert start -->
+<?php
+$msg = "";
+if (isset($_GET["msg"])) {
+    $msg = base64_decode($_GET["msg"]);
+}
+?>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="msgToast" class="toast align-items-center text-bg-secondary border-0" role="alert" data-bs-delay="5000">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMsg">
+                <!-- Message -->
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let msg = "<?php echo $msg; ?>";
+        if (msg !== "") {
+            document.getElementById("toastMsg").innerText = msg;
+            let toastEl = document.getElementById("msgToast");
+            let toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+    });
+</script>
+<!-- alert end -->
 
 
 </html>

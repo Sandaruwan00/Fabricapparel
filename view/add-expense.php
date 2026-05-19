@@ -55,6 +55,7 @@ $userrow = $_SESSION["user"];
                                     <option value="Vehicle Maintenance">Vehicle Maintenance</option>
                                     <option value="Office Bills">Office Bills</option>
                                     <option value="Transport">Transport</option>
+                                    <option value="Refund">Refund</option>
                                     <option value="Other">Other</option>
                                 </select>
                             </div>

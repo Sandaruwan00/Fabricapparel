@@ -484,39 +484,39 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     <?php } elseif ($totalPayments != 0) { ?>
-                        <div class="modal-body">
-
-                            <p>Submit a refund request for Order <strong>#<?php echo $order_id; ?></strong>?</p>
-
-                            <!-- Refund Summary -->
-                            <div class="rounded p-3 mb-3" style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">Total Order Cost</span>
-                                    <span>Rs <?php echo number_format($totalOrderCost, 2); ?></span>
+                        <form action="../controller/order_controller.php?status=order_refund_request" method="post">
+                            <div class="modal-body">
+                                <p>Submit a refund request for Order <strong>#<?php echo $order_id; ?></strong>?</p>
+                                <!-- Refund Summary -->
+                                <div class="rounded p-3 mb-3" style="background-color: #f8f9fa; border: 1px solid #dee2e6;">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="text-muted">Total Order Cost</span>
+                                        <span>Rs <?php echo number_format($totalOrderCost, 2); ?></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="text-muted">Amount Paid</span>
+                                        <span class="text-success fw-bold">Rs <?php echo number_format($totalPayments, 2); ?></span>
+                                    </div>
+                                    <hr class="my-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="fw-bold">Refund Amount</span>
+                                        <span class="fw-bold text-success fs-5">Rs <?php echo number_format($totalPayments, 2); ?></span>
+                                    </div>
                                 </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">Amount Paid</span>
-                                    <span class="text-success fw-bold">Rs <?php echo number_format($totalPayments, 2); ?></span>
-                                </div>
-                                <hr class="my-2">
-                                <div class="d-flex justify-content-between">
-                                    <span class="fw-bold">Refund Amount</span>
-                                    <span class="fw-bold text-success fs-5">Rs <?php echo number_format($totalPayments, 2); ?></span>
-                                </div>
+                                <label class="form-label fw-bold">Amount <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" name="refund_amount">
+                                <label class="form-label fw-bold mt-3">Remarks <span class="text-danger">*</span></label>
+                                <textarea name="remarks" class="form-control" rows="3" placeholder="Reason for refund..." required></textarea>
+                                <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
+                                <input type="hidden" name="total_order_cost" value="<?php echo $totalOrderCost; ?>">
                             </div>
-
-                            <label class="form-label fw-bold">Remarks <span class="text-danger">*</span></label>
-                            <textarea name="remarks" class="form-control" rows="3" placeholder="Reason for refund..." required></textarea>
-
-                            <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" name="refund_request_submit" class="btn btn-success">
-                                Submit Request
-                            </button>
-                        </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" name="refund_request_submit" class="btn btn-success">
+                                    Submit Request
+                                </button>
+                            </div>
+                        </form>
                     <?php } else { ?>
                         <div class="modal-body text-center py-4">
                             <i class="bi bi-exclamation-circle text-warning" style="font-size: 48px;"></i>

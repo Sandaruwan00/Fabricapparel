@@ -250,4 +250,33 @@ class Order
         $con->query($sql2) or die($con->error);
     }
 
+    public function addOrderRefund($order_id,$refund_amount,$remarks)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "INSERT INTO order_refunds(order_id, refund_amount, remarks) VALUES ('$order_id','$refund_amount','$remarks')";
+        $con->query($sql) or die($con->error);
+    }
+
+    public function getAllOrderRefunds()
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM order_refunds ore, orders o, buyer_company bc WHERE ore.order_id = o.order_id AND o.company_id = bc.company_id";
+        $result = $con->query($sql) or die($con->error);
+        return $result;
+    }
+
+    public function rejectRefund($refund_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "UPDATE order_refunds SET refund_status = 'Rejected' WHERE refund_id = '$refund_id'";
+        $con->query($sql) or die($con->error);
+    }
+    
+    public function approveRefund($refund_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "UPDATE order_refunds SET refund_status = 'Approved' WHERE refund_id = '$refund_id'";
+        $con->query($sql) or die($con->error);
+    }
+
 }
