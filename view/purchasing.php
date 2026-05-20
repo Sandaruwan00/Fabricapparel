@@ -43,14 +43,11 @@ while ($row = $totalSuppliersResult->fetch_assoc()) {
                     <a href="purchase-requests.php" class="btn btn-outline-info">
                         Purchase Requests
                     </a>
-                    <a href="rfq.php" class="btn btn-outline-secondary">
-                        RFQ / Quotations
-                    </a>
                     <a href="purchase-orders.php" class="btn btn-outline-success">
                         Purchase Orders
                     </a>
                     <a href="generate-purchase-reports.php" class="btn btn-outline-warning">
-                        Reports
+                        Generate Purchasing Reports
                     </a>
                 </div>
             </div>
