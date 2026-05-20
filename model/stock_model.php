@@ -271,9 +271,9 @@ class Stock
         JOIN stock s ON spr.stock_item_id = s.stock_item_id
         JOIN stock_items si ON spr.stock_item_id = si.stock_item_id
         JOIN stock_units su ON si.stock_unit_id = su.stock_unit_id
-        JOIN stock_categories sc ON si.stock_category_id = sc.stock_category_id
-        LEFT JOIN user u ON spr.requested_by = u.user_id";
-        return $con->query($sql);
+        JOIN stock_categories sc ON si.stock_category_id = sc.stock_category_id";
+        $result = $con->query($sql);
+        return $result;
     }
 
     public function approvePurchaseRequest($stock_purchase_request_id, $approved_by, $approved_date)

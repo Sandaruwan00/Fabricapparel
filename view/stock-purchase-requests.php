@@ -137,9 +137,7 @@ $lowStockItems = $stockObj->getLowStockItems();
                                 <th>Item</th>
                                 <th>Qty</th>
                                 <th>Status</th>
-                                <th>Requested Date</th>
-                                <th>Approved/Rejected Date</th>
-                                <th>PO</th>
+                                
                             </tr>
                         </thead>
 
@@ -175,12 +173,7 @@ $lowStockItems = $stockObj->getLowStockItems();
                                         <?= $row['request_status']; ?>
                                     </td>
 
-                                    <td><?= $row['requested_date']; ?></td>
-                                    <td><?= $row['approved_rejected_date'] ? $row['approved_rejected_date'] : "-" ; ?></td>
-
-                                    <td>
-                                        <?= $row['po_id'] ? "PO-" . $row['po_id'] : "-"; ?>
-                                    </td>
+                                   
                                 </tr>
                             <?php } ?>
                         </tbody>

@@ -20,12 +20,53 @@ $userrow = $_SESSION["user"];
     <?php $pageName = "STOCK MANAGEMENT" ?>
     <?php include_once "../includes/header_row_module_includes.php"; ?>
 
-
     <div class="row">
       <div class="col-md-4" style="text-align:left;">
         <a href="dashboard.php" type="button" class="btn btn-outline-secondary">Back</a>
       </div>
     </div>
+
+    <div class="row">&nbsp;</div>
+
+    <div class="row d-flex justify-content-around align-items-center shadow-lg" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%); padding: 20px; border-radius:10px;">
+      <span class="h3 mb-4 fw-bold">Stock Summary</span>
+      <div class="row d-flex justify-content-around text-center">
+        <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
+          <div class="card-header">---------</div>
+          <div class="card-body">
+            <h1 class="card-title">
+              0 </h1>
+          </div>
+        </div>
+        <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
+          <div class="card-header">---------</div>
+          <div class="card-body">
+            <h1 class="card-title">
+              0</h1>
+          </div>
+        </div>
+        <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
+          <div class="card-header">---------</div>
+          <div class="card-body">
+            <h1 class="card-title">
+              0
+            </h1>
+          </div>
+        </div>
+        <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
+          <div class="card-header">--------</div>
+          <div class="card-body">
+            <h1 class="card-title">
+              0
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">&nbsp;</div>
+
+
+    
 
     <div class="row mt-4 d-flex justify-content-around align-items-center shadow-lg cardgroupstyle">
 
@@ -66,6 +107,10 @@ $userrow = $_SESSION["user"];
       </div>
 
     </div>
+
+    <div class="row">&nbsp;</div>
+
+
 
 
   </div>
