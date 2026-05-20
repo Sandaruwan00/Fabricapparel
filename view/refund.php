@@ -5,14 +5,14 @@ include_once '../model/order_model.php';
 $userrow = $_SESSION["user"];
 
 $orderObj = new Order();
-$orderPaymentRequestResult = $orderObj->getAllOrderRefunds();
+$orderRefundResult = $orderObj->getAllOrderRefunds();
 ?>
 
 <html>
 
 <head>
     <?php include_once "../includes/bootstrap_css_includes.php" ?>
-    <title>Refund Requests</title>
+    <title>Refund Management</title>
 </head>
 
 
@@ -23,10 +23,10 @@ $orderPaymentRequestResult = $orderObj->getAllOrderRefunds();
 
         <div class="row">
             <div class="col-md-4 text-start">
-                <a href="order.php" class="btn btn-outline-secondary">Back</a>
+                <a href="finance.php" class="btn btn-outline-secondary">Back</a>
             </div>
             <div class="col-md-4 text-center">
-                <h1 style="font-size:28px; font-weight:600;">Refund Requests</h1>
+                <h1 style="font-size:28px; font-weight:600;">Refund Management</h1>
             </div>
 
         </div>
@@ -54,7 +54,7 @@ $orderPaymentRequestResult = $orderObj->getAllOrderRefunds();
                         </thead>
                         <tbody>
                                 <?php
-                                while ($row = $orderPaymentRequestResult->fetch_assoc()) {
+                                while ($row = $orderRefundResult->fetch_assoc()) {
                                 ?>
                                     <tr height="45">
                                         <td><?php echo $row["refund_id"]; ?></td>
@@ -77,11 +77,11 @@ $orderPaymentRequestResult = $orderObj->getAllOrderRefunds();
                                         <td class="text-center <?php echo $bg; ?>"><?php echo $row["refund_status"]; ?></td>
                                         <td>
                                             <?php
-                                            if ($row["refund_status"] == "Pending") { ?>
-                                                <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#approveModal" onclick="approveRefund('<?php echo $row['refund_id']; ?>');">
-                                                    <i class="bi bi-check-circle"></i> Approve
+                                            if ($row["refund_status"] == "Approved") { ?>
+                                                <a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#processModal" onclick="processRefund('<?php echo $row['refund_id']; ?>','<?php echo $row['refund_amount']; ?>');">
+                                                    <i class="bi bi-check-circle"></i> Process
                                                 </a>
-                                                <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rejectModal" onclick="rejectRefund('<?php echo $row['refund_id']; ?>');"><i class="bi bi-x-circle"></i> Reject</a>
+                                                
 
                                             <?php
                                             }
@@ -100,66 +100,72 @@ $orderPaymentRequestResult = $orderObj->getAllOrderRefunds();
 
 
      <!-- approve modal -->
-    <div class="modal fade" id="approveModal">
+    <div class="modal fade" id="processModal">
         <div class="modal-dialog">
             <div class="modal-content">
 
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title">Approve Refund</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title">Process Refund</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <form action="../controller/order_controller.php?status=approve_refund" method="post">
-                    <input type="hidden" name="refund_id" id="approve_refund_id">
+                <form action="../controller/finance_controller.php?status=process_refund" method="post">
+    <input type="hidden" name="refund_id" id="process_refund_id">
 
-                    <div class="modal-body">Are you sure you want to approve this refund?</div>
+    <div class="modal-body">
+        <!-- Refund Amount Display -->
+        <div class="mb-3 p-3 bg-light rounded border">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-semibold text-muted">Refund Amount:</span>
+                <span class="fs-5 fw-bold text-success" id="process_refund_amount">—</span>
+            </div>
+        </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success">Approve</button>
-                    </div>
-                </form>
+        
+
+        <!-- Payment Method -->
+        <div class="mb-3">
+            <label for="process_payment_method" class="form-label fw-semibold">Payment Method <span class="text-danger">*</span></label>
+            <select class="form-select" name="payment_method" id="process_payment_method" required>
+                <option value="" disabled selected>Select payment method</option>
+                <option value="Cash">Cash</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="Cheque">Cheque</option>
+            </select>
+        </div>
+
+        <!-- Reference Number -->
+        <div class="mb-3">
+            <label for="process_ref_no" class="form-label fw-semibold">Reference No. <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="reference_no" id="process_ref_no" placeholder="Enter reference number" required>
+        </div>
+
+        <!-- Remarks -->
+        <div class="mb-3">
+            <label for="process_remarks" class="form-label fw-semibold">Remarks</label>
+            <textarea class="form-control" name="remarks" id="process_remarks" rows="3" placeholder="Enter remarks (optional)"></textarea>
+        </div>
+        <p class="mb-3">Are you sure you want to process this refund?</p>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-info">Process</button>
+    </div>
+</form>
 
             </div>
         </div>
     </div>
 
     <script>
-        function approveRefund(refund_id) {
-            document.getElementById("approve_refund_id").value = refund_id;
+        function processRefund(refund_id,refund_amount) {
+            document.getElementById("process_refund_id").value = refund_id;
+            document.getElementById('process_refund_amount').textContent = 'Rs.' + parseFloat(refund_amount).toLocaleString('en-PH', { minimumFractionDigits: 2 });
         }
     </script>
 
-    <!-- reject modal -->
-    <div class="modal fade" id="rejectModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">Reject Refund</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-
-                <form action="../controller/order_controller.php?status=reject_refund" method="post">
-                    <input type="hidden" name="refund_id" id="reject_refund_id">
-
-                    <div class="modal-body">Are you sure you want to refund this expense?</div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Reject</button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function rejectRefund(refund_id) {
-            document.getElementById("reject_refund_id").value = refund_id;
-        }
-    </script>
+    
     
 
     <?php include_once '../includes/footer_includes.php'; ?>

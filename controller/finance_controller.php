@@ -101,4 +101,34 @@ switch ($status) {
 <?php
         }
         break;
+
+        case "process_refund":
+        
+                $refund_id = $_POST["refund_id"];
+                $remarks = $_POST["remarks"];
+                $payment_method = $_POST["payment_method"];
+                $reference_no = $_POST["reference_no"];
+        
+                try {
+        
+                    $financeObj->processRefund($refund_id,$remarks,$payment_method,$reference_no);
+        
+                    $msg = "Refund Processed";
+                    $msg = base64_encode($msg);
+                ?>
+                    <script>
+                        window.location = "../view/refund.php?msg=<?php echo $msg; ?>";
+                    </script>
+                <?php
+        
+                } catch (Exception $ex) {
+                    $msg = $ex->getMessage();
+                    $msg = base64_encode($msg);
+                ?>
+                    <script>
+                        window.location = "../view/refund.php?msg=<?php echo $msg; ?>";
+                    </script>
+                <?php
+                }
+                break;
 }

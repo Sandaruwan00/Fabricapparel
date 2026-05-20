@@ -42,4 +42,11 @@ class Finance
         $sql = "UPDATE expenses SET expense_status = 'Approved' WHERE expense_id = '$expense_id'";
         $con->query($sql) or die($con->error);
     }
+
+    public function processRefund($refund_id,$remarks,$payment_method,$reference_no)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "UPDATE order_refunds SET remarks='$remarks',payment_method='$payment_method',reference_no='$reference_no',refund_status='Processed' WHERE refund_id = '$refund_id'";
+        $con->query($sql) or die($con->error);
+    }
 }

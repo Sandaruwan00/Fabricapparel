@@ -356,6 +356,39 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                             <?php } ?>
                         </div>
 
+                        <?php
+                        $refundResult = $orderObj->getAllOrderRefunds();
+                        $refundAmount = 0;
+                        $display = 0;
+                        while ($row = $refundResult->fetch_assoc()) {
+                            if ($row["order_id"] == $order_id && $row["refund_status"] == "Processed") {
+                                $refundAmount = $refundAmount + $row["refund_amount"];
+                                $display++;
+                            }
+                        }
+                        if ($display != 0) { ?>
+                            <div class="row g-3 mt-3 mb-3 justify-content-center">
+
+                                <!-- TOTAL REFUND AMOUNT -->
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded bg-success bg-opacity-10 border border-success shadow-lg">
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <i class="bi bi-check-circle-fill text-success"></i>
+                                            <p class="text-success mb-0 small fw-semibold">SUCCESSFULLY REFUNDED</p>
+                                        </div>
+                                        <p class="fs-4 fw-bold mb-0 text-success">
+                                            Rs <?php echo number_format($refundAmount, 2); ?>
+                                        </p>
+                                        <p class="text-muted mb-0 small mt-1">Total refund amount processed</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <?php
+                        }
+                        ?>
+
+
                     </div>
                 </div>
             </div>

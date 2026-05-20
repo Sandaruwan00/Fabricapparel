@@ -9,6 +9,20 @@ $userrow = $_SESSION["user"];
 $financeObj = new Finance();
 $orderObj = new Order();
 
+//calculate total refunds
+$orderRefundResult = $orderObj->getAllOrderRefunds();
+$totalRefunds = 0;
+$approvedRefundsCount = 0;
+while ($refundrow = $orderRefundResult->fetch_assoc()) {
+  if ($refundrow["refund_status"] == "Processed") {
+    $totalRefunds = $totalRefunds + $refundrow["refund_amount"];
+  }
+  if ($refundrow["refund_status"] == "Approved") {
+    $approvedRefundsCount++;
+  }
+}
+
+//calculate total expenses
 $expensesResult = $financeObj->getAllExpenses();
 $totalExpense = 0;
 while ($expenserow = $expensesResult->fetch_assoc()) {
@@ -17,13 +31,15 @@ while ($expenserow = $expensesResult->fetch_assoc()) {
   }
 }
 
+$totalCompanyExpenses = $totalRefunds + $totalExpense;
+
 $incomeResult = $financeObj->getAllApprovedPayments();
 $totalIncome = 0;
 while ($incomerow = $incomeResult->fetch_assoc()) {
   $totalIncome = $totalIncome + $incomerow["amount"];
 }
 
-$totalProfit = $totalIncome - $totalExpense;
+$totalProfit = $totalIncome - $totalCompanyExpenses;
 
 ?>
 
@@ -74,7 +90,7 @@ $totalProfit = $totalIncome - $totalExpense;
         <div class="p-3 rounded bg-light shadow-lg">
           <p class="text-muted mb-1 small">TOTAL EXPENSES</p>
           <p class="fs-4 fw-bold mb-0 text-danger">
-            Rs <?php echo number_format($totalExpense, 2); ?>
+            Rs <?php echo number_format($totalCompanyExpenses, 2); ?>
           </p>
         </div>
       </div>
@@ -95,10 +111,24 @@ $totalProfit = $totalIncome - $totalExpense;
 
     <div class="row cardgroupstyle">
       <div class="col-md-3">
-        <a href="" class="text-decoration-none">
+        <a href="refund.php" class="text-decoration-none">
           <div class="card shadow-sm text-center p-3">
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+              <?php echo $approvedRefundsCount; ?>
+            </span>
             <h4>Refund Management</h4>
             <p>Handle customer refunds and transaction reversals</p>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-3">
+        <a href="refund.php" class="text-decoration-none">
+          <div class="card shadow-sm text-center p-3">
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+              ...
+            </span>
+            <h4>PO Payments</h4>
+            <p>Manage supplier payments for purchase orders</p>
           </div>
         </a>
       </div>
