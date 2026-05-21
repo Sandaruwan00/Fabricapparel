@@ -46,4 +46,12 @@ class Supplier
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
+
+    public function getSupplier($supplier_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM supplier WHERE supplier_id = '$supplier_id'";
+        $result = $con->query($sql) or die($con->error);
+        return $result->fetch_assoc();
+    }
 }

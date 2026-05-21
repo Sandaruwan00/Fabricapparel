@@ -18,7 +18,7 @@ $orderRefundResult = $orderObj->getAllOrderRefunds();
 
 <body>
     <div class="container">
-        <?php $pageName = "ORDER MANAGEMENT" ?>
+        <?php $pageName = "FINANCE MANAGEMENT" ?>
         <?php include_once "../includes/header_row_module_includes.php"; ?>
 
         <div class="row">

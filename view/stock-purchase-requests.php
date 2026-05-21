@@ -150,12 +150,10 @@ $lowStockItems = $stockObj->getLowStockItems();
                                 // Status color
                                 if ($row['request_status'] == 'Pending') {
                                     $statusColor = "bg-warning text-dark";
-                                } elseif ($row['request_status'] == 'Approved') {
+                                } elseif ($row['request_status'] == 'Sent') {
                                     $statusColor = "bg-success";
-                                } elseif ($row['request_status'] == 'Rejected') {
-                                    $statusColor = "bg-danger";
                                 } else {
-                                    $statusColor = "bg-secondary";
+                                    $statusColor = "bg-info";
                                 }
                             ?>
                                 <tr>

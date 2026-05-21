@@ -241,7 +241,7 @@ class Stock
 
             LEFT JOIN stock_purchase_request spr 
                 ON s.stock_item_id = spr.stock_item_id
-                AND spr.request_status IN ('Pending','Approved','RFQ_Sent','Quotation_Received','PO_Created','Completed')
+                AND spr.request_status IN ('Pending','Sent')
 
             WHERE s.quantity <= si.min_stock_level
             AND spr.stock_purchase_request_id IS NULL";
@@ -256,10 +256,10 @@ class Stock
         return $con->query($sql);
     }
 
-    public function addPurchaseRequest($stock_item_id, $requested_qty, $requested_by)
+    public function addPurchaseRequest($stock_item_id, $requested_qty)
     {
         $con = $GLOBALS['con'];
-        $sql = "INSERT INTO stock_purchase_request(stock_item_id,requested_qty,requested_by)VALUES('$stock_item_id','$requested_qty','$requested_by')";
+        $sql = "INSERT INTO stock_purchase_request(stock_item_id,requested_qty)VALUES('$stock_item_id','$requested_qty')";
         $con->query($sql) or die($con->error);
     }
 

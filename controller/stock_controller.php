@@ -353,9 +353,8 @@ switch ($status) {
     case "add_purchase_request":
         $stock_item_id = $_POST["stock_item_id"];
         $requested_qty = $_POST["requested_qty"];
-        $requested_by = $userrow["user_id"];
         try {
-            $stockObj->addPurchaseRequest($stock_item_id, $requested_qty, $requested_by);
+            $stockObj->addPurchaseRequest($stock_item_id, $requested_qty);
             $msg = "Purchase Request Successfully Added!!!";
             $msg = base64_encode($msg);
         ?>
