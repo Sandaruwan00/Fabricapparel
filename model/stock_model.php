@@ -241,7 +241,7 @@ class Stock
 
             LEFT JOIN stock_purchase_request spr 
                 ON s.stock_item_id = spr.stock_item_id
-                AND spr.request_status IN ('Pending','Sent')
+                AND spr.request_status IN ('Pending','Sent','PO Created')
 
             WHERE s.quantity <= si.min_stock_level
             AND spr.stock_purchase_request_id IS NULL";

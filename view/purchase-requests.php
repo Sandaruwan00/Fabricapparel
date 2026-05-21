@@ -34,7 +34,7 @@ $requests = $stockObj->getAllPurchaseRequests();
                     <a href="supplier.php" class="btn btn-outline-primary">
                         Suppliers
                     </a>
-                    <a href="purchase-requests.php" class="btn btn-outline-info">
+                    <a href="purchase-requests.php" class="btn btn-outline-info active">
                         Purchase Requests
                     </a>
                     <a href="purchase-orders.php" class="btn btn-outline-success">

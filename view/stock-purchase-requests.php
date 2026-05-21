@@ -31,7 +31,7 @@ $lowStockItems = $stockObj->getLowStockItems();
             </div>
             <div class="col-md-4 text-end">
                 <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#purchaseRequestModal">
-                    View Purchase Requests
+                    View Sent Purchase Requests
                 </button>
             </div>
         </div>
@@ -121,7 +121,7 @@ $lowStockItems = $stockObj->getLowStockItems();
 
             <!-- Header -->
             <div class="modal-header bg-info text-white">
-                <h5 class="modal-title">Purchase Requests</h5>
+                <h5 class="modal-title">Sent Purchase Requests</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
 
@@ -136,6 +136,7 @@ $lowStockItems = $stockObj->getLowStockItems();
                                 <th>#</th>
                                 <th>Item</th>
                                 <th>Qty</th>
+                                <th>Requested Date</th>
                                 <th>Status</th>
                                 
                             </tr>
@@ -152,6 +153,8 @@ $lowStockItems = $stockObj->getLowStockItems();
                                     $statusColor = "bg-warning text-dark";
                                 } elseif ($row['request_status'] == 'Sent') {
                                     $statusColor = "bg-success";
+                                } elseif ($row['request_status'] == 'PO Created') {
+                                    $statusColor = "bg-secondary";
                                 } else {
                                     $statusColor = "bg-info";
                                 }
@@ -165,6 +168,10 @@ $lowStockItems = $stockObj->getLowStockItems();
 
                                     <td>
                                         <?= $row['requested_qty'] . " " . $row["stock_unit_short_name"]; ?>
+                                    </td>
+
+                                    <td>
+                                        <?= $row['requested_date']; ?>
                                     </td>
 
                                     <td class="text-center <?= $statusColor; ?>">

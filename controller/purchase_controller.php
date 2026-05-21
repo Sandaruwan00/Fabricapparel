@@ -107,7 +107,70 @@ switch ($status) {
             <script>
                 window.location = "../view/purchase-requests.php?msg=<?php echo $msg; ?>";
             </script>
+        <?php
+        }
+        break;
+
+    case "add_purchase_order":
+
+        $stock_purchase_request_id = $_POST["stock_purchase_request_id"];
+        $supplier_id = $_POST["supplier_id"];
+        $ordered_qty = $_POST["ordered_qty"];
+        $unit_price = $_POST["unit_price"];
+        $total_price = $_POST["total_price"];
+
+        $request_status = "PO Created";
+
+
+
+        try {
+
+            $purchaseObj->addPO($stock_purchase_request_id, $supplier_id, $ordered_qty, $unit_price, $total_price);
+            $purchaseObj->updateStockPurchaseRequestStatus($stock_purchase_request_id, $request_status);
+
+            $msg = "Purchase Order Created";
+            $msg = base64_encode($msg);
+        ?>
+            <script>
+                window.location = "../view/purchase-orders.php?msg=<?php echo $msg; ?>";
+            </script>
+        <?php
+
+        } catch (Exception $ex) {
+            $msg = $ex->getMessage();
+            $msg = base64_encode($msg);
+        ?>
+            <script>
+                window.location = "../view/purchase-orders.php?msg=<?php echo $msg; ?>";
+            </script>
 <?php
         }
         break;
+
+        case "reject_po":
+        
+                $po_id = $_POST["po_id"];
+        
+                try {
+        
+                    $purchaseObj->rejectPO($po_id);
+        
+                    $msg = "msg";
+                    $msg = base64_encode($msg);
+                ?>
+                    <script>
+                        window.location = "../view/purchase-orders.php?msg=<?php echo $msg; ?>";
+                    </script>
+                <?php
+        
+                } catch (Exception $ex) {
+                    $msg = $ex->getMessage();
+                    $msg = base64_encode($msg);
+                ?>
+                    <script>
+                        window.location = "../view/purchase-orders.php?msg=<?php echo $msg; ?>";
+                    </script>
+                <?php
+                }
+                break;
 }
