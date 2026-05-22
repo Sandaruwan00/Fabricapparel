@@ -22,6 +22,19 @@ while ($refundrow = $orderRefundResult->fetch_assoc()) {
   }
 }
 
+//calculate total po payments
+$poPaymentsResult = $financeObj->getAllPOPayments();
+$totalPOPayments = 0;
+$pendingPOPaymentsCount = 0;
+while ($popaymentrow = $poPaymentsResult->fetch_assoc()) {
+  if ($popaymentrow["po_payment_status"] == "Paid") {
+    $totalPOPayments = $totalPOPayments + $popaymentrow["po_amount"];
+  }
+  if ($popaymentrow["po_payment_status"] == "Pending") {
+    $pendingPOPaymentsCount++;
+  }
+}
+
 //calculate total expenses
 $expensesResult = $financeObj->getAllExpenses();
 $totalExpense = 0;
@@ -31,7 +44,7 @@ while ($expenserow = $expensesResult->fetch_assoc()) {
   }
 }
 
-$totalCompanyExpenses = $totalRefunds + $totalExpense;
+$totalCompanyExpenses = $totalRefunds + $totalExpense + $totalPOPayments;
 
 $incomeResult = $financeObj->getAllApprovedPayments();
 $totalIncome = 0;
@@ -122,10 +135,10 @@ $totalProfit = $totalIncome - $totalCompanyExpenses;
         </a>
       </div>
       <div class="col-md-3">
-        <a href="refund.php" class="text-decoration-none">
+        <a href="purchase-order-payments.php" class="text-decoration-none">
           <div class="card shadow-sm text-center p-3">
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
-              ...
+              <?php echo $pendingPOPaymentsCount; ?>
             </span>
             <h4>PO Payments</h4>
             <p>Manage supplier payments for purchase orders</p>

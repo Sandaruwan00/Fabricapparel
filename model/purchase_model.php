@@ -94,5 +94,12 @@ class Purchase
         $con->query($sql) or die($con->error);
     }
 
+    public function payPO($po_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "UPDATE purchase_orders SET po_status = 'Paid' WHERE po_id = '$po_id'";
+        $con->query($sql) or die($con->error);
+    }
+
 
 }

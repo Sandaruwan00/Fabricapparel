@@ -161,7 +161,7 @@ $orderRefundResult = $orderObj->getAllOrderRefunds();
     <script>
         function processRefund(refund_id,refund_amount) {
             document.getElementById("process_refund_id").value = refund_id;
-            document.getElementById('process_refund_amount').textContent = 'Rs.' + parseFloat(refund_amount).toLocaleString('en-PH', { minimumFractionDigits: 2 });
+            document.getElementById('process_refund_amount').textContent = 'Rs.' + parseFloat(refund_amount).toLocaleString('en-LK', { minimumFractionDigits: 2 });
         }
     </script>
 

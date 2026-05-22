@@ -94,6 +94,8 @@ $poResults = $purchaseObj->getPOs();
                                 $bg = "bg-success";
                             } elseif ($row["po_status"] == "Delivered") {
                                 $bg = "bg-info";
+                            } elseif ($row["po_status"] == "Paid") {
+                                $bg = "bg-secondary";
                             } else {
                                 $bg = "bg-danger";
                             }

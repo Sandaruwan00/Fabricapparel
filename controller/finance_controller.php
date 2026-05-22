@@ -1,6 +1,7 @@
 <?php
 include '../commons/session.php';
 include '../model/finance_model.php';
+include '../model/purchase_model.php';
 
 $userrow = $_SESSION["user"];
 
@@ -15,6 +16,7 @@ if (!isset($_GET["status"])) {
 $status = $_GET["status"];
 
 $financeObj = new Finance();
+$purchaseObj = new Purchase();
 
 switch ($status) {
 
@@ -131,4 +133,35 @@ switch ($status) {
                 <?php
                 }
                 break;
+
+                case "pay_po":
+                
+                        $po_id = $_POST["po_id"];
+                        $po_payment_id = $_POST["po_payment_id"];
+                        $payment_method = $_POST["payment_method"];
+                        $reference_no = $_POST["reference_no"];
+                
+                        try {
+                
+                            $financeObj->payPOPayment($po_payment_id,$payment_method,$reference_no);
+                            $purchaseObj->payPO($po_id);
+                
+                            $msg = "Payment Successfully Completed";
+                            $msg = base64_encode($msg);
+                        ?>
+                            <script>
+                                window.location = "../view/purchase-order-payments.php?msg=<?php echo $msg; ?>";
+                            </script>
+                        <?php
+                
+                        } catch (Exception $ex) {
+                            $msg = $ex->getMessage();
+                            $msg = base64_encode($msg);
+                        ?>
+                            <script>
+                                window.location = "../view/purchase-order-payments.php?msg=<?php echo $msg; ?>";
+                            </script>
+                        <?php
+                        }
+                        break;
 }
