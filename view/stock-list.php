@@ -348,7 +348,9 @@ $stockResult = $stockObj->getAllStocks(); // JOIN query
 
     <script>
         $(document).ready(function() {
-            $("#transactionTable").DataTable();
+            $("#transactionTable").DataTable({
+                order: [[5, "desc"]]
+            });
         });
     </script>
 
