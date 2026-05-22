@@ -73,5 +73,26 @@ class Purchase
         return $result;
     }
 
+    public function deliveredPO($po_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "UPDATE purchase_orders SET po_status = 'Delivered' WHERE po_id = '$po_id'";
+        $con->query($sql) or die($con->error);
+    }
+
+    public function completeStockPurchaseRequest($stock_purchase_request_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "UPDATE stock_purchase_request SET request_status = 'Completed' WHERE stock_purchase_request_id = '$stock_purchase_request_id'";
+        $con->query($sql) or die($con->error);
+    }
+
+    public function addPOPayment($po_id,$po_amount)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "INSERT INTO purchase_order_payments(po_id, po_amount) VALUES ('$po_id','$po_amount')";
+        $con->query($sql) or die($con->error);
+    }
+
 
 }

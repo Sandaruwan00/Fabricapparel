@@ -108,7 +108,7 @@ $poResults = $purchaseObj->getPOs();
                                 <td class="text-center <?php echo $bg; ?>"><?php echo $row["po_status"]; ?></td>
 
                                 <td>
-                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#viewModal">
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#viewModal" onclick="viewPO( '<?php echo $row['po_id']; ?>')">
                                         <i class="bi bi-eye-fill"></i> View
                                     </button>
                                     <?php
@@ -116,6 +116,14 @@ $poResults = $purchaseObj->getPOs();
                                         <button class="btn btn-sm btn-success" onclick="loadConfirm('<?php echo $row['po_id']; ?>','<?php echo $row['supplier_id']; ?>')" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="bi bi-check-circle"></i> Confirm</button>
 
                                         <button class="btn btn-sm btn-danger" onclick="loadReject(<?php echo $row['po_id']; ?>)" data-bs-toggle="modal" data-bs-target="#rejectModal"><i class="bi bi-x-circle"></i> Reject</button>
+                                    <?php
+                                    }
+                                    ?>
+                                    <?php
+                                    if ($row["po_status"] == "Confirmed") { ?>
+                                        <button class="btn btn-sm btn-info" onclick="loadDelivered('<?php echo $row['po_id']; ?>','<?php echo $row['stock_item_id']; ?>','<?php echo $row['ordered_qty']; ?>')" data-bs-toggle="modal" data-bs-target="#deliveredModal">
+                                            <i class="bi bi-truck"></i> Delivered
+                                        </button>
                                     <?php
                                     }
                                     ?>
@@ -242,50 +250,7 @@ $poResults = $purchaseObj->getPOs();
                         data-bs-dismiss="modal"></button>
                 </div>
 
-                <div class="modal-body">
-
-                    <div class="mb-3">
-                        <small class="text-muted">PO ID</small>
-                        <h6><?php echo $row["po_id"]; ?></h6>
-                    </div>
-
-                    <div class="mb-3">
-                        <small class="text-muted">Supplier</small>
-                        <h6><?php echo $row["supplier_name"]; ?></h6>
-                    </div>
-
-                    <div class="mb-3">
-                        <small class="text-muted">Item</small>
-                        <h6>
-                            <?php
-                            echo $row["stock_item_id"] . ") " .
-                                $row["stock_item_name"] . " " .
-                                $row["stock_item_color_code"];
-                            ?>
-                        </h6>
-                    </div>
-
-                    <div class="mb-3">
-                        <small class="text-muted">Quantity</small>
-                        <h6>
-                            <?php
-                            echo $row["ordered_qty"] . " " .
-                                $row["stock_unit_name"];
-                            ?>
-                        </h6>
-                    </div>
-
-                    <div class="mb-3">
-                        <small class="text-muted">Total Price</small>
-                        <h6>Rs. <?php echo $row["total_price"]; ?></h6>
-                    </div>
-
-                    <div class="mb-3">
-                        <small class="text-muted">PO Status</small>
-                        <span class="badge bg-primary">
-                            <?php echo $row["po_status"]; ?>
-                        </span>
-                    </div>
+                <div id="display_data">
 
                 </div>
 
@@ -301,12 +266,25 @@ $poResults = $purchaseObj->getPOs();
         </div>
     </div>
 
+    <script>
+        function viewPO(po_id) {
+
+            var url = "../controller/purchase_controller.php?status=load_po";
+
+            $.post(url, {
+                po_id: po_id
+            }, function(data) {
+                $("#display_data").html(data).show();
+            });
+        }
+    </script>
+
     <!-- Confirm Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
 
-                
+
                 <div class="modal-header bg-success text-white">
                     <h5 class="modal-title">
                         Confirmation
@@ -315,12 +293,12 @@ $poResults = $purchaseObj->getPOs();
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
-              
+
                 <div class="modal-body">
                     Are you sure you want to confirm this Purchase Order?
                 </div>
 
-               
+
                 <div class="modal-footer">
 
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -329,7 +307,7 @@ $poResults = $purchaseObj->getPOs();
 
                     <form method="POST" action="../controller/purchase_controller.php?status=confirm_po">
                         <input type="hidden" name="po_id" id="confirm_po_id">
-                        
+
                         <input type="hidden" name="supplier_id" id="confirm_supplier_id">
 
                         <button type="submit" class="btn btn-success">
@@ -351,7 +329,7 @@ $poResults = $purchaseObj->getPOs();
         <div class="modal-dialog">
             <div class="modal-content">
 
-               
+
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title">
                         Reject Confrimation
@@ -360,12 +338,12 @@ $poResults = $purchaseObj->getPOs();
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
-              
+
                 <div class="modal-body">
                     Are you sure you want to reject this Purchase Order?
                 </div>
 
-               
+
                 <div class="modal-footer">
 
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -387,7 +365,7 @@ $poResults = $purchaseObj->getPOs();
     </div>
 
     <script>
-        function loadConfirm(id,supplier_id) {
+        function loadConfirm(id, supplier_id) {
             document.getElementById("confirm_po_id").value = id;
             document.getElementById("confirm_supplier_id").value = supplier_id;
         }
@@ -396,6 +374,71 @@ $poResults = $purchaseObj->getPOs();
             document.getElementById("reject_po_id").value = id;
         }
     </script>
+
+    <!-- Delivered Modal -->
+<div class="modal fade" id="deliveredModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header bg-info">
+                <h5 class="modal-title">
+                    
+                    Good Received Note
+                </h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form method="POST" action="../controller/purchase_controller.php?status=delivered_po">
+
+                <div class="modal-body">
+
+                    <input type="hidden" id="delivered_po_id" name="po_id">
+                    <input type="hidden" id="delivered_stock_item_id" name="stock_item_id">
+
+                    <p class="mb-3">
+                        Purchase Order #<b id="delivered_po_text"></b>
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label">Qty</label>
+                        <input type="number" class="form-control" name="ordered_qty" id="delivered_ordered_qty" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Reference/Invoice No.</label>
+                        <input type="text" name="delivery_ref" class="form-control" required>
+                        
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="btn btn-info">
+                       Delivered
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+function loadDelivered(po_id,stock_item_id,ordered_qty){
+    
+    document.getElementById("delivered_po_id").value = po_id;
+    document.getElementById("delivered_po_text").innerHTML=po_id;
+    document.getElementById("delivered_stock_item_id").value=stock_item_id;
+    document.getElementById("delivered_ordered_qty").value=ordered_qty;
+    }
+</script>
 
 
     <?php include_once '../includes/footer_includes.php'; ?>

@@ -179,7 +179,6 @@ switch ($status) {
         $po_id = $_POST["po_id"];
         $supplier_id = $_POST["supplier_id"];
 
-
         try {
 
             $supplier = $supplierObj->getSupplier($supplier_id);
@@ -272,6 +271,122 @@ switch ($status) {
             $mail->send();
 
             $msg = "Purchase Order Confirmed & Email Sent";
+            $msg = base64_encode($msg);
+        ?>
+            <script>
+                window.location = "../view/purchase-orders.php?msg=<?php echo $msg; ?>";
+            </script>
+        <?php
+
+        } catch (Exception $ex) {
+            $msg = $ex->getMessage();
+            $msg = base64_encode($msg);
+        ?>
+            <script>
+                window.location = "../view/purchase-orders.php?msg=<?php echo $msg; ?>";
+            </script>
+        <?php
+        }
+        break;
+
+    case "load_po":
+        $po_id = $_POST["po_id"];
+        $poDetailsResult = $purchaseObj->getPODetails($po_id);
+        $poDetails = $poDetailsResult->fetch_assoc();
+        ?>
+
+        <div class="modal-body">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+                        <span class="fw-semibold text-secondary">PO ID</span>
+                        <span>#<?php echo $poDetails["po_id"]; ?></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+                        <span class="fw-semibold text-secondary">Supplier</span>
+                        <span><?php echo $poDetails["supplier_name"]; ?></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+                        <span class="fw-semibold text-secondary">Item</span>
+
+                        <span class="text-end">
+                            <?php
+                            echo "ID: " . $poDetails["stock_item_id"] . " " .
+                                $poDetails["stock_item_name"] . " " .
+                                $poDetails["stock_item_color_code"];
+                            ?>
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+                        <span class="fw-semibold text-secondary">Quantity</span>
+
+                        <span>
+                            <?php
+                            echo $poDetails["ordered_qty"] . " " .
+                                $poDetails["stock_unit_name"];
+                            ?>
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+                        <span class="fw-semibold text-secondary">Unit Price</span>
+                        <span class="fw-bold text-success">
+                            Rs. <?php echo $poDetails["unit_price"]; ?>
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
+                        <span class="fw-semibold text-secondary">Total Price</span>
+                        <span class="fw-bold text-success">
+                            Rs. <?php echo $poDetails["total_price"]; ?>
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-semibold text-secondary">PO Status</span>
+
+                        <span class="badge bg-primary px-3 py-2">
+                            <?php echo $poDetails["po_status"]; ?>
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <?php
+        break;
+
+    case "delivered_po":
+
+        $po_id = $_POST["po_id"];
+        $stock_item_id = $_POST["stock_item_id"];
+        $ordered_qty = $_POST["ordered_qty"];
+        $delivery_ref = $_POST["delivery_ref"];
+
+        try {
+
+            $poDetailsResult = $purchaseObj->getPODetails($po_id);
+            $poDetails = $poDetailsResult->fetch_assoc();
+            $stock_purchase_request_id = $poDetails["stock_purchase_request_id"];
+            $po_amount = $poDetails["total_price"];
+
+            $purchaseObj->deliveredPO($po_id);
+            $purchaseObj->completeStockPurchaseRequest($stock_purchase_request_id);
+
+            $transaction_type = "IN";
+            $stockObj->addInventoryStockItem($stock_item_id, $ordered_qty);
+            $stockObj->addStockTransaction($stock_item_id, $transaction_type, $ordered_qty, $delivery_ref);
+
+            $purchaseObj->addPOPayment($po_id,$po_amount);
+
+            $msg = "Purchase Order Delivered";
             $msg = base64_encode($msg);
         ?>
             <script>
