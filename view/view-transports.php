@@ -219,7 +219,7 @@ $transportResults = $transportObj->getAllTransports();
     <div class="modal fade" id="confirmModal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-success text-white">
+                <div class="modal-header bg-info">
                     <h5>Transport Confirmation</h5>
                 </div>
                 <form action="../controller/transport_controller.php?status=confirm_transport" method="post">

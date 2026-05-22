@@ -76,27 +76,38 @@ $productionOrders = $productionObj->getAllProductionOrders()
                                     <td><?php echo $row["company_name"]; ?></td>
                                     <td class="text-center
                                     <?php
-                                    $expected = $row["expected_delivery_date"];
-                                    $today = date("Y-m-d");
+                                    if ($row["status_id"] != 0 && $row["status_id"] != 15) {
 
-                                    $days = ceil((strtotime($expected) - strtotime($today)) / (60 * 60 * 24));
+                                        $expected = $row["expected_delivery_date"];
+                                        $today = date("Y-m-d");
 
-                                    if ($days > 0) {
-                                        echo "bg-success text-white";
-                                    } elseif ($days == 0) {
-                                        echo "bg-warning text-dark";
+                                        $days = ceil((strtotime($expected) - strtotime($today)) / (60 * 60 * 24));
+
+                                        if ($days > 0) {
+                                            echo "bg-success text-white";
+                                        } elseif ($days == 0) {
+                                            echo "bg-warning text-dark";
+                                        } else {
+                                            echo "bg-danger text-white";
+                                        }
                                     } else {
-                                        echo "bg-danger text-white";
+                                        echo "bg-info";
                                     }
                                     ?>
                                     ">
                                         <?php
-                                        if ($days > 0) {
-                                            echo "$days days left";
-                                        } elseif ($days == 0) {
-                                            echo "Due Today";
+                                        if ($row["status_id"] != 0 && $row["status_id"] != 15) {
+
+                                            if ($days > 0) {
+                                                echo "$days days left";
+                                            } elseif ($days == 0) {
+                                                echo "Due Today";
+                                            } else {
+                                                echo abs($days) . " days overdue";
+                                            }
                                         } else {
-                                            echo abs($days) . " days overdue";
+
+                                            echo "-";
                                         }
                                         ?>
                                     </td>
@@ -165,8 +176,8 @@ $productionOrders = $productionObj->getAllProductionOrders()
                 </div>
 
                 <form action="../controller/production_controller.php?status=end_production" method="post">
-                    <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
-                    <input type="hidden" name="production_id" value="<?php echo $production_id; ?>">
+                    <input type="hidden" name="order_id" id="order_id" value="<?php echo $order_id; ?>">
+                    <input type="hidden" name="production_id" id="production_id" value="<?php echo $production_id; ?>">
                     <div class="modal-body py-4">
                         <p class="mt-3 fs-5">Are you sure you want to finish the production?</p>
                     </div>

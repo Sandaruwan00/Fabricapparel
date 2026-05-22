@@ -38,16 +38,7 @@ $badge = $pendingCount->fetch_assoc();
 
 
 
-        <!-- Message -->
-        <?php if (isset($_GET["msg"])) { ?>
-            <div class="row justify-content-center" id="msg">
-                <div class="col-md-6 alert alert-success text-center">
-                    <?php echo base64_decode($_GET["msg"]); ?>
-                </div>
-            </div>
-        <?php } ?>
 
-        <div class="row">&nbsp;</div>
 
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -92,7 +83,7 @@ $badge = $pendingCount->fetch_assoc();
                                     <td><?php echo $row["order_payment_id"]; ?></td>
                                     <td><?php echo $row["payment_datetime"]; ?></td>
                                     <td><?php echo $row["amount"]; ?></td>
-                                    <td><?php echo $row["order_id"]; ?></td>
+                                    <td><?php echo "ORD".$row["order_id"]; ?></td>
                                     <td><?php echo $row["payment_method"]; ?></td>
                                     <td><?php echo $row["reference_no"]; ?></td>
 
@@ -240,5 +231,34 @@ $badge = $pendingCount->fetch_assoc();
     }
 </script>
 
+<!-- alert start -->
+<?php
+$msg = "";
+if (isset($_GET["msg"])) {
+    $msg = base64_decode($_GET["msg"]);
+}
+?>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="msgToast" class="toast align-items-center text-bg-secondary border-0" role="alert" data-bs-delay="5000">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMsg">
+                <!-- Message -->
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let msg = "<?php echo $msg; ?>";
+        if (msg !== "") {
+            document.getElementById("toastMsg").innerText = msg;
+            let toastEl = document.getElementById("msgToast");
+            let toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+    });
+</script>
+<!-- alert end -->
 
 </html>
