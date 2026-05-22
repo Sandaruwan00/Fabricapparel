@@ -35,6 +35,7 @@ $roleCountResult = $userObj->getAllUserRoleCount();
 <head>
   <?php include_once "../includes/bootstrap_css_includes.php" ?>
   <title>User Management</title>
+  <script src="../js/plotly-3.0.1.min.js" charset="utf-8"></script>
 </head>
 
 <body style="border-radius:10px;">
@@ -45,7 +46,7 @@ $roleCountResult = $userObj->getAllUserRoleCount();
 
     <div class="row">
       <div class="col-md-4" style="text-align:left;">
-                <a href="dashboard.php" type="button" class="btn btn-outline-secondary">Back</a>
+        <a href="dashboard.php" type="button" class="btn btn-outline-secondary">Back</a>
 
       </div>
       <div class="col-md-4" style="text-align:center;">
@@ -105,88 +106,69 @@ $roleCountResult = $userObj->getAllUserRoleCount();
       &nbsp;
     </div>
 
-    <div class="row d-flex justify-content-around align-items-center shadow-lg" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%); padding: 20px; border-radius:10px;">
-      <span class="h3 mb-4 fw-bold">User Roles</span>
-      <div class="row">
+    <div class="row d-flex justify-content-around align-items-center ">
 
-            <div class="col-md-6">
 
-              <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
-                <table class="table table-bordered table-hover align-middle" id="usertable">
-                  <thead class="fs-6 table-secondary text-center">
+
+      <div class="col-md-6">
+
+        <div class="row shadow-lg" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%); padding: 20px; border-radius:10px;">
+          <span class="h3 mb-4 fw-bold">User Roles</span>
+          <div class="col-md-12">
+
+            <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+              <table class="table table-bordered table-hover align-middle" id="usertable">
+                <thead class="fs-6 table-secondary text-center">
+                  <tr>
+                    <th>User Roles</th>
+                    <th style="width: 30%;">Role User Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  while ($roleRow = $roleCountResult->fetch_assoc()) {
+                  ?>
                     <tr>
-                      <th>User Roles</th>
-                      <th style="width: 30%;">Role User Count</th>
+                      <td><?php echo $roleRow["role_name"]; ?></td>
+                      <td><?php echo $roleRow["user_count"]; ?></td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-                    while ($roleRow = $roleCountResult->fetch_assoc()) {
-                    ?>
-                      <tr>
-                        <td><?php echo $roleRow["role_name"]; ?></td>
-                        <td><?php echo $roleRow["user_count"]; ?></td>
-                      </tr>
-                    <?php
-                    }
-                    ?>
-                  </tbody>
-                </table>
-              </div>
+                  <?php
+                  }
+                  ?>
+                </tbody>
+              </table>
             </div>
-            <div class="col-md-2"></div>
-            <!-- <div class="col-md-4">
-              <h4 class="text-left">Add New Role</h4>
-              <form action="">
-                <div class="row mt-3">
-                  <div class="col-md-8">
-                    <div class="mb-3">
-                      <label class="form-label">Role Name</label>
-                      <div class="input-group">
-                        <input type="text" id="newrole" name="newrole" class="form-control">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div id="display_functions">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-3">
-                    <input type="submit" id="submit" name="submit" class="btn btn-success w-100" value="Submit" />
-                  </div>
-                  <div class="col-md-3">
-                    <input type="reset" id="reset" name="reset" class="btn btn-danger w-100" value="Reset" />
-                  </div>
-                </div>
-              </form>
-            </div> -->
           </div>
-      
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div id="tester">
+
+        </div>
+      </div>
+
     </div>
-
-    
-      
-        
-        
-      
-
-
-
-    
-
-
-
-
-
-
-
 
 
   </div>
   <?php include_once '../includes/footer_includes.php'; ?>
 </body>
 <script src="../js/jquery-3.7.1.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+  var data = [{
+    values: [<?php echo $active_row["user_count"]; ?>, <?php echo $deactive_row["user_count"]; ?>],
+    labels: ['Active User Count', 'De Active User Count'],
+    type: 'pie'
+  }];
+
+  var layout = {
+    height: 300,
+    width: 650
+  };
+
+  Plotly.newPlot('tester', data, layout);
+</script>
 
 </html>
