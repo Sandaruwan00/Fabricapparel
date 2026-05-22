@@ -57,6 +57,21 @@ class Purchase
         $sql = "UPDATE purchase_orders SET po_status = 'Cancelled' WHERE po_id = '$po_id'";
         $con->query($sql) or die($con->error);
     }
+    
+    public function confirmPO($po_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "UPDATE purchase_orders SET po_status = 'Confirmed' WHERE po_id = '$po_id'";
+        $con->query($sql) or die($con->error);
+    }
+
+    public function getPODetails($po_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM purchase_orders po, stock_purchase_request spr, stock_items si, stock_units su, supplier s WHERE po.stock_purchase_request_id = spr.stock_purchase_request_id AND spr.stock_item_id = si.stock_item_id AND si.stock_unit_id = su.stock_unit_id AND po.supplier_id = s.supplier_id AND po.po_id = '$po_id'";
+        $result = $con->query($sql) or die($con->error);
+        return $result;
+    }
 
 
 }

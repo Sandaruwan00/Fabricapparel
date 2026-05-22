@@ -113,7 +113,7 @@ $poResults = $purchaseObj->getPOs();
                                     </button>
                                     <?php
                                     if ($row["po_status"] == "Pending") { ?>
-                                        <button class="btn btn-sm btn-success" onclick="loadConfirm(<?php echo $row['po_id']; ?>)" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="bi bi-check-circle"></i> Confirm</button>
+                                        <button class="btn btn-sm btn-success" onclick="loadConfirm('<?php echo $row['po_id']; ?>','<?php echo $row['supplier_id']; ?>')" data-bs-toggle="modal" data-bs-target="#confirmModal"><i class="bi bi-check-circle"></i> Confirm</button>
 
                                         <button class="btn btn-sm btn-danger" onclick="loadReject(<?php echo $row['po_id']; ?>)" data-bs-toggle="modal" data-bs-target="#rejectModal"><i class="bi bi-x-circle"></i> Reject</button>
                                     <?php
@@ -327,8 +327,10 @@ $poResults = $purchaseObj->getPOs();
                         Cancel
                     </button>
 
-                    <form method="POST" action="po_action.php">
+                    <form method="POST" action="../controller/purchase_controller.php?status=confirm_po">
                         <input type="hidden" name="po_id" id="confirm_po_id">
+                        
+                        <input type="hidden" name="supplier_id" id="confirm_supplier_id">
 
                         <button type="submit" class="btn btn-success">
                             Confirm
@@ -385,8 +387,9 @@ $poResults = $purchaseObj->getPOs();
     </div>
 
     <script>
-        function loadConfirm(id) {
+        function loadConfirm(id,supplier_id) {
             document.getElementById("confirm_po_id").value = id;
+            document.getElementById("confirm_supplier_id").value = supplier_id;
         }
 
         function loadReject(id) {
