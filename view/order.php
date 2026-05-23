@@ -31,6 +31,22 @@ while ($row = $orderresult->fetch_assoc()) {
     }
 }
 
+$pendingOrderPayments = $orderObj->getPendingOrderPaymentsCount();
+$badge = $pendingOrderPayments->fetch_assoc();
+
+$pendinOrderPaymentsCount = $badge["pending_count"];
+$pendingRefundRequestsCount = 0;
+
+$orderPaymentRequestResult = $orderObj->getAllOrderRefunds();
+while ($row = $orderPaymentRequestResult->fetch_assoc()) {
+
+    if ($row["refund_status"] == "Pending") {
+        $pendingRefundRequestsCount++;
+    }
+}
+
+
+
 ?>
 <html>
 
@@ -104,6 +120,9 @@ while ($row = $orderresult->fetch_assoc()) {
         <div class="col-md-3">
     <a href="order-payments.php" class="text-decoration-none">
       <div class="card shadow-sm text-center p-3">
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+              <?php echo $pendinOrderPaymentsCount; ?>
+            </span>
         <h4>Order Payments</h4>
         <p>Approve/Reject order payments</p>
       </div>
@@ -112,6 +131,9 @@ while ($row = $orderresult->fetch_assoc()) {
         <div class="col-md-3">
     <a href="order-refund.php" class="text-decoration-none">
       <div class="card shadow-sm text-center p-3">
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+              <?php echo $pendingRefundRequestsCount; ?>
+            </span>
         <h4>Refund Requests</h4>
         <p>Approve/Reject refund payments</p>
       </div>
