@@ -9,7 +9,7 @@ class Buyer
     public function addBuyerCompany($company_name, $company_registration, $business_type, $website, $company_address_line_1, $company_address_line_2, $company_city, $company_postal_code, $company_country)
     {
         $con = $GLOBALS["con"];
-        $sql = "INSERT INTO buyer_company (company_name, company_registration, business_type, website, company_address_line_1, company_address_line_2, company_city, company_postal_code, company_country) VALUES ('$company_name', '$company_registration', '$business_type', '$website', '$company_address_line_1', '$company_address_line_2', '$company_city', '$company_postal_code', '$company_country')";
+        $sql = "INSERT INTO buyer_company (company_name, company_registration, business_type_id, website, company_address_line_1, company_address_line_2, company_city, company_postal_code, company_country) VALUES ('$company_name', '$company_registration', '$business_type', '$website', '$company_address_line_1', '$company_address_line_2', '$company_city', '$company_postal_code', '$company_country')";
         $con->query($sql) or die($con->error);
         $company_id = $con->insert_id;
         return $company_id;

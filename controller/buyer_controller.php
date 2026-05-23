@@ -46,11 +46,12 @@ switch ($status) {
 
                 $msg = "$company_name Successfully Added";
                 $msg = base64_encode($msg);
+                $company_id = base64_encode($company_id);
 
     ?>
 
                 <script>
-                    window.location = "../view/view-buyers.php?msg=<?php echo $msg; ?>";
+                    window.location = "../view/view-buyer.php?company_id=<?php echo $company_id; ?>&msg=<?php echo $msg; ?>";
                 </script>
 
 
@@ -115,20 +116,21 @@ switch ($status) {
         $office_address_line_3 = $_POST["office_address_line_3"];
 
         try {
-            
-            
-            
+
+
+
             $buyerObj->updateBuyerCompany($company_name, $company_registration, $business_type, $website, $company_address_line_1, $company_address_line_2, $company_city, $company_postal_code, $company_country, $company_id);
-            
+
             $buyerObj->updateBuyerCompanyPerson($company_id, $contact_name, $job_title, $contact_email, $contact_phone, $office_address_line_1, $office_address_line_2, $office_address_line_3);
 
-            
+
 
             $msg = "$company_name Successfully Updated!";
             $msg = base64_encode($msg);
+            $company_id = base64_encode($company_id);
         ?>
             <script>
-                window.location = "../view/view-buyers.php?msg=<?php echo $msg; ?>";
+                window.location = "../view/view-buyer.php?company_id=<?php echo $company_id; ?>&msg=<?php echo $msg; ?>";
             </script>
         <?php
 

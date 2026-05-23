@@ -76,8 +76,8 @@ $businesstypedetailrow = $businessTypeResult->fetch_assoc();
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p class="fw-bold m-auto">ADDRESS:</p>
-                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_address_line_1"]; ?></p>
-                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_address_line_2"]; ?></p>
+                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_address_line_1"].","; ?></p>
+                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_address_line_2"].","; ?></p>
                                         <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_city"]; ?></p>
                                         <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_postal_code"]; ?></p>
                                         <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_country"]; ?></p>
@@ -121,8 +121,8 @@ $businesstypedetailrow = $businessTypeResult->fetch_assoc();
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p class="fw-bold m-auto">OFFICE ADDRESS:</p>
-                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["office_address_line_1"]; ?></p>
-                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["office_address_line_2"]; ?></p>
+                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["office_address_line_1"].","; ?></p>
+                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["office_address_line_2"].","; ?></p>
                                         <p class="fs-5 m-auto"><?php echo $buyerdetailrow["office_address_line_3"]; ?></p>
                                     </div>
 

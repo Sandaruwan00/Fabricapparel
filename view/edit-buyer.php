@@ -197,7 +197,7 @@ $editBuyer = $buyerCompanyResult->fetch_assoc();
                     <!-- BUTTONS -->
                     <div class="row mb-4">
                         <div class="col-md-3 offset-md-3">
-                            <button type="submit" class="btn btn-success w-100">Submit</button>
+                            <button type="submit" class="btn btn-success w-100">Edit</button>
                         </div>
                         <div class="col-md-3">
                             <button type="reset" class="btn btn-danger w-100">Reset</button>
