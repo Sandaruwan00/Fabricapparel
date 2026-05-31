@@ -66,7 +66,7 @@ $planResult = $planObj->getAllPlans();
                             while ($row = $planResult->fetch_assoc()) {
                             ?>
                                 <tr>
-                                    <td><?= $row["plan_id"]; ?></td>
+                                    <td><?= "PLAN" . $row["plan_id"]; ?></td>
                                     <td><?= "ORD" . $row["order_id"]; ?></td>
                                     <td><?= $row["company_name"]; ?></td>
                                     <td><?= $row["expected_delivery_date"]; ?></td>

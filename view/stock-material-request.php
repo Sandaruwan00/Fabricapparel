@@ -75,7 +75,7 @@ while ($rowcount = $psrCount->fetch_assoc()) {
                             <tr>
                                 <td><?= $row['stock_request_id']; ?></td>
                                 <td><?= $row['request_date']; ?></td>
-                                <td><?= $row['plan_id']; ?></td>
+                                <td><?= "PLAN" . $row['plan_id']; ?></td>
                                 <td><?= "ORD" . $row['order_id']; ?></td>
                                 <td><?= $row['company_name']; ?></td>
 

@@ -68,7 +68,7 @@ $completedProductions = $packingObj->getAllCompletedProductions()
                             <?php while ($row = $completedProductions->fetch_assoc()) {
                             ?>
                                 <tr>
-                                    <td><?php echo $row["production_id"]; ?></td>
+                                    <td><?php echo "PRO" . $row["production_id"]; ?></td>
                                     <td><?php echo "ORD" . $row["order_id"]; ?></td>
                                     <td><?php echo $row["company_name"]; ?></td>
                                     <td class="text-center

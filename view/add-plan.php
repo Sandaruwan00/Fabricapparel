@@ -68,7 +68,7 @@ $orderResult = $orderObj->getAllConfirmedOrders();
                             while ($row = $orderResult->fetch_assoc()) {
                             ?>
                                 <tr>
-                                    <td><?= $row["order_id"]; ?></td>
+                                    <td><?= "ORD".$row["order_id"]; ?></td>
                                     <td><?= $row["company_name"]; ?></td>
                                     <td><?= $row["contact_name"]; ?></td>
                                     <td><?= $row["expected_delivery_date"]; ?></td>
