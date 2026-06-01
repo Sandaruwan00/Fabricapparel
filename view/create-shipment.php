@@ -146,7 +146,7 @@ $disctrictResult = $transportObj->getAllDistrict();
                                                     <td class="text-center">
                                                         <input class="form-check-input" type="checkbox" name="packages[]" value="<?php echo $packageRow["packing_id"]; ?>">
                                                     </td>
-                                                    <td><?php echo $packageRow["packing_id"]; ?></td>
+                                                    <td><?php echo "PACK".$packageRow["packing_id"]; ?></td>
                                                     <td><?php echo "ORD" . $packageRow["order_id"]; ?></td>
                                                     <td><?php echo $packageRow["company_name"]; ?></td>
 

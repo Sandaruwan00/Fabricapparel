@@ -87,7 +87,7 @@ $shipmentResults = $warehouseObj->getAllShipments();
                             }
                         ?>
                             <tr>
-                                <td><?php echo $shipmentRow["shipment_id"]; ?></td>
+                                <td><?php echo "SHIP".$shipmentRow["shipment_id"]; ?></td>
                                 <td><?php echo $shipmentRow["district_name"]; ?></td>
                                 <td><?php echo $shipmentItemCount; ?></td>
 

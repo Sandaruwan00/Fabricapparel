@@ -69,7 +69,7 @@ $transportResults = $transportObj->getAllTransports();
 
                     <thead class="table-secondary text-center">
                         <tr>
-                            <th width="10%">Delivery ID</th>
+                            <th width="10%">Transport ID</th>
                             <th width="15%">Delivery Location</th>
                             <th width="10%">Shipment ID</th>
                             <th width="10%">Vehile</th>
@@ -84,9 +84,9 @@ $transportResults = $transportObj->getAllTransports();
                         while ($row = $transportResults->fetch_assoc()) {
                         ?>
                             <tr>
-                                <td><?php echo $row["transport_id"]; ?></td>
+                                <td><?php echo "TRA".$row["transport_id"]; ?></td>
                                 <td><?php echo $row["district_name"]; ?></td>
-                                <td><?php echo $row["shipment_id"]; ?></td>
+                                <td><?php echo "SHIP".$row["shipment_id"]; ?></td>
                                 <td><?php echo $row["vehicle_number"]; ?></td>
                                 <td><?php echo "ID:" . $row["driver_id"] . " - " . $row["driver_name"]; ?></td>
 

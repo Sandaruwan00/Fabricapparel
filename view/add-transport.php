@@ -92,7 +92,7 @@ $driverResults = $transportObj->getAllAvailableDrivers();
                             }
                         ?>
                             <tr>
-                                <td><?php echo $Row["shipment_id"]; ?></td>
+                                <td><?php echo "SHIP".$Row["shipment_id"]; ?></td>
                                 <td><?php echo $Row["district_name"]; ?></td>
                                 <td><?php echo $shipmentItemCount; ?></td>
                                 <td>

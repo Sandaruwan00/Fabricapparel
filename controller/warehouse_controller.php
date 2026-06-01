@@ -144,6 +144,8 @@ switch ($status) {
                             <br>
 
                             <?php
+                            $expected = $orderrow["expected_delivery_date"];
+                            $badgeText = "-";
                             if ($orderrow["status_name"] != "Cancelled" && $orderrow["status_name"] != "Delivered") {
                                 $expected = $orderrow["expected_delivery_date"];
                                 $today = date("Y-m-d");
@@ -159,6 +161,10 @@ switch ($status) {
                                     $badgeClass = "bg-danger text-white";
                                     $badgeText = abs($days) . " days overdue";
                                 }
+                            }
+
+                            if ($orderrow["status_name"] == "Cancelled" && $orderrow["status_name"] == "Delivered") {
+                                $expected = $orderrow["expected_delivery_date"];
                             }
                             ?>
 

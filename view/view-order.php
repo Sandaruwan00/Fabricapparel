@@ -217,7 +217,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                                         <td width="20%"><?php echo $pay["payment_remarks"]; ?></td>
                                     </tr>
                                 <?php
-                                    if ($pay["payment_status"] == "Pending" || $pay["payment_status"] == "Approved") {
+                                    if ($pay["payment_status"] == "Approved") {
                                         $totalPayments = $totalPayments + $pay["amount"];
                                     }
                                 } ?>

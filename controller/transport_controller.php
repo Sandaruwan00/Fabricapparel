@@ -224,7 +224,7 @@ switch ($status) {
                             <tr>
                                 <td><?php echo $row['vehicle_log_id']; ?></td>
                                 <td><?php echo $row['vehicle_log_time']; ?></td>
-                                <td><?php echo $row['transport_id'] ?? "-"; ?></td>
+                                <td><?php echo "TRA".$row['transport_id'] ?? "-"; ?></td>
                                 <td><?php echo $row['vehicle_action']; ?></td>
                                 <td><?php echo $row['vehicle_remarks']; ?></td>
 
@@ -464,7 +464,7 @@ switch ($status) {
                                     <tr>
                                         <td><?php echo $row['driver_log_id']; ?></td>
                                         <td><?php echo $row['driver_log_time']; ?></td>
-                                        <td><?php echo $row['transport_id']; ?></td>
+                                        <td><?php echo "TRA".$row['transport_id']; ?></td>
                                         <td><?php echo $row['driver_action']; ?></td>
                                         <td><?php echo $row['driver_remarks']; ?></td>
                                     </tr>

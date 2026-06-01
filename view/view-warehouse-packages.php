@@ -86,7 +86,7 @@ $pkgResults = $warehouseObj->getAllWarehousePackages();
                         ?>
                             <tr>
 
-                                <td><?php echo $row["packing_id"] ?></td>
+                                <td><?php echo "PACK".$row["packing_id"] ?></td>
                                 <td><?php echo "ORD" . $row['order_id']; ?></td>
                                 <td><?php echo $row['company_name']; ?></td>
                                 <td class="text-center
