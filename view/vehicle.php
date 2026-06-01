@@ -35,7 +35,7 @@ $vehicleResult = $transportObj->getAllVehicles();
                     <a href="view-transports.php" class="btn btn-outline-success">View Transports</a>
                     <a href="driver.php" class="btn btn-outline-info">Drivers</a>
                     <a href="vehicle.php" class="btn btn-outline-dark active">Vehicles</a>
-                    <a href="generate-transport-report.php" class="btn btn-outline-warning">Generate Transport Reports</a>
+                    <a href="generate-vehicle-report.php" class="btn btn-outline-warning">Generate Transport Reports</a>
                 </div>
             </div>
         </div>

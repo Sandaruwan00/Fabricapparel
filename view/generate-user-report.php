@@ -75,7 +75,7 @@ $userResult = $userObj->getAllUsersForReport();
 
 // Current date for report
 $date = date("Y-m-d");
-
+$dateTime = date("Y-m-d H:i:s");
 
 // ---------------- PDF GENERATION ----------------
 
@@ -98,7 +98,7 @@ $pdf->AddPage();
 $pdf->SetFont("Arial", "", 10);
 
 // Report date
-$pdf->Cell(0, 8, "Report Date : $date", 0, 1, "L");
+$pdf->Cell(0, 8, "Generated On : $dateTime", 0, 1, "L");
 $pdf->Ln(2);
 
 // Draw horizontal line under date
@@ -174,15 +174,7 @@ if ($userResult && $userResult->num_rows > 0) {
 
 $pdf->Ln(5);
 $pdf->SetFont("Arial", "B", 10);
-$pdf->Cell(
-    0,
-    6,
-    "Total Users: " . ($totalActive + $totalInactive) .
-    " | Active: $totalActive | Inactive: $totalInactive",
-    0,
-    1,
-    "L"
-);
+$pdf->Cell(0,6,"Total Users: " . ($totalActive + $totalInactive) ." | Active: $totalActive | Inactive: $totalInactive",0,1,"L");
 
 
 // ---------------- FOOTER NOTES ----------------
@@ -199,4 +191,4 @@ $pdf->MultiCell(0, 5, "Confidentiality Notice: This document contains internal s
 ob_end_clean();
 
 // Display PDF in browser
-$pdf->Output("I", "User_Report_Fabric_Apparel_$date.pdf");
+$pdf->Output("I", "User_Report_Fabric_Apparel_$dateTime.pdf");
