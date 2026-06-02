@@ -58,6 +58,7 @@ $buyerObj = new Buyer();
 $buyerResult = $buyerObj->getAllBuyers();
 
 $date = date("Y-m-d");
+$dateTime = date("Y-m-d H:i:s");
 
 
 // ---------------- PDF GENERATION ----------------
@@ -71,7 +72,7 @@ $pdf->AddPage();
 // ---------------- REPORT META ----------------
 
 $pdf->SetFont("Arial", "", 10);
-$pdf->Cell(0, 8, "Report Date : $date", 0, 1, "L");
+$pdf->Cell(0, 8, "Generated On : $dateTime", 0, 1, "L");
 $pdf->Ln(2);
 
 $pdf->SetLineWidth(0.5);
@@ -146,4 +147,4 @@ $pdf->MultiCell(0, 5, "Confidentiality Notice: This document contains internal s
 // ---------------- OUTPUT ----------------
 
 ob_end_clean();
-$pdf->Output("I", "Buyer_Report_Fabric_Apparel_$date.pdf");
+$pdf->Output("I", "Buyer_Report_Fabric_Apparel_$dateTime.pdf");

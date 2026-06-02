@@ -63,6 +63,7 @@ $businessTypeResult = $buyerObj->viewBusinessType($company_id);
 $business = $businessTypeResult->fetch_assoc();
 
 $date = date("Y-m-d");
+$dateTime = date("Y-m-d H:i:s");
 
 // ---------------- PDF INIT ----------------
 $pdf = new BuyerReport("P", "mm", "A4");
@@ -72,7 +73,7 @@ $pdf->AddPage();
 
 // ---------------- META ----------------
 $pdf->SetFont("Arial", "", 10);
-$pdf->Cell(0, 8, "Report Date : $date", 0, 1);
+$pdf->Cell(0, 8, "Generated On : $dateTime", 0, 1, "L");
 $pdf->Ln(2);
 
 // Draw horizontal line under date
@@ -124,4 +125,4 @@ $pdf->MultiCell(0, 5, "Confidential: Internal system data.", 0, "C");
 
 // ---------------- OUTPUT ----------------
 ob_end_clean();
-$pdf->Output("I", "Buyer_Report_{$buyer["company_name"]}_$date.pdf");
+$pdf->Output("I", "Buyer_Report_{$buyer["company_name"]}_$dateTime.pdf");

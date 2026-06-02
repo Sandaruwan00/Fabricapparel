@@ -66,6 +66,7 @@ if ($moduleResult) {
 
 $date = date("Y-m-d");
 $time = date("H:i:s");
+$dateTime = date("Y-m-d H:i:s");
 
 // ---------------- PDF CLASS ----------------
 class SingleUserReport extends FPDF
@@ -136,7 +137,7 @@ $pdf->AddPage();
 $pdf->SetFont("Arial", "", 10);
 
 // Report date
-$pdf->Cell(0, 8, "Report Date : $date", 0, 1, "L");
+$pdf->Cell(0, 8, "Generated On : $dateTime", 0, 1, "L");
 $pdf->Ln(2);
 
 // Draw horizontal line under date
@@ -223,4 +224,4 @@ $pdf->MultiCell(0, 5, "Confidentiality Notice: This document contains internal s
 while (ob_get_level()) ob_end_clean();
 
 $fileName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $fullName);
-$pdf->Output("I", "User_Report_{$fileName}_$date.pdf");
+$pdf->Output("I", "User_Report_{$fileName}_$dateTime.pdf");
