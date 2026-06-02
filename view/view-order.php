@@ -127,6 +127,8 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                         <br>
 
                         <?php
+                        $expected = $orderrow["expected_delivery_date"];
+                        $badgeText = "-";
                         if ($orderrow["status_name"] != "Cancelled" && $orderrow["status_name"] != "Delivered") {
                             $expected = $orderrow["expected_delivery_date"];
                             $today = date("Y-m-d");
