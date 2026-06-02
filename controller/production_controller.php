@@ -79,21 +79,25 @@ switch ($status) {
                 <br>
 
                 <?php
-                $expected = $orderrow["expected_delivery_date"];
-                $today = date("Y-m-d");
-                $days = ceil((strtotime($expected) - strtotime($today)) / (60 * 60 * 24));
+                        $expected = $orderrow["expected_delivery_date"];
+                        $badgeText = "-";
+                        if ($orderrow["status_name"] != "Cancelled" && $orderrow["status_name"] != "Delivered") {
+                            $expected = $orderrow["expected_delivery_date"];
+                            $today = date("Y-m-d");
+                            $days = ceil((strtotime($expected) - strtotime($today)) / (60 * 60 * 24));
 
-                if ($days > 0) {
-                    $badgeClass = "bg-success text-white";
-                    $badgeText = "$days days left";
-                } elseif ($days == 0) {
-                    $badgeClass = "bg-warning text-dark";
-                    $badgeText = "Due Today";
-                } else {
-                    $badgeClass = "bg-danger text-white";
-                    $badgeText = abs($days) . " days overdue";
-                }
-                ?>
+                            if ($days > 0) {
+                                $badgeClass = "bg-success text-white";
+                                $badgeText = "$days days left";
+                            } elseif ($days == 0) {
+                                $badgeClass = "bg-warning text-dark";
+                                $badgeText = "Due Today";
+                            } else {
+                                $badgeClass = "bg-danger text-white";
+                                $badgeText = abs($days) . " days overdue";
+                            }
+                        }
+                        ?>
 
                 <div class="row">
                     <div class="col-md-6">
