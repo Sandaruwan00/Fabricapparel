@@ -30,6 +30,14 @@ class Buyer
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
+    
+    public function getAllBuyersForCount()
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM buyer_company";
+        $result = $con->query($sql) or die($con->error);
+        return $result;
+    }
 
     public function deleteBuyerCompany($company_id)
     {
