@@ -7,7 +7,7 @@ $userrow = $_SESSION["user"];
 
 $transportObj = new Transport();
 
-$vehicleResult = $transportObj->getAllVehicles();
+$vehicleResult = $transportObj->getAllAvailableVehicles();
 
 
 $totalTransportresult = $transportObj->getAllTransports();

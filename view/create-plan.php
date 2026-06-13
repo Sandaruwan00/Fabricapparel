@@ -51,6 +51,7 @@ $stockResult = $stockObj->getAllStocks();
             </div>
             <div class="col-md-4" style="text-align:right;">
                 <div class="btn-group">
+                    <a href="add-plan.php" class="btn btn-outline-primary">Add Plan</a>
                     <a href="view-plans.php" class="btn btn-outline-success">View Plans</a>
                     <a href="generate-plan-report.php" class="btn btn-outline-warning">Generate Plan Reports</a>
                 </div>

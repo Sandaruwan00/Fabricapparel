@@ -137,8 +137,8 @@ class Order
     public function cancelOrder($order_id, $user_id, $remarks)
     {
         $con = $GLOBALS["con"];
-        $sql = "UPDATE orders SET status_id='10' WHERE order_id='$order_id'";
-        $sql2 = "INSERT INTO order_status_log(order_id, status_id, changed_by, remarks) VALUES ('$order_id','10','$user_id','$remarks');";
+        $sql = "UPDATE orders SET status_id='0' WHERE order_id='$order_id'";
+        $sql2 = "INSERT INTO order_status_log(order_id, status_id, changed_by, remarks) VALUES ('$order_id','0','$user_id','$remarks');";
         $con->query($sql) or die($con->error);
         $con->query($sql2) or die($con->error);
     }

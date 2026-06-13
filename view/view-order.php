@@ -330,7 +330,8 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                                                                         if ($orderrow['status_id'] >= "2") {
                                                                             echo "disabled";
                                                                         }
-                                                                        ?>>
+                                                                        ?>
+                                                                        >
                                         <i class="bi bi-check-lg"></i> Confirm
                                     </button>
                                 </div>
@@ -342,7 +343,8 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                                                                         if ($orderrow['status_id'] >= "6") {
                                                                             echo "disabled";
                                                                         }
-                                                                        ?>>
+                                                                        ?>
+                                                                        >
                                         <i class="bi bi-slash-circle"></i> Cancel
                                     </button>
                                 </div>
@@ -539,7 +541,12 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                                     </div>
                                 </div>
                                 <label class="form-label fw-bold">Amount <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" name="refund_amount">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text" id="btnGroupAddon">Rs</div>
+                                    </div>
+                                    <input type="number" class="form-control" name="refund_amount" value="<?php echo $totalPayments;?>" readonly>
+                                </div>
                                 <label class="form-label fw-bold mt-3">Remarks <span class="text-danger">*</span></label>
                                 <textarea name="remarks" class="form-control" rows="3" placeholder="Reason for refund..." required></textarea>
                                 <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
