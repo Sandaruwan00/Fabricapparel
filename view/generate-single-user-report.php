@@ -178,40 +178,40 @@ $pdf->SetTextColor(0, 0, 0);
 $pdf->Ln(5);
 
 // ---------------- PERMISSIONS ----------------
-$pdf->SectionTitle("Permissions");
+// $pdf->SectionTitle("Permissions");
 
-if (empty($permissionsData)) {
-    $pdf->Cell(0, 8, "No permissions assigned.", 1, 1, "C");
-} else {
+// if (empty($permissionsData)) {
+//     $pdf->Cell(0, 8, "No permissions assigned.", 1, 1, "C");
+// } else {
 
-    foreach ($permissionsData as $moduleData) {
+//     foreach ($permissionsData as $moduleData) {
 
-        if ($pdf->GetY() > 260) $pdf->AddPage();
+//         if ($pdf->GetY() > 260) $pdf->AddPage();
 
-        $pdf->SetFont("Arial", "B", 10);
-        $pdf->SetFillColor(230, 240, 255);
-        $pdf->Cell(180, 8, $pdf->SafeText($moduleData["module"]), 1, 1, "L", true);
+//         $pdf->SetFont("Arial", "B", 10);
+//         $pdf->SetFillColor(230, 240, 255);
+//         $pdf->Cell(180, 8, $pdf->SafeText($moduleData["module"]), 1, 1, "L", true);
 
-        foreach ($moduleData["functions"] as $fun) {
+//         foreach ($moduleData["functions"] as $fun) {
 
-            if ($pdf->GetY() > 270) $pdf->AddPage();
+//             if ($pdf->GetY() > 270) $pdf->AddPage();
 
-            $mark = $fun["granted"] ? "YES" : "NO";
+//             $mark = $fun["granted"] ? "YES" : "NO";
 
-            if ($fun["granted"]) $pdf->SetTextColor(0, 130, 0);
-            else $pdf->SetTextColor(180, 0, 0);
+//             if ($fun["granted"]) $pdf->SetTextColor(0, 130, 0);
+//             else $pdf->SetTextColor(180, 0, 0);
 
-            $pdf->SetFont("Arial", "B", 9);
-            $pdf->Cell(20, 7, $mark, 1, 0, "C");
+//             $pdf->SetFont("Arial", "B", 9);
+//             $pdf->Cell(20, 7, $mark, 1, 0, "C");
 
-            $pdf->SetTextColor(0, 0, 0);
-            $pdf->SetFont("Arial", "", 9);
-            $pdf->Cell(160, 7, $pdf->SafeText($fun["name"]), 1, 1);
-        }
+//             $pdf->SetTextColor(0, 0, 0);
+//             $pdf->SetFont("Arial", "", 9);
+//             $pdf->Cell(160, 7, $pdf->SafeText($fun["name"]), 1, 1);
+//         }
 
-        $pdf->Ln(2);
-    }
-}
+//         $pdf->Ln(2);
+//     }
+// }
 
 // ---------------- FOOTER NOTES ----------------
 
