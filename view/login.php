@@ -52,6 +52,9 @@
                                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                 <input type="password" id="loginpassword" name="loginpassword"
                                     class="form-control" placeholder="Password">
+                                <button type="button" class="btn btn-secondary" id="togglePassword" title="Show or hide password">
+                                    <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                                </button>
                             </div>
 
 
@@ -76,12 +79,26 @@
 
 <script>
     const msg = document.getElementById('msg');
+    const togglePassword = document.getElementById('togglePassword');
+    const loginPassword = document.getElementById('loginpassword');
+    const togglePasswordIcon = document.getElementById('togglePasswordIcon');
 
     const delayTime = 3000;
 
     setTimeout(() => {
-        msg.style.display = 'none';
+        if (msg) {
+            msg.style.display = 'none';
+        }
     }, delayTime);
+
+    if (togglePassword && loginPassword) {
+        togglePassword.addEventListener('click', () => {
+            const isPassword = loginPassword.type === 'password';
+            loginPassword.type = isPassword ? 'text' : 'password';
+            togglePasswordIcon.classList.toggle('bi-eye');
+            togglePasswordIcon.classList.toggle('bi-eye-slash');
+        });
+    }
 </script>
 
 </html>
