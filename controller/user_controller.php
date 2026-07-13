@@ -175,15 +175,12 @@ switch ($status) {
             if (isset($_FILES["user_image"])) {
                 if ($_FILES["user_image"]["name"] != "") {
 
-
                     //upload new image
-
                     $img = time() . "" . $_FILES["user_image"]["name"];
                     $path = "../images/user_images/";
                     move_uploaded_file($_FILES["user_image"]["tmp_name"], $path . "$img");
 
                     //remove previous image
-
                     if (file_exists($path . $prev_image) && $prev_image != "") {
                         unlink($path . $prev_image);
                     }
@@ -193,7 +190,6 @@ switch ($status) {
             }
 
             //update user
-
             $userObj->updateUser($fname, $lname, $email, $dob, $nic, $user_role, $img, $user_id);
 
             //update login
