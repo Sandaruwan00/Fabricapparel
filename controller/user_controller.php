@@ -83,10 +83,7 @@ switch ($status) {
 
 
         try {
-            if ($fname == "") {
-
-                throw new Exception("First Name cannot be Empty!!!!");
-            }
+            
 
             ///  uploading image
             $file_name = "";
@@ -96,6 +93,20 @@ switch ($status) {
                     $path = "../images/user_images/$file_name";
                     move_uploaded_file($user_image["tmp_name"], $path);
                 }
+            }
+
+            $emailResult = $userObj->checkEmailExist($email);
+            $emailRow = $emailResult->fetch_assoc();
+
+            if ($emailRow["total"] > 0) {
+                throw new Exception("Email Already Exists!!!!");
+            }
+
+            $nicResult = $userObj->checkNICExist($nic);
+            $nicRow = $nicResult->fetch_assoc();
+
+            if ($nicRow["total"] > 0) {
+                throw new Exception("NIC Already Exists!!!!");
             }
 
             $user_id =  $userObj->addUser($fname, $lname, $email, $dob, $nic, $user_role, $file_name);
@@ -189,6 +200,20 @@ switch ($status) {
                 }
             }
 
+            $emailResult = $userObj->checkEmailExist($email);
+            $emailRow = $emailResult->fetch_assoc();
+
+            if ($emailRow["total"] > 0) {
+                throw new Exception("Email Already Exists!!!!");
+            }
+
+            $nicResult = $userObj->checkNICExist($nic);
+            $nicRow = $nicResult->fetch_assoc();
+
+            if ($nicRow["total"] > 0) {
+                throw new Exception("NIC Already Exists!!!!");
+            }
+
             //update user
             $userObj->updateUser($fname, $lname, $email, $dob, $nic, $user_role, $img, $user_id);
 
@@ -221,9 +246,10 @@ switch ($status) {
         } catch (Exception $ex) {
             $msg = $ex->getMessage();
             $msg = base64_encode($msg);
+            $user_id = base64_encode($user_id);
         ?>
             <script>
-                window.location = "../view/edit-user.php?msg=<?php echo $msg; ?>";
+                window.location = "../view/edit-user.php?user_id=<?php echo $user_id; ?>&msg=<?php echo $msg; ?>";
             </script>
         <?php
 

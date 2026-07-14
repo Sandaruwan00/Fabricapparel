@@ -177,6 +177,8 @@ $pdf->SetFont("Arial", "B", 10);
 $pdf->Cell(0,6,"Total Users: " . ($totalActive + $totalInactive) ." | Active: $totalActive | Inactive: $totalInactive",0,1,"L");
 
 
+
+
 // ---------------- FOOTER NOTES ----------------
 
 $pdf->Ln(5);
