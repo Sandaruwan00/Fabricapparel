@@ -16,10 +16,10 @@ class Buyer
     }
 
 
-    public function addBuyerCompanyPerson($company_id, $contact_name, $job_title, $contact_email, $contact_phone, $office_address_line_1, $office_address_line_2, $office_address_line_3)
+    public function addBuyerCompanyPerson($company_id, $contact_name, $job_title, $contact_email, $contact_nic, $contact_phone, $office_address_line_1, $office_address_line_2, $office_address_line_3)
     {
         $con = $GLOBALS["con"];
-        $sql = "INSERT INTO buyer_contact_person (company_id, contact_name, job_title, contact_email, contact_phone, office_address_line_1, office_address_line_2, office_address_line_3) VALUES ('$company_id', '$contact_name', '$job_title', '$contact_email', '$contact_phone', '$office_address_line_1', '$office_address_line_2', '$office_address_line_3')";
+        $sql = "INSERT INTO buyer_contact_person (company_id, contact_name, job_title, contact_email, contact_nic, contact_phone, office_address_line_1, office_address_line_2, office_address_line_3) VALUES ('$company_id', '$contact_name', '$job_title', '$contact_email', '$contact_nic', '$contact_phone', '$office_address_line_1', '$office_address_line_2', '$office_address_line_3')";
         $result = $con->query($sql) or die($con->error);
     }
 
@@ -30,7 +30,7 @@ class Buyer
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
-    
+
     public function getAllBuyersForCount()
     {
         $con = $GLOBALS["con"];
@@ -91,11 +91,19 @@ class Buyer
         $con->query($sql) or die($con->error);
     }
 
-    public function updateBuyerCompanyPerson($company_id, $contact_name, $job_title, $contact_email, $contact_phone, $office_address_line_1, $office_address_line_2, $office_address_line_3)
+    public function updateBuyerCompanyPerson($company_id, $contact_name, $job_title, $contact_email, $contact_nic, $contact_phone, $office_address_line_1, $office_address_line_2, $office_address_line_3)
     {
 
         $con = $GLOBALS["con"];
-        $sql = "UPDATE buyer_contact_person SET contact_name='$contact_name',job_title='$job_title',contact_email='$contact_email',contact_phone='$contact_phone',office_address_line_1='$office_address_line_1',office_address_line_2='$office_address_line_2',office_address_line_3='$office_address_line_3' WHERE company_id='$company_id';";
+        $sql = "UPDATE buyer_contact_person SET contact_name='$contact_name',job_title='$job_title',contact_email='$contact_email',contact_nic='$contact_nic',contact_phone='$contact_phone',office_address_line_1='$office_address_line_1',office_address_line_2='$office_address_line_2',office_address_line_3='$office_address_line_3' WHERE company_id='$company_id';";
         $con->query($sql) or die($con->error);
+    }
+
+    public function getOrderHistory($company_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM orders o, order_status os WHERE o.company_id='$company_id' AND o.status_id = os.status_id";
+        $result = $con->query($sql) or die($con->error);
+        return $result;
     }
 }

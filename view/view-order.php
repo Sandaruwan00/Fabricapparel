@@ -97,10 +97,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
-                                <p class="fw-bold m-auto">DESIGN</p>
-                                <iframe src="../files/design_pdfs/<?php echo $orderrow["design"]; ?>" width="100%" height="300px"></iframe>
-                            </div>
+                           
                             <div class="col-md-6">
                                 <p class="fw-bold m-auto">COMMENTS:</p>
                                 <p class="fs-5"><?php echo $orderrow["comments"]; ?></p>
@@ -160,7 +157,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
 
                         <div class="row">&nbsp;</div>
 
-                        <!-- Items -->
+                      <!-- Items -->
                         <h4 class="fw-bold"><i class="bi bi-box-seam"></i> Order Items</h4>
                         <hr>
 
@@ -172,6 +169,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                                     <th>Qty</th>
                                     <th>Price</th>
                                     <th>Amount</th>
+                                    <th>Design</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -182,6 +180,20 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                                         <td><?php echo $item["qty"]; ?></td>
                                         <td class="text-end"><?php echo number_format($item["unit_price"], 2); ?></td>
                                         <td class="text-end"><?php echo number_format($item["qty"] * $item["unit_price"], 2); ?></td>
+                                        <td class="text-center">
+                                            <?php if (!empty($item["item_design"])) { ?>
+                                                <button type="button"
+                                                        class="btn btn-outline-primary btn-sm previewDesignBtn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#designPreviewModal"
+                                                        data-file="../files/designs/<?php echo $item["item_design"]; ?>"
+                                                        data-filename="<?php echo $item["item_design"]; ?>">
+                                                    <i class="bi bi-eye"></i> View
+                                                </button>
+                                            <?php } else { ?>
+                                                <span class="text-muted">-</span>
+                                            <?php } ?>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -575,6 +587,66 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
             </div>
         </div>
     </div>
+
+
+    <!-- item design view modal -->
+
+    <!-- Design Preview Modal -->
+<div class="modal fade" id="designPreviewModal" tabindex="-1" aria-labelledby="designPreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="designPreviewModalLabel">Design Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center" style="min-height: 400px;">
+                <div id="designPreviewContent">
+                    <!-- populated via JS -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="designDownloadBtn" class="btn btn-outline-secondary" download>
+                    <i class="bi bi-download"></i> Download
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("click", function(e) {
+        const btn = e.target.closest(".previewDesignBtn");
+        if (!btn) return;
+
+        const filePath = btn.dataset.file;
+        const fileName = btn.dataset.filename;
+        const content = document.getElementById("designPreviewContent");
+        const downloadBtn = document.getElementById("designDownloadBtn");
+
+        const ext = fileName.split('.').pop().toLowerCase();
+        const imageExts = ["jpg", "jpeg", "png", "gif", "webp"];
+
+        if (ext === "pdf") {
+            content.innerHTML = `<iframe src="${filePath}" width="100%" height="500px" style="border:none;"></iframe>`;
+        } else if (imageExts.includes(ext)) {
+            content.innerHTML = `<img src="${filePath}" class="img-fluid" alt="Design Preview">`;
+        } else {
+            content.innerHTML = `
+                <p class="text-muted">Preview not available for this file type (.${ext}).</p>
+                <p><strong>${fileName}</strong></p>
+            `;
+        }
+
+        downloadBtn.href = filePath;
+        downloadBtn.setAttribute("download", fileName);
+    });
+
+    // Clean up content when modal closes, so old previews don't flash before new ones load
+    document.getElementById("designPreviewModal").addEventListener("hidden.bs.modal", function() {
+        document.getElementById("designPreviewContent").innerHTML = "";
+    });
+</script>
 
 
 </body>

@@ -14,6 +14,8 @@ $buyerdetailrow = $buyerCompanyResult->fetch_assoc();
 $businessTypeResult = $buyerObj->viewBusinessType($company_id);
 $businesstypedetailrow = $businessTypeResult->fetch_assoc();
 
+$orderHistoryResult = $buyerObj->getOrderHistory($company_id);
+
 ?>
 <html>
 
@@ -76,8 +78,8 @@ $businesstypedetailrow = $businessTypeResult->fetch_assoc();
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p class="fw-bold m-auto">ADDRESS:</p>
-                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_address_line_1"].","; ?></p>
-                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_address_line_2"].","; ?></p>
+                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_address_line_1"] . ","; ?></p>
+                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_address_line_2"] . ","; ?></p>
                                         <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_city"]; ?></p>
                                         <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_postal_code"]; ?></p>
                                         <p class="fs-5 m-auto"><?php echo $buyerdetailrow["company_country"]; ?></p>
@@ -110,19 +112,27 @@ $businesstypedetailrow = $businessTypeResult->fetch_assoc();
                                     </div>
                                     <!-- methanin palla hadanna thinooooooo -->
                                     <div class="col-md-6">
+                                        <p class="fw-bold m-auto">NIC:</p>
+                                        <p class="fs-4"><?php echo $buyerdetailrow["contact_nic"]; ?></p>
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+
+
+                                    <div class="col-md-6">
                                         <p class="fw-bold m-auto">PHONE NUMBER:</p>
                                         <p class="fs-4"><?php echo $buyerdetailrow["contact_phone"]; ?></p>
                                     </div>
-                                    <div class="row">
-                                        &nbsp;
-                                    </div>
+
 
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p class="fw-bold m-auto">OFFICE ADDRESS:</p>
-                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["office_address_line_1"].","; ?></p>
-                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["office_address_line_2"].","; ?></p>
+                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["office_address_line_1"] . ","; ?></p>
+                                        <p class="fs-5 m-auto"><?php echo $buyerdetailrow["office_address_line_2"] . ","; ?></p>
                                         <p class="fs-5 m-auto"><?php echo $buyerdetailrow["office_address_line_3"]; ?></p>
                                     </div>
 
@@ -130,11 +140,62 @@ $businesstypedetailrow = $businessTypeResult->fetch_assoc();
                                 <div class="row">
                                     &nbsp;
                                 </div>
+
+                                <div class="row">
+                                    &nbsp;
+                                </div>
+                                <h4 class="card-title fw-bold"><i class="bi bi-clock-history"></i> &nbsp;Order History</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered table-hover" id="table">
+
+                                            <thead class="table-secondary text-center">
+                                                <tr>
+                                                    <th>Order ID</th>
+                                                    <th>Order Date</th>
+                                                    <th>Status</th>
+                                                    <th>Total Amount (LKR)</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <?php
+                                                while ($row = $orderHistoryResult->fetch_assoc()) {
+
+                                                    $orderAmout = $row['total_amount'] + $row['delivery_charge'];
+                                                ?>
+                                                    <tr>
+                                                        <td><?php echo "ORD" . $row['order_id']; ?></td>
+                                                        <td><?php echo $row['order_date']; ?></td>
+                                                        <td style="background-color: <?php echo $row['color_code']; ?>; text-align:center;">
+                                                            <?php echo $row['status_name']; ?>
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            <?php echo number_format($orderAmout, 2); ?>
+                                                        </td>
+                                                        <td>
+                                                            <button href="#" class="btn btn-primary btn-sm"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#viewModal" onclick="loadorder('<?php echo $row['order_id']; ?>');">
+                                                                <i class="bi bi-eye-fill"></i> View
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     &nbsp;
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-3"></div>    
+                                    <div class="col-md-3"></div>
                                     <div class="col-md-3">
                                         <?php $company_id = base64_encode($company_id); ?>
                                         <a href="edit-buyer.php?company_id=<?php echo $company_id; ?>" class="btn btn-warning w-100">
@@ -157,7 +218,7 @@ $businesstypedetailrow = $businessTypeResult->fetch_assoc();
                                             Delete
                                         </a>
                                     </div>
-                                    
+
 
 
 
@@ -193,10 +254,6 @@ $businesstypedetailrow = $businessTypeResult->fetch_assoc();
     </div>
 </div>
 
-<script src="../js/jquery-3.7.1.js"></script>
-<script src="../bootstrap/dist/js/bootstrap.js"></script>
-<script src="../js/datatable/bootstrap.bundle.min.js"></script>
-
 <script>
     function loadbuyer(company_id, company_name) {
         document.getElementById("showBuyername").innerText = company_name;
@@ -204,6 +261,54 @@ $businesstypedetailrow = $businessTypeResult->fetch_assoc();
             "../controller/buyer_controller.php?status=delete&company_id=" + company_id;
     }
 </script>
+
+
+<div class="modal fade" id="viewModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Order Details</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div id="display_data">
+                <div class="modal-body text-center">
+                    <div class="spinner-border text-secondary" role="status"></div>
+                    <p class="mt-2 text-muted">Loading order details...</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+        function loadorder(order_id) {
+
+            var url = "../controller/warehouse_controller.php?status=load_order";
+
+            $.post(url, {
+                order_id: order_id
+            }, function(data) {
+                $("#display_data").html(data).show();
+            });
+        }
+    </script>
+
+
+
+<script src="../js/jquery-3.7.1.js"></script>
+<script src="../bootstrap/dist/js/bootstrap.js"></script>
+<script src="../js/datatable/bootstrap.bundle.min.js"></script>
+
+
 
 
 

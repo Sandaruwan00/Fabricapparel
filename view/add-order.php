@@ -198,7 +198,7 @@ $disctrictResult = $transportObj->getAllDistrict();
                                         <div class="row">
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Order Date</label>
-                                                <input type="date" id="todayDate" name="order_date" class="form-control">
+                                                <input type="date" id="todayDate" name="order_date" class="form-control" readonly>
                                             </div>
 
                                         </div>
@@ -216,7 +216,7 @@ $disctrictResult = $transportObj->getAllDistrict();
 
                                                 </select>
                                             </div>
-                                            <div class="col-md-3 mb-3">
+                                            <div class="col-md-2 mb-3">
                                                 <label>Size</label>
                                                 <select name="select_size" id="select_size" class="form-control">
                                                     <option value="">--Select--</option>
@@ -230,9 +230,13 @@ $disctrictResult = $transportObj->getAllDistrict();
 
                                                 </select>
                                             </div>
-                                            <div class="col-md-3 mb-3">
+                                            <div class="col-md-1 mb-3">
                                                 <label>Qty</label>
                                                 <input type="number" name="qty" id="qty" class="form-control" min="1">
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label>Design</label>
+                                                <input type="file" name="item_design" id="item_design" class="form-control">
                                             </div>
                                             <input type="hidden" name="order_items" id="order_items_input">
                                             <div class="col-md-3 mb-3 d-flex align-items-end">
@@ -242,11 +246,12 @@ $disctrictResult = $transportObj->getAllDistrict();
                                         <table class="table table-bordered mt-3">
                                             <thead class="table-dark">
                                                 <tr>
-                                                    <th style="width:25%;">Type</th>
-                                                    <th style="width:15%;">Size</th>
-                                                    <th style="width:15%;">Qty</th>
-                                                    <th style="width:20%;">Amount (Rs.)</th>
-                                                    <th style="width:25%;">Actions</th>
+                                                    <th>Type</th>
+                                                    <th>Size</th>
+                                                    <th>Qty</th>
+                                                    <th>Design</th>
+                                                    <th>Amount (Rs.)</th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="orderTableBody"></tbody>
@@ -264,14 +269,14 @@ $disctrictResult = $transportObj->getAllDistrict();
                                     <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
                                         <div class="mb-3">
                                             <label class="form-label">Delivery Address</label>
-                                            <input type="text" class="form-control mb-3" name="address_line_1" id="address_line_1" placeholder="Address Line 1" required>
-                                            <input type="text" class="form-control mb-3" name="address_line_2" id="address_line_2" placeholder="Address Line 2" required>
-                                            <input type="text" class="form-control" name="address_line_3" id="address_line_3" placeholder="Address Line 3" required>
+                                            <input type="text" class="form-control mb-3" name="address_line_1" id="address_line_1" placeholder="Address Line 1">
+                                            <input type="text" class="form-control mb-3" name="address_line_2" id="address_line_2" placeholder="Address Line 2">
+                                            <input type="text" class="form-control" name="address_line_3" id="address_line_3" placeholder="Address Line 3">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">District</label>
-                                                <select name="district" id="district" class="form-control  form-select" required>
+                                                <select name="district" id="district" class="form-control  form-select">
                                                     <option value="">--Select--</option>
 
                                                     <?php
@@ -285,35 +290,53 @@ $disctrictResult = $transportObj->getAllDistrict();
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Expected Delivery Date</label>
-                                                <input type="date" name="delivery_date" id="delivery_date" class="form-control" required>
+                                                <input type="date" name="delivery_date" id="delivery_date" class="form-control">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
+                                <div class="card mb-4" style="height: 362px;">
+                                    <div class="card-header bg-dark text-white fw-semibold">
+                                        Optional
+                                    </div>
+                                    <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
+
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label">Comments</label>
+                                                <textarea name="comments" id="comments" class="form-control" rows="9"></textarea>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
                                 <div class="card mb-4 ">
                                     <div class="card-header bg-dark text-white fw-semibold">
                                         Payment Details
                                     </div>
-                                    <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%); height: 320px;">
+                                    <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
+
+                                        <input type="hidden" name="amount" id="totalAmount">
+                                        <input type="hidden" name="delivery_charge" id="delivery_charge">
 
                                         <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label">Order Amount (Rs)</label>
-                                                <input type="number" name="amount" id="totalAmount" class="form-control" readonly>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label">Delivery Charge</label>
-                                                <input type="number" name="delivery_charge" id="delivery_charge" class="form-control" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
+                                            <div class="col-md-3 mb-3">
                                                 <label class="form-label">1st Installment</label>
-                                                <input type="number" name="installment" id="installment" class="form-control">
+                                                <input type="number" name="installment" id="installment" class="form-control" min="0">
                                             </div>
-                                            <div class="col-md-6 mb-3">
+                                            <div class="col-md-3 mb-3">
                                                 <label class="form-label">Payment Method</label>
                                                 <select name="payment_method" id="payment_method" class="form-select">
                                                     <option value="">------</option>
@@ -322,14 +345,12 @@ $disctrictResult = $transportObj->getAllDistrict();
                                                     <option value="Online">Online</option>
                                                 </select>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12 mb-3">
+                                            <div class="col-md-6 mb-3">
                                                 <label class="form-label">Reference No.</label>
                                                 <input type="reference_no" name="reference_no" id="reference_no" class="form-control">
                                             </div>
-
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -339,25 +360,44 @@ $disctrictResult = $transportObj->getAllDistrict();
                             <div class="col-md-12">
                                 <div class="card mb-4">
                                     <div class="card-header bg-dark text-white fw-semibold">
-                                        Optional
+                                        Order Summary
                                     </div>
                                     <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
-
-                                    <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label">Comments</label>
-                                                <textarea name="comments" id="comments" class="form-control" rows="3"></textarea>
+                                        <div class="row">
+                                            <div class="col-md-3 text-center">
+                                                <div class="text-muted">Items Total</div>
+                                                <div class="h4 fw-bold" id="summaryItemsTotal">Rs. 0.00</div>
                                             </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label">Design</label>
-                                                <input type="file" name="design" id="design" class="form-control" required>
+                                            <div class="col-md-3 text-center">
+                                                <div class="text-muted">Delivery Charge</div>
+                                                <div class="h4 fw-bold" id="summaryDeliveryCharge">Rs. 0.00</div>
+                                            </div>
+                                            <div class="col-md-3 text-center">
+                                                <div class="text-muted">Grand Total</div>
+                                                <div class="h4 fw-bold text-primary" id="summaryGrandTotal">Rs. 0.00</div>
+                                            </div>
+                                            <div class="col-md-3 text-center">
+                                                <div class="text-muted">1st Installment</div>
+                                                <div class="h4 fw-bold text-success" id="summaryInstallment">Rs. 0.00</div>
                                             </div>
                                         </div>
-
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-6 text-center">
+                                                <div class="text-muted">Item Count</div>
+                                                <div class="h5 fw-bold" id="summaryItemCount">0</div>
+                                            </div>
+                                            <div class="col-md-6 text-center">
+                                                <div class="text-muted">Balance Due</div>
+                                                <div class="h5 fw-bold text-danger" id="summaryBalance">Rs. 0.00</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
 
                         <div class="row mb-4">
                             <div class="col-md-3 offset-md-3">
@@ -448,10 +488,12 @@ $disctrictResult = $transportObj->getAllDistrict();
 
 
     <script src="../js/jquery-3.7.1.js"></script>
+    <script src="../js/order_validation.js"></script>
     <script src="../bootstrap/dist/js/bootstrap.js"></script>
     <script src="../js/datatable/bootstrap.bundle.min.js"></script>
     <script src="../js/datatable/dataTables.bootstrap5.js"></script>
     <script src="../js/datatable/dataTables.js"></script>
+
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
             const dateInput = document.querySelector('#todayDate');
@@ -461,113 +503,160 @@ $disctrictResult = $transportObj->getAllDistrict();
             let day = today.getDate();
             if (month < 10) month = `0${month}`;
             if (day < 10) day = `0${day}`;
-            const formattedDate = `${year}-${month}-${day}`;
-            dateInput.value = formattedDate;
+            dateInput.value = `${year}-${month}-${day}`;
+
+            // Prevent selecting a date before the order date
+            const deliveryDate = document.getElementById("delivery_date");
+            deliveryDate.min = dateInput.value;
+
+            document.getElementById("installment").addEventListener("input", updateOrderSummary);
         });
     </script>
-</body>
 
-<script>
-    function setSelectedBuyer(company_id) {
-        document.getElementById("company_id_input").value = company_id;
-    }
-</script>
+    <script>
+        function setSelectedBuyer(company_id) {
+            document.getElementById("company_id_input").value = company_id;
+        }
+    </script>
 
-<script>
-    $(document).ready(function() {
-        $("#buyertable").DataTable();
-    });
-</script>
-
-<script>
-    let pricingData = {};
-
-    <?php while ($row = $priceResult->fetch_assoc()) {
-        if ($row['pricing_status'] == 1) { ?>
-            pricingData["<?php echo $row['product_type_id'] . '_' . $row['size_id']; ?>"] = <?php echo $row['price']; ?>;
-    <?php }
-    } ?>
-</script>
-
-<script>
-    let orderItems = []; // store all items
-    const totalInput = document.getElementById("totalAmount"); // total amount input
-
-    // Function to calculate total amount
-    function calculateTotal() {
-        let total = 0;
-
-        orderItems.forEach(item => {
-            total += item.qty * item.price;
+    <script>
+        $(document).ready(function() {
+            $("#buyertable").DataTable();
         });
+    </script>
 
-        totalInput.value = total;
+    <script>
+        let pricingData = {};
 
-        // Delivery = 5% with minimum 1000
-        let delivery = total * 0.05;
+        <?php while ($row = $priceResult->fetch_assoc()) {
+            if ($row['pricing_status'] == 1) { ?>
+                pricingData["<?php echo $row['product_type_id'] . '_' . $row['size_id']; ?>"] = <?php echo $row['price']; ?>;
+        <?php }
+        } ?>
+    </script>
 
-        if (delivery < 1000) {
-            delivery = 1000;
+    <script>
+        function updateOrderSummary() {
+            let itemsTotal = 0;
+            orderItems.forEach(item => {
+                itemsTotal += item.qty * item.price;
+            });
+
+            let deliveryCharge = parseFloat(document.getElementById("delivery_charge").value) || 0;
+            let installmentInput = document.getElementById("installment");
+            let installment = parseFloat(installmentInput.value) || 0;
+
+            let grandTotal = itemsTotal + deliveryCharge;
+
+            // Prevent installment from exceeding grand total
+            if (installment > grandTotal) {
+                installment = grandTotal;
+                installmentInput.value = grandTotal.toFixed(2);
+                alert("1st Installment cannot be greater than the Grand Total.");
+            }
+
+            let balance = grandTotal - installment;
+
+            document.getElementById("summaryItemsTotal").innerText = "Rs. " + itemsTotal.toFixed(2);
+            document.getElementById("summaryDeliveryCharge").innerText = "Rs. " + deliveryCharge.toFixed(2);
+            document.getElementById("summaryGrandTotal").innerText = "Rs. " + grandTotal.toFixed(2);
+            document.getElementById("summaryInstallment").innerText = "Rs. " + installment.toFixed(2);
+            document.getElementById("summaryItemCount").innerText = orderItems.length;
+            document.getElementById("summaryBalance").innerText = "Rs. " + (balance < 0 ? "0.00" : balance.toFixed(2));
+        }
+    </script>
+
+    <script>
+        let orderItems = []; // metadata for each item (no binary files in here)
+        let itemCounter = 0; // permanent unique id per item, never reused
+        const totalInput = document.getElementById("totalAmount");
+        const form = document.querySelector("form");
+
+        function calculateTotal() {
+            let total = 0;
+            orderItems.forEach(item => {
+                total += item.qty * item.price;
+            });
+            totalInput.value = total;
+
+            let delivery = total * 0.05;
+            if (delivery < 1000) delivery = 1000;
+            document.getElementById("delivery_charge").value = delivery.toFixed(2);
+
+            updateOrderSummary();
         }
 
-        document.getElementById("delivery_charge").value = delivery.toFixed(2);
-    }
+        // Add item to table
+        document.getElementById("addBtn").addEventListener("click", function() {
+            let productSelect = document.getElementById("select_product");
+            let sizeSelect = document.getElementById("select_size");
+            let qtyInput = document.getElementById("qty");
+            let designInput = document.getElementById("item_design");
 
-    // Add item to table
-    document.getElementById("addBtn").addEventListener("click", function() {
-        let productSelect = document.getElementById("select_product");
-        let sizeSelect = document.getElementById("select_size");
-        let qtyInput = document.getElementById("qty");
+            let product_id = productSelect.value;
+            let size_id = sizeSelect.value;
+            let qty = parseInt(qtyInput.value);
+            let file = designInput.files[0]; // may be undefined
 
-        let product_id = productSelect.value;
-        let size_id = sizeSelect.value;
-        let qty = parseInt(qtyInput.value);
+            let productText = productSelect.options[productSelect.selectedIndex].text;
+            let sizeText = sizeSelect.options[sizeSelect.selectedIndex].text;
 
-        let productText = productSelect.options[productSelect.selectedIndex].text;
-        let sizeText = sizeSelect.options[sizeSelect.selectedIndex].text;
+            if (!product_id || !size_id || !qty || qty <= 0 || !file) {
+                alert("Please fill all fields correctly!");
+                return;
+            }
 
-        // Validation
-        if (!product_id || !size_id || !qty || qty <= 0) {
-            alert("Please fill all fields correctly!");
-            return;
-        }
+            let key = product_id + "_" + size_id;
+            let price = pricingData[key];
 
-        // Get price from pricingData
-        let key = product_id + "_" + size_id;
-        let price = pricingData[key];
+            if (!price) {
+                alert("Price not found!");
+                console.log("Missing key:", key);
+                return;
+            }
 
-        if (!price) {
-            alert("Price not found!");
-            console.log("Missing key:", key);
-            return;
-        }
+            let existing = orderItems.find(item =>
+                item.product_id == product_id && item.size_id == size_id
+            );
+            if (existing) {
+                alert("This product & size already added!");
+                return;
+            }
 
-        let amount = price * qty;
+            let amount = price * qty;
+            let itemKey = itemCounter++;
 
-        // Prevent duplicate
-        let existing = orderItems.find(item =>
-            item.product_id == product_id && item.size_id == size_id
-        );
+            orderItems.push({
+                item_key: itemKey,
+                product_id: product_id,
+                size_id: size_id,
+                qty: qty,
+                price: price,
+                design_name: file ? file.name : null
+            });
 
-        if (existing) {
-            alert("This product & size already added!");
-            return;
-        }
+            // Create a dedicated hidden file input for this item's design,
+            // so each row's file survives independently until submit.
+            if (file) {
+                let hiddenInput = document.createElement("input");
+                hiddenInput.type = "file";
+                hiddenInput.name = `item_design[${itemKey}]`;
+                hiddenInput.id = `item_design_${itemKey}`;
+                hiddenInput.style.display = "none";
 
-        // Store item
-        orderItems.push({
-            product_id: product_id,
-            size_id: size_id,
-            qty: qty,
-            price: price
-        });
+                let dt = new DataTransfer();
+                dt.items.add(file);
+                hiddenInput.files = dt.files;
 
-        // Add row to table
-        let row = `
-        <tr>
+                form.appendChild(hiddenInput);
+            }
+
+            let row = `
+        <tr data-item-key="${itemKey}">
             <td>${productText}</td>
             <td>${sizeText}</td>
             <td class="qtyCell">${qty}</td>
+            <td class="designCell">${file ? file.name : "-"}</td>
             <td class="amountCell">${amount}</td>
             <td>
                 <button type="button" class="btn btn-warning btn-sm editBtn">Edit</button>
@@ -576,92 +665,84 @@ $disctrictResult = $transportObj->getAllDistrict();
             </td>
         </tr>
     `;
-        document.getElementById("orderTableBody").innerHTML += row;
+            document.getElementById("orderTableBody").insertAdjacentHTML("beforeend", row);
 
-        // Clear inputs
-        qtyInput.value = "";
-        productSelect.selectedIndex = 0;
-        sizeSelect.selectedIndex = 0;
+            // Clear inputs for next entry
+            qtyInput.value = "";
+            designInput.value = "";
+            productSelect.selectedIndex = 0;
+            sizeSelect.selectedIndex = 0;
 
-        // Update total
-        calculateTotal();
-    });
-
-    // Remove row + update array
-    document.addEventListener("click", function(e) {
-        if (e.target.classList.contains("removeBtn")) {
-            let row = e.target.closest("tr");
-            let index = row.rowIndex - 1; // adjust index
-            orderItems.splice(index, 1); // remove from array
-            row.remove();
-            calculateTotal(); // update total
-        }
-    });
-
-    // Edit button click
-    document.addEventListener("click", function(e) {
-        if (e.target.classList.contains("editBtn")) {
-            let row = e.target.closest("tr");
-            let qtyCell = row.querySelector(".qtyCell");
-            let currentQty = qtyCell.innerText;
-
-            // Convert to input
-            qtyCell.innerHTML = `<input type="number" class="form-control form-control-sm editQty" value="${currentQty}" min="1">`;
-
-            // Toggle buttons
-            row.querySelector(".editBtn").classList.add("d-none");
-            row.querySelector(".saveBtn").classList.remove("d-none");
-        }
-    });
-
-    // Save button click
-    document.addEventListener("click", function(e) {
-        if (e.target.classList.contains("saveBtn")) {
-            let row = e.target.closest("tr");
-            let qtyInput = row.querySelector(".editQty");
-            let newQty = parseInt(qtyInput.value);
-
-            if (!newQty || newQty <= 0) {
-                alert("Invalid quantity!");
-                return;
-            }
-
-            let rowIndex = row.rowIndex - 1;
-            let item = orderItems[rowIndex];
-
-            let price = item.price;
-            let newAmount = price * newQty;
-
-            // Update UI
-            row.querySelector(".qtyCell").innerText = newQty;
-            row.querySelector(".amountCell").innerText = newAmount;
-
-            // Update array
-            item.qty = newQty;
-
-            // Toggle buttons
-            row.querySelector(".editBtn").classList.remove("d-none");
-            row.querySelector(".saveBtn").classList.add("d-none");
-
-            // Update total
             calculateTotal();
-        }
-    });
-</script>
+        });
 
-<script>
-    const form = document.querySelector("form");
+        // Remove row + its file input + update array (matched by item_key, not row position)
+        document.addEventListener("click", function(e) {
+            if (e.target.classList.contains("removeBtn")) {
+                let row = e.target.closest("tr");
+                let itemKey = row.dataset.itemKey;
 
-    form.addEventListener("submit", function(e) {
-        // Convert orderItems array to JSON string
-        document.getElementById("order_items_input").value = JSON.stringify(orderItems);
+                orderItems = orderItems.filter(item => item.item_key != itemKey);
 
-        // Optionally, you can validate that there is at least 1 item
-        if (orderItems.length === 0) {
-            e.preventDefault();
-            alert("Please add at least one order item!");
-        }
-    });
-</script>
+                let hiddenInput = document.getElementById(`item_design_${itemKey}`);
+                if (hiddenInput) hiddenInput.remove();
+
+                row.remove();
+                calculateTotal();
+            }
+        });
+
+        // Edit qty
+        document.addEventListener("click", function(e) {
+            if (e.target.classList.contains("editBtn")) {
+                let row = e.target.closest("tr");
+                let qtyCell = row.querySelector(".qtyCell");
+                let currentQty = qtyCell.innerText;
+
+                qtyCell.innerHTML = `<input type="number" class="form-control form-control-sm editQty" value="${currentQty}" min="1">`;
+
+                row.querySelector(".editBtn").classList.add("d-none");
+                row.querySelector(".saveBtn").classList.remove("d-none");
+            }
+        });
+
+        // Save qty (matched by item_key)
+        document.addEventListener("click", function(e) {
+            if (e.target.classList.contains("saveBtn")) {
+                let row = e.target.closest("tr");
+                let itemKey = row.dataset.itemKey;
+                let qtyInput = row.querySelector(".editQty");
+                let newQty = parseInt(qtyInput.value);
+
+                if (!newQty || newQty <= 0) {
+                    alert("Invalid quantity!");
+                    return;
+                }
+
+                let item = orderItems.find(i => i.item_key == itemKey);
+                let newAmount = item.price * newQty;
+
+                row.querySelector(".qtyCell").innerText = newQty;
+                row.querySelector(".amountCell").innerText = newAmount;
+
+                item.qty = newQty;
+
+                row.querySelector(".editBtn").classList.remove("d-none");
+                row.querySelector(".saveBtn").classList.add("d-none");
+
+                calculateTotal();
+            }
+        });
+
+        // Submit: serialize metadata; files already sit in the form as item_design[itemKey]
+        form.addEventListener("submit", function(e) {
+            document.getElementById("order_items_input").value = JSON.stringify(orderItems);
+
+            if (orderItems.length === 0) {
+                e.preventDefault();
+                alert("Please add at least one order item!");
+            }
+        });
+    </script>
 
 </html>

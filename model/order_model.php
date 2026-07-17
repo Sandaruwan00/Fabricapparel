@@ -6,21 +6,21 @@ $dbcon = new DbConnection();
 class Order
 {
     // Add a new order
-    public function addOrder($company_id, $user_id, $address_line_1, $address_line_2, $address_line_3, $district_id, $expected_delivery_date, $total_amount, $delivery_charge, $comments, $file_name)
+    public function addOrder($company_id, $user_id, $address_line_1, $address_line_2, $address_line_3, $district_id, $expected_delivery_date, $total_amount, $delivery_charge, $comments)
     {
         $con = $GLOBALS["con"];
-        $sql = "INSERT INTO orders (company_id, user_id, address_line_1, address_line_2, address_line_3, district_id, expected_delivery_date, total_amount, delivery_charge, comments, design, status_id)
-                VALUES ('$company_id', '$user_id', '$address_line_1', '$address_line_2', '$address_line_3', '$district_id', '$expected_delivery_date', '$total_amount', '$delivery_charge', '$comments', '$file_name', '1')";
+        $sql = "INSERT INTO orders (company_id, user_id, address_line_1, address_line_2, address_line_3, district_id, expected_delivery_date, total_amount, delivery_charge, comments, status_id)
+                VALUES ('$company_id', '$user_id', '$address_line_1', '$address_line_2', '$address_line_3', '$district_id', '$expected_delivery_date', '$total_amount', '$delivery_charge', '$comments', '1')";
         $con->query($sql) or die($con->error);
         return $con->insert_id;
     }
 
     // Add an order item
-    public function addOrderItem($order_id, $product_id, $size_id, $qty, $unit_price)
+    public function addOrderItem($order_id, $product_id, $size_id, $qty, $unit_price, $item_design_name)
     {
         $con = $GLOBALS["con"];
-        $sql = "INSERT INTO order_item (order_id, product_id, size_id, qty, unit_price) 
-                VALUES ('$order_id', '$product_id', '$size_id', '$qty', '$unit_price')";
+        $sql = "INSERT INTO order_item (order_id, product_id, size_id, qty, unit_price, item_design) 
+                VALUES ('$order_id', '$product_id', '$size_id', '$qty', '$unit_price', '$item_design_name')";
         $con->query($sql) or die($con->error);
     }
 

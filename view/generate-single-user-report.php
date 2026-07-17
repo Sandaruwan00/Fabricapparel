@@ -10,7 +10,8 @@ if (!isset($_GET["user_id"]) || empty($_GET["user_id"])) {
     exit();
 }
 
-$user_id = intval($_GET["user_id"]); // safer than raw value
+$user_id = ($_GET["user_id"]); // safer than raw value
+$user_id = base64_decode($user_id);
 
 // ---------------- FETCH DATA ----------------
 $userObj = new User();

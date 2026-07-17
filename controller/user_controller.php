@@ -34,7 +34,7 @@ switch ($status) {
                 $functionResult = $userObj->getModuleFunctions($module_id);
             ?>
                 <div class="col-md-4">
-                    <div class="card" style="border: 2px solid grey; border-radius: 15px;">
+                    <div class="card" style="border: 2px solid grey; border-radius: 15px; height: 100%;">
                         <div class="card-body">
                             <h5 class="card-title text-center">
                                 <?php
@@ -46,7 +46,7 @@ switch ($status) {
                             while ($fun_row = $functionResult->fetch_assoc()) {
                             ?>
                                 <input type="checkbox" name="fun[]" value="<?php echo $fun_row["function_id"]; ?>" checked />
-                                <label for="" class="h6"><?php echo $fun_row["function_name"]; ?></label>
+                                <label for="" style="font-size: 13px;"> <?php echo $fun_row["function_name"]; ?></label>
                                 <br />
                             <?php
                             }
@@ -200,19 +200,20 @@ switch ($status) {
                 }
             }
 
-            $emailResult = $userObj->checkEmailExist($email);
+            $emailResult = $userObj->checkEmailExistUpdate($email, $user_id);
             $emailRow = $emailResult->fetch_assoc();
 
             if ($emailRow["total"] > 0) {
                 throw new Exception("Email Already Exists!!!!");
             }
 
-            $nicResult = $userObj->checkNICExist($nic);
+            $nicResult = $userObj->checkNicExistUpdate($nic, $user_id);
             $nicRow = $nicResult->fetch_assoc();
 
             if ($nicRow["total"] > 0) {
                 throw new Exception("NIC Already Exists!!!!");
             }
+
 
             //update user
             $userObj->updateUser($fname, $lname, $email, $dob, $nic, $user_role, $img, $user_id);

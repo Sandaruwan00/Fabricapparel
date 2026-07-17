@@ -32,7 +32,7 @@ switch ($status) {
             $payment_method = $_POST["payment_method"];
             $reference_no = $_POST["reference_no"];
 
-            $design = $_FILES["design"];
+            
 
             $order_items = $_POST["order_items"]; // pass orderItems as JSON from JS
 
@@ -42,20 +42,17 @@ switch ($status) {
                 $delivery_charge = 1000;
             }
 
+            if (empty($company_id)) {
+                throw new Exception("Please select a buyer before submitting the order!");
+            }
+
             if (!$order_items) {
                 throw new Exception("Order items cannot be empty!");
             }
 
             $order_items = json_decode($order_items, true);
 
-            $file_name = "";
-            if (isset($_FILES["design"])) {
-                if ($design["name"] != "") {
-                    $file_name = time() . "_" . $design["name"];
-                    $path = "../files/design_pdfs/$file_name";
-                    move_uploaded_file($design["tmp_name"], $path);
-                }
-            }
+            
 
             // --- Insert Order ---
             $order_id = $orderObj->addOrder(
@@ -68,20 +65,36 @@ switch ($status) {
                 $expected_delivery_date,
                 $total_amount,
                 $delivery_charge,
-                $comments,
-                $file_name
+                $comments
             );
 
             if (!$order_id) throw new Exception("Failed to create order!");
 
-            // --- Insert Order Items ---
+            // --- Insert Order Items (with per-item design files) ---
             foreach ($order_items as $item) {
+                $item_key = $item["item_key"];
+                $item_design_name = "";
+
+                // Each item's design file arrives as item_design[item_key] via the
+                // hidden per-row file inputs created in add-order.php
+                if (
+                    isset($_FILES["item_design"]) &&
+                    isset($_FILES["item_design"]["name"][$item_key]) &&
+                    $_FILES["item_design"]["error"][$item_key] === UPLOAD_ERR_OK
+                ) {
+                    $original_name = basename($_FILES["item_design"]["name"][$item_key]);
+                    $item_design_name = time() . "_" . $item_key . "_" . $original_name;
+                    $item_design_path = "../files/designs/$item_design_name";
+                    move_uploaded_file($_FILES["item_design"]["tmp_name"][$item_key], $item_design_path);
+                }
+
                 $orderObj->addOrderItem(
                     $order_id,
                     $item["product_id"],
                     $item["size_id"],
                     $item["qty"],
-                    $item["price"]
+                    $item["price"],
+                    $item_design_name
                 );
             }
 

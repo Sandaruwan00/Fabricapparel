@@ -247,7 +247,7 @@ while ($fun_row = $userfunctionResult->fetch_assoc()) {
                                                     $functionResult = $userObj->getModuleFunctions($module_id);
                                                 ?>
                                                     <div class="col-md-4">
-                                                        <div class="card" style="border: 2px solid grey; border-radius: 15px;">
+                                                        <div class="card" style="border: 2px solid grey; border-radius: 15px; height: 100%;">
                                                             <div class="card-body">
                                                                 <h5 class="card-title text-center">
                                                                     <?php
@@ -269,7 +269,7 @@ while ($fun_row = $userfunctionResult->fetch_assoc()) {
                                                                         <?php
                                                                         }
                                                                         ?> />
-                                                                    <label for="" class="h6"><?php echo $fun_row["function_name"]; ?></label>
+                                                                    <label for="" style="font-size: 13px;"> <?php echo $fun_row["function_name"]; ?></label>
                                                                     <br />
                                                                 <?php
                                                                 }

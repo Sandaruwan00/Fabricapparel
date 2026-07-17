@@ -59,6 +59,20 @@ class User
         return $result;
     }
 
+    public function checkEmailExistUpdate($email, $user_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT COUNT(*) AS total FROM user WHERE user_email='$email' AND user_id != '$user_id'";
+        return $con->query($sql);
+    }
+
+    public function checkNicExistUpdate($nic, $user_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT COUNT(*) AS total FROM user WHERE user_nic='$nic' AND user_id != '$user_id'";
+        return $con->query($sql);
+    }
+
     public function addUser($fname, $lname, $email, $dob, $nic, $user_role, $user_image)
     {
 
@@ -198,6 +212,4 @@ class User
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
-
-
 }

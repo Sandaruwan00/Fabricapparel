@@ -67,7 +67,7 @@ while ($fun_row = $userfunctionResult->fetch_assoc()) {
                 <div class="btn-group">
                     <a href="add-user.php" class="btn btn-outline-primary">Add User</a>
                     <a href="view-users.php" class="btn btn-outline-success">View Users</a>
-                    <a href="generate-single-user-report.php?user_id=<?php echo $user_id; ?>" class="btn btn-outline-warning">Generate User Report</a>
+                    <a href="generate-single-user-report.php?user_id=<?php echo $_GET["user_id"]; ?>" class="btn btn-outline-warning">Generate User Report</a>
                 </div>
             </div>
         </div>
@@ -193,7 +193,7 @@ while ($fun_row = $userfunctionResult->fetch_assoc()) {
                                                         $functionResult = $userObj->getModuleFunctions($module_id);
                                                     ?>
                                                         <div class="col-md-6">
-                                                            <div class="card" style="border: 2px solid grey; border-radius: 15px;">
+                                                            <div class="card" style="border: 2px solid grey; border-radius: 15px; height: 100%;">
                                                                 <div class="card-body">
                                                                     <h6 class="card-title text-center">
                                                                         <?php

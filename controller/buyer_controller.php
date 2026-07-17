@@ -32,6 +32,7 @@ switch ($status) {
         $contact_name = $_POST["contact_name"];
         $job_title = $_POST["job_title"];
         $contact_email = $_POST["contact_email"];
+        $contact_nic = $_POST["contact_nic"];
         $contact_phone = $_POST["contact_phone"];
         $office_address_line_1 = $_POST["office_address_line_1"];
         $office_address_line_2 = $_POST["office_address_line_2"];
@@ -42,7 +43,7 @@ switch ($status) {
             $company_id = $buyerObj->addBuyerCompany($company_name, $company_registration, $business_type, $website, $company_address_line_1, $company_address_line_2, $company_city, $company_postal_code, $company_country);
 
             if ($company_id > 0) {
-                $buyerObj->addBuyerCompanyPerson($company_id, $contact_name, $job_title, $contact_email, $contact_phone, $office_address_line_1, $office_address_line_2, $office_address_line_3);
+                $buyerObj->addBuyerCompanyPerson($company_id, $contact_name, $job_title, $contact_email, $contact_nic, $contact_phone, $office_address_line_1, $office_address_line_2, $office_address_line_3);
 
                 $msg = "$company_name Successfully Added";
                 $msg = base64_encode($msg);
@@ -110,6 +111,7 @@ switch ($status) {
         $contact_name = $_POST["contact_name"];
         $job_title = $_POST["job_title"];
         $contact_email = $_POST["contact_email"];
+        $contact_nic = $_POST["contact_nic"];
         $contact_phone = $_POST["contact_phone"];
         $office_address_line_1 = $_POST["office_address_line_1"];
         $office_address_line_2 = $_POST["office_address_line_2"];
@@ -121,7 +123,7 @@ switch ($status) {
 
             $buyerObj->updateBuyerCompany($company_name, $company_registration, $business_type, $website, $company_address_line_1, $company_address_line_2, $company_city, $company_postal_code, $company_country, $company_id);
 
-            $buyerObj->updateBuyerCompanyPerson($company_id, $contact_name, $job_title, $contact_email, $contact_phone, $office_address_line_1, $office_address_line_2, $office_address_line_3);
+            $buyerObj->updateBuyerCompanyPerson($company_id, $contact_name, $job_title, $contact_email, $contact_nic, $contact_phone, $office_address_line_1, $office_address_line_2, $office_address_line_3);
 
 
 
