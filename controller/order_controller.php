@@ -32,7 +32,7 @@ switch ($status) {
             $payment_method = $_POST["payment_method"];
             $reference_no = $_POST["reference_no"];
 
-            
+
 
             $order_items = $_POST["order_items"]; // pass orderItems as JSON from JS
 
@@ -52,7 +52,7 @@ switch ($status) {
 
             $order_items = json_decode($order_items, true);
 
-            
+
 
             // --- Insert Order ---
             $order_id = $orderObj->addOrder(
@@ -344,8 +344,302 @@ switch ($status) {
             <script>
                 window.location = "../view/order-refund.php?msg=<?php echo $msg; ?>";
             </script>
-<?php
+        <?php
         }
+        break;
+
+    case "load_order":
+
+        $order_id = $_POST["order_id"];
+
+        // Get order main details
+        $orderResult = $orderObj->getOrder($order_id);
+        $orderrow = $orderResult->fetch_assoc();
+
+        // Get order items
+        $orderItemsResult = $orderObj->getOrderItems($order_id);
+
+        // Get payments
+        $paymentResult = $orderObj->getOrderPayments($order_id);
+
+        $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
+
+        ?>
+        <div class="modal-body">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card" style="box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+
+                        <!-- Header -->
+                        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                            <div>
+                                <h3 class="fw-bold mb-1">Order #<?php echo $orderrow["order_id"]; ?></h3>
+                                <h4 class="mb-0"><?php echo $orderrow["company_name"]; ?></h4>
+                                <h6 class="mb-0">Contact Person: <?php echo $orderrow["contact_name"]; ?></h6>
+                            </div>
+                            <span class="badge fs-5" style="background-color: <?php echo $orderrow['color_code']; ?>; color: white;">
+                                <?php echo $orderrow['status_name']; ?>
+                            </span>
+                        </div>
+
+                        <div class="card-body" style="margin:20px;">
+
+                            <!-- Order Info -->
+                            <h4 class="fw-bold"><i class="bi bi-receipt"></i> Order Information</h4>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="fw-bold m-auto">ORDER DATE:</p>
+                                    <p class="fs-5"><?php echo $orderrow["order_date"]; ?></p>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="fw-bold m-auto">TOTAL AMOUNT:</p>
+                                    <p class="fs-5">Rs <?php echo number_format($orderrow["total_amount"], 2); ?></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="fw-bold m-auto">DELIVERY CHARGE:</p>
+                                    <p class="fs-5">Rs <?php echo number_format($orderrow["delivery_charge"], 2); ?></p>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <p class="fw-bold m-auto">COMMENTS:</p>
+                                    <p class="fs-5"><?php echo $orderrow["comments"]; ?></p>
+                                </div>
+                            </div>
+
+                            <div class="row">&nbsp;</div>
+
+                            <!-- Delivery -->
+                            <h4 class="fw-bold"><i class="bi bi-truck"></i> Delivery Details</h4>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><?php echo $orderrow["address_line_1"] . ", " . $orderrow["address_line_2"] . ", " . $orderrow["address_line_3"]; ?></h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="fw-bold m-auto">DISTRICT:</p>
+                                    <p class="fs-5"><?php echo $orderrow["district_name"]; ?></p>
+                                </div>
+                            </div>
+
+
+                            <br>
+
+                            <?php
+                            $expected = $orderrow["expected_delivery_date"];
+                            $badgeText = "-";
+                            if ($orderrow["status_name"] != "Cancelled" && $orderrow["status_name"] != "Delivered") {
+                                $expected = $orderrow["expected_delivery_date"];
+                                $today = date("Y-m-d");
+                                $days = ceil((strtotime($expected) - strtotime($today)) / (60 * 60 * 24));
+
+                                if ($days > 0) {
+                                    $badgeClass = "bg-success text-white";
+                                    $badgeText = "$days days left";
+                                } elseif ($days == 0) {
+                                    $badgeClass = "bg-warning text-dark";
+                                    $badgeText = "Due Today";
+                                } else {
+                                    $badgeClass = "bg-danger text-white";
+                                    $badgeText = abs($days) . " days overdue";
+                                }
+                            }
+                            ?>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="fw-bold m-auto">EXPECTED DELIVERY DATE:</p>
+                                    <p class="fs-5"><?php echo $expected; ?></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="fw-bold m-auto">DELIVERY DUE:</p>
+                                    <p><span class="badge fs-6 <?php echo $badgeClass; ?>"><?php echo $badgeText; ?></span></p>
+                                </div>
+                            </div>
+
+                            <div class="row">&nbsp;</div>
+
+                            <!-- Items -->
+                            <h4 class="fw-bold"><i class="bi bi-box-seam"></i> Order Items</h4>
+                            <hr>
+
+                            <table class="table table-bordered">
+                                <thead class="table-dark text-center">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Size</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                        <th>Amount</th>
+                                        <th>Design</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($item = $orderItemsResult->fetch_assoc()) { ?>
+                                        <tr>
+                                            <td><?php echo $item["product_type_name"]; ?></td>
+                                            <td><?php echo $item["size_short_name"]; ?></td>
+                                            <td><?php echo $item["qty"]; ?></td>
+                                            <td class="text-end"><?php echo number_format($item["unit_price"], 2); ?></td>
+                                            <td class="text-end"><?php echo number_format($item["qty"] * $item["unit_price"], 2); ?></td>
+                                            <td class="text-center">
+                                                <?php if (!empty($item["item_design"])) { ?>
+                                                    <button type="button"
+                                                        class="btn btn-outline-primary btn-sm previewDesignBtn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#designPreviewModal"
+                                                        data-file="../files/designs/<?php echo $item["item_design"]; ?>"
+                                                        data-filename="<?php echo $item["item_design"]; ?>">
+                                                        <i class="bi bi-eye"></i> View
+                                                    </button>
+                                                <?php } else { ?>
+                                                    <span class="text-muted">-</span>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+
+                            <div class="row">&nbsp;</div>
+
+
+
+                            <!-- Payments -->
+                            <h4 class="fw-bold"><i class="bi bi-cash"></i> Payments</h4>
+                            <hr>
+
+                            <table class="table table-bordered">
+                                <thead class="table-secondary text-center">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Method</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Reference</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $totalPayments = 0;
+                                    while ($pay = $paymentResult->fetch_assoc()) { ?>
+                                        <tr>
+                                            <td width="20%"><?php echo $pay["payment_datetime"]; ?></td>
+                                            <td width="10%"><?php echo $pay["payment_method"]; ?></td>
+                                            <td width="15%" class="text-end"><?php echo number_format($pay["amount"], 2); ?></td>
+                                            <td width="15%" class="text-center"><?php echo $pay["payment_status"]; ?></td>
+                                            <td width="20%"><?php echo $pay["reference_no"]; ?></td>
+                                            <td width="20%"><?php echo $pay["payment_remarks"]; ?></td>
+                                        </tr>
+                                    <?php
+                                        if ($pay["payment_status"] == "Approved") {
+                                            $totalPayments = $totalPayments + $pay["amount"];
+                                        }
+                                    } ?>
+                                </tbody>
+                            </table>
+
+                            <div class="row">&nbsp;</div>
+
+                            <!-- Order Summary -->
+
+                            <h4 class="fw-bold"><i class="bi bi-calculator"></i> Order Summary</h4>
+                            <hr>
+
+                            <?php
+
+
+                            // ✅ Calculate totals
+                            $totalOrderCost = $orderrow["total_amount"] + $orderrow["delivery_charge"];
+                            $dueAmount = $totalOrderCost - $totalPayments;
+                            ?>
+
+                            <div class="row g-3 mb-3">
+
+                                <!-- TOTAL ORDER COST -->
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded bg-light shadow-lg">
+                                        <p class="text-muted mb-1 small">TOTAL ORDER COST</p>
+                                        <p class="fs-4 fw-bold mb-0">
+                                            Rs <?php echo number_format($totalOrderCost, 2); ?>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- TOTAL PAYMENTS -->
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded bg-light shadow-lg">
+                                        <p class="text-muted mb-1 small">TOTAL PAYMENTS</p>
+                                        <p class="fs-4 fw-bold mb-0 text-success">
+                                            Rs <?php echo number_format($totalPayments, 2); ?>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- DUE AMOUNT -->
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded bg-light shadow-lg">
+                                        <p class="text-muted mb-1 small">DUE AMOUNT</p>
+                                        <p class="fs-4 fw-bold mb-0 <?php echo ($dueAmount > 0) ? 'text-danger' : 'text-success'; ?>">
+                                            Rs <?php echo number_format($dueAmount, 2); ?>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">&nbsp;</div>
+
+                            <h4 class="fw-bold"><i class="bi bi-journal-text"></i> Order History</h4>
+                            <hr>
+
+                            <table class="table table-bordered">
+                                <thead class="table-secondary text-center">
+                                    <tr>
+                                        <th width="2%">#</th>
+                                        <th width="18%">Date & Time</th>
+                                        <th width="20%">Status</th>
+                                        <th width="35%">Description</th>
+                                        <th width="25%">Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $no = 0;
+                                    while ($log = $orderStatusLogResult->fetch_assoc()) {
+                                        $no++;
+                                    ?>
+                                        <tr height="50px" class="align-middle">
+                                            <td><?php echo $no; ?></td>
+                                            <td><?php echo $log["changed_at"]; ?></td>
+                                            <td class="text-center" style="background-color: <?php echo $log["color_code"]; ?> ;"><?php echo $log["status_name"]; ?></td>
+                                            <td><?php echo $log["description"]; ?></td>
+                                            <td><?php echo $log["remarks"]; ?></td>
+                                        </tr>
+                                    <?php
+
+                                    } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<?php
+
         break;
 }
 
