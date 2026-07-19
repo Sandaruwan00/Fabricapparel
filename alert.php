@@ -27,3 +27,14 @@ if (isset($_GET["msg"])) {
     });
 </script>
 <!-- alert end -->
+
+
+<div class="row justify-content-center" style="margin-top:25px;">
+            <div id="msg" class="col-md-4 text-center">
+                <?php if (isset($_GET["msg"])) { ?>
+                    <div class="alert alert-danger text-center">
+                        <?php echo base64_decode($_GET["msg"]); ?>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>

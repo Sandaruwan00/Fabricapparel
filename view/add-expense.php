@@ -29,12 +29,12 @@ $userrow = $_SESSION["user"];
 
                     <a href="refund.php" class="btn btn-outline-info">
                         Refunds
-                       
+
                     </a>
 
                     <a href="purchase-order-payments.php" class="btn btn-outline-secondary">
                         PO Payments
-                       
+
                     </a>
 
                     <a href="generate-finance-report.php" class="btn btn-outline-warning">
@@ -53,7 +53,17 @@ $userrow = $_SESSION["user"];
             </div>
         </div>
 
-        <div class="row">&nbsp;</div>
+
+        <div class="row justify-content-center" style="margin-top:25px;">
+            <div id="msg" class="col-md-4 text-center">
+                <?php if (isset($_GET["msg"])) { ?>
+                    <div class="alert alert-danger text-center">
+                        <?php echo base64_decode($_GET["msg"]); ?>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card shadow-lg border-0 rounded-4">
@@ -66,7 +76,7 @@ $userrow = $_SESSION["user"];
                             <div class="mb-3">
                                 <label class="form-label">Expense Category</label>
 
-                                <select name="expense_category" class="form-select" required>
+                                <select name="expense_category" class="form-select" id="expense_category">
                                     <option value="">-- Select Category --</option>
                                     <option value="Fuel">Fuel</option>
                                     <option value="Salary">Salary</option>
@@ -78,26 +88,26 @@ $userrow = $_SESSION["user"];
                                 </select>
                             </div>
 
-                            
+
 
                             <div class="mb-3">
                                 <label class="form-label">Expense Amount</label>
                                 <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text" id="btnGroupAddon">Rs</div>
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text" id="btnGroupAddon">Rs</div>
+                                    </div>
+                                    <input type="number" step="0.01" name="expense_amount" class="form-control" placeholder="Enter Amount" id="expense_amount">
                                 </div>
-                                <input type="number" step="0.01" name="expense_amount" class="form-control" placeholder="Enter Amount" required>
-                            </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Expense Date</label>
-                                <input type="date" name="expense_date" class="form-control" value="<?php echo date('Y-m-d'); ?>" required>
+                                <input type="date" name="expense_date" class="form-control" value="<?php echo date('Y-m-d'); ?>" id="expense_date">
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Description</label>
-                                <textarea name="expense_description" rows="4" class="form-control" placeholder="Enter Expense Description" required></textarea>
+                                <textarea name="expense_description" rows="4" class="form-control" placeholder="Enter Expense Description" id="expense_description"></textarea>
                             </div>
 
                             <div class="text-end">
@@ -112,5 +122,61 @@ $userrow = $_SESSION["user"];
     <?php include_once '../includes/footer_includes.php'; ?>
 </body>
 <script src="../js/jquery-3.7.1.js"></script>
+
+<script>
+    $(document).ready(function() {
+
+        var today = new Date().toISOString().split("T")[0];
+        $("#expense_date").attr("min", today);
+
+        $("form").submit(function() {
+
+            $("#msg").removeClass("alert alert-danger").html("");
+
+            var expense_category = $("#expense_category").val();
+            var expense_amount = $("#expense_amount").val().trim();
+            var expense_date = $("#expense_date").val();
+            var expense_description = $("#expense_description").val().trim();
+
+            if (expense_category == "") {
+                $("#msg").html("Please Select an Expense Category!");
+                $("#msg").addClass("alert alert-danger");
+                return false;
+            }
+
+            if (expense_amount == "") {
+                $("#msg").html("Expense Amount Cannot Be Empty!");
+                $("#msg").addClass("alert alert-danger");
+                return false;
+            }
+
+            if (isNaN(expense_amount) || parseFloat(expense_amount) <= 0) {
+                $("#msg").html("Expense Amount Must Be Greater Than Zero!");
+                $("#msg").addClass("alert alert-danger");
+                return false;
+            }
+
+            if (expense_date == "") {
+                $("#msg").html("Please Select an Expense Date!");
+                $("#msg").addClass("alert alert-danger");
+                return false;
+            }
+
+            if (expense_description == "") {
+                $("#msg").html("Expense Description Cannot Be Empty!");
+                $("#msg").addClass("alert alert-danger");
+                return false;
+            }
+
+            if (expense_description.length < 5) {
+                $("#msg").html("Expense Description Must Be At Least 5 Characters!");
+                $("#msg").addClass("alert alert-danger");
+                return false;
+            }
+
+        });
+
+    });
+</script>
 
 </html>
