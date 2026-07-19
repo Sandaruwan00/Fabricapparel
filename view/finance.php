@@ -9,50 +9,137 @@ $userrow = $_SESSION["user"];
 $financeObj = new Finance();
 $orderObj = new Order();
 
-//calculate total refunds
-$orderRefundResult = $orderObj->getAllOrderRefunds();
-$totalRefunds = 0;
-$approvedRefundsCount = 0;
-while ($refundrow = $orderRefundResult->fetch_assoc()) {
-  if ($refundrow["refund_status"] == "Processed") {
-    $totalRefunds = $totalRefunds + $refundrow["refund_amount"];
-  }
-  if ($refundrow["refund_status"] == "Approved") {
-    $approvedRefundsCount++;
-  }
-}
+$totalWeeklyIncome = 0;
+$totalWeeklyExpenses = 0;
+$totalMonthlyIncome = 0;
+$totalMonthlyExpenses = 0;
+$totalPendingRefunds = 0;
+$totalPendingPOPayments = 0;
 
-//calculate total po payments
-$poPaymentsResult = $financeObj->getAllPOPayments();
-$totalPOPayments = 0;
-$pendingPOPaymentsCount = 0;
-while ($popaymentrow = $poPaymentsResult->fetch_assoc()) {
-  if ($popaymentrow["po_payment_status"] == "Paid") {
-    $totalPOPayments = $totalPOPayments + $popaymentrow["po_amount"];
-  }
-  if ($popaymentrow["po_payment_status"] == "Pending") {
-    $pendingPOPaymentsCount++;
-  }
-}
-
-//calculate total expenses
-$expensesResult = $financeObj->getAllExpenses();
-$totalExpense = 0;
-while ($expenserow = $expensesResult->fetch_assoc()) {
-  if ($expenserow["expense_status"] == "Approved") {
-    $totalExpense = $totalExpense + $expenserow["expense_amount"];
-  }
-}
-
-$totalCompanyExpenses = $totalRefunds + $totalExpense + $totalPOPayments;
-
+// Get Weekly Income and Expenses
 $incomeResult = $financeObj->getAllApprovedPayments();
-$totalIncome = 0;
-while ($incomerow = $incomeResult->fetch_assoc()) {
-  $totalIncome = $totalIncome + $incomerow["amount"];
+
+$startOfWeek = date('Y-m-d', strtotime('monday this week'));
+$endOfWeek = date('Y-m-d', strtotime('sunday this week'));
+
+while ($row = $incomeResult->fetch_assoc()) {
+
+    $paymentDate = date('Y-m-d', strtotime($row["payment_datetime"]));
+
+    if ($paymentDate >= $startOfWeek && $paymentDate <= $endOfWeek) {
+        $totalWeeklyIncome += $row["amount"];
+    }
+
 }
 
-$totalProfit = $totalIncome - $totalCompanyExpenses;
+$expensesResult = $financeObj->getAllExpenses();
+
+$startOfWeek = date('Y-m-d', strtotime('monday this week'));
+$endOfWeek = date('Y-m-d', strtotime('sunday this week'));
+
+while ($row = $expensesResult->fetch_assoc()) {
+
+    $expenseDate = date('Y-m-d', strtotime($row["expense_date"]));
+
+    if (
+        $row["expense_status"] == "Approved" &&
+        $expenseDate >= $startOfWeek &&
+        $expenseDate <= $endOfWeek
+    ) {
+        $totalWeeklyExpenses += $row["expense_amount"];
+    }
+
+}
+
+// Get Monthly Income and Expenses
+$incomeResultForMonthly = $financeObj->getAllApprovedPayments();
+
+$currentMonth = date('m');
+$currentYear = date('Y');
+
+while ($row = $incomeResultForMonthly->fetch_assoc()) {
+
+    $paymentDate = strtotime($row["payment_datetime"]);
+
+    if (
+        date('m', $paymentDate) == $currentMonth &&
+        date('Y', $paymentDate) == $currentYear
+    ) {
+        $totalMonthlyIncome += $row["amount"];
+    }
+
+}
+
+$expensesResultForMonthly = $financeObj->getAllExpenses();
+
+$currentMonth = date('m');
+$currentYear = date('Y');
+
+while ($row = $expensesResultForMonthly->fetch_assoc()) {
+
+    $expenseDate = strtotime($row["expense_date"]);
+
+    if (
+        $row["expense_status"] == "Approved" &&
+        date('m', $expenseDate) == $currentMonth &&
+        date('Y', $expenseDate) == $currentYear
+    ) {
+        $totalMonthlyExpenses += $row["expense_amount"];
+    }
+
+}
+
+// Get Pending Refunds and PO Payments
+$orderRefundResult = $orderObj->getAllOrderRefunds();
+while ($row = $orderRefundResult->fetch_assoc()) {
+    if ($row["refund_status"] == "Pending") {
+        $totalPendingRefunds += $row["refund_amount"];
+    }
+}
+
+$poPaymentsResult = $financeObj->getAllPOPayments();
+while ($row = $poPaymentsResult->fetch_assoc()) {
+    if ($row["po_payment_status"] == "Pending") {
+        $totalPendingPOPayments += $row["po_amount"];
+    }
+}
+
+// Get Expense Category Data
+$expenseCategoryData = [
+    "Fuel" => 0,
+    "Salary" => 0,
+    "Vehicle Maintenance" => 0,
+    "Office Bills" => 0,
+    "Transport" => 0,
+    "Refund" => 0,
+    "Other" => 0
+];
+
+$expenseCategoryResult = $financeObj->getAllExpenses();
+
+$currentMonth = date('m');
+$currentYear = date('Y');
+
+while ($row = $expenseCategoryResult->fetch_assoc()) {
+
+    $expenseDate = strtotime($row["expense_date"]);
+
+    if (
+        $row["expense_status"] == "Approved" &&
+        date('m', $expenseDate) == $currentMonth &&
+        date('Y', $expenseDate) == $currentYear
+    ) {
+
+        $category = $row["expense_category"];
+
+        if (array_key_exists($category, $expenseCategoryData)) {
+            $expenseCategoryData[$category] += $row["expense_amount"];
+        }
+
+    }
+}
+
+$expenseCategoryData = array_filter($expenseCategoryData);
 
 ?>
 
@@ -61,6 +148,7 @@ $totalProfit = $totalIncome - $totalCompanyExpenses;
 <head>
   <?php include_once "../includes/bootstrap_css_includes.php" ?>
   <title>Finance Management</title>
+  <script src="../js/plotly-3.0.1.min.js" charset="utf-8"></script>
 </head>
 
 <body style="border-radius:10px;">
@@ -104,39 +192,94 @@ $totalProfit = $totalIncome - $totalCompanyExpenses;
 
     <div class="row">&nbsp;</div>
 
-    <div class="row cardgroupstyle">
+    <div class="row">
+      <div class="col-md-6">
+<div class="row cardgroupstyle">
+      <span class="h3 mb-4 fw-bold">Finance Summary</span>
 
-      <!-- TOTAL ORDER COST -->
-      <div class="col-md-4">
-        <div class="p-3 rounded bg-light shadow-lg">
-          <p class="text-muted mb-1 small">TOTAL INCOME</p>
-          <p class="fs-4 fw-bold mb-0">
-            Rs <?php echo number_format($totalIncome, 2); ?>
-          </p>
+      <div class="row">
+       
+        <div class="col-md-6">
+          <div class="p-3 rounded bg-success shadow-lg">
+            <p class="mb-1 small text-white">This Week Income</p>
+            <p class="fs-4 fw-bold mb-0 text-white">
+              Rs <?php echo number_format($totalWeeklyIncome, 2); ?>
+            </p>
+          </div>
         </div>
+       
+        <div class="col-md-6">
+          <div class="p-3 rounded bg-danger shadow-lg">
+            <p class="mb-1 small text-white">This Week Expenses</p>
+            <p class="fs-4 fw-bold mb-0 text-white">
+              Rs <?php echo number_format($totalWeeklyExpenses, 2); ?>
+            </p>
+          </div>
+        </div>
+       
+        
+        
       </div>
 
-      <!-- TOTAL PAYMENTS -->
-      <div class="col-md-4">
-        <div class="p-3 rounded bg-light shadow-lg">
-          <p class="text-muted mb-1 small">TOTAL EXPENSES</p>
-          <p class="fs-4 fw-bold mb-0 text-danger">
-            Rs <?php echo number_format($totalCompanyExpenses, 2); ?>
-          </p>
+      <div class="row">&nbsp;</div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="p-3 rounded bg-success shadow-lg">
+            <p class="mb-1 small text-white">Monthly Income</p>
+            <p class="fs-4 fw-bold mb-0 text-white">
+              Rs <?php echo number_format($totalMonthlyIncome, 2); ?>
+            </p>
+          </div>
         </div>
+        <div class="col-md-6">
+          <div class="p-3 rounded bg-danger shadow-lg">
+            <p class="mb-1 small text-white">Monthly Expenses</p>
+            <p class="fs-4 fw-bold mb-0 text-white">
+              Rs <?php echo number_format($totalMonthlyExpenses, 2); ?>
+            </p>
+          </div>
+        </div>
+
       </div>
 
-      <!-- DUE AMOUNT -->
-      <div class="col-md-4">
-        <div class="p-3 rounded bg-light shadow-lg">
-          <p class="text-muted mb-1 small">TOTAL PROFIT</p>
-          <p class="fs-4 fw-bold mb-0 text-success">
-            Rs <?php echo number_format($totalProfit, 2); ?>
-          </p>
+    <div class="row">&nbsp;</div>
+      
+      <div class="row">
+    
+        <div class="col-md-6">
+          <div class="p-3 rounded bg-warning shadow-lg">
+            <p class="mb-1 small text-dark">Pending Refunds</p>
+            <p class="fs-4 fw-bold mb-0 text-dark">
+              Rs <?php echo number_format($totalPendingRefunds, 2); ?>
+            </p>
+          </div>
         </div>
+       
+        <div class="col-md-6">
+          <div class="p-3 rounded bg-warning shadow-lg">
+            <p class="mb-1 small text-dark">Pending PO Payments</p>
+            <p class="fs-4 fw-bold mb-0 text-dark">
+              Rs <?php echo number_format($totalPendingPOPayments, 2); ?>
+            </p>
+          </div>
+        </div>
+      
+        
+        
       </div>
 
     </div>
+      </div>
+
+
+      <div class="col-md-6">
+        <div id="expenseChart"></div>
+      </div>
+      
+    </div>
+
+    
 
     <div class="row">&nbsp;</div>
 
@@ -149,5 +292,46 @@ $totalProfit = $totalIncome - $totalCompanyExpenses;
   <?php include_once '../includes/footer_includes.php'; ?>
 </body>
 <script src="../js/jquery-3.7.1.js"></script>
+<script src="../bootstrap/dist/js/bootstrap.js"></script>
+
+
+<script>
+
+var data = [{
+    type: "pie",
+    values: <?php echo json_encode(array_values($expenseCategoryData)); ?>,
+    labels: <?php echo json_encode(array_keys($expenseCategoryData)); ?>,
+    textinfo: "label+percent",
+    textposition: "outside",
+    automargin: true
+}];
+
+var layout = {
+    height: 400,
+    width: 650,
+    showlegend: true,
+    title: {
+    text: "Monthly Expenses by Category"
+}
+};
+
+Plotly.newPlot('expenseChart', data, layout);
+
+</script>
+
+<!-- <script>
+  var data = [{
+    values: <?php echo json_encode(array_values($expenseCategoryData)); ?>,
+    labels: <?php echo json_encode(array_keys($expenseCategoryData)); ?>,
+    type: 'pie'
+  }];
+
+  var layout = {
+    height: 300,
+    width: 650
+  };
+
+  Plotly.newPlot('expenseChart', data, layout);
+</script> -->
 
 </html>
