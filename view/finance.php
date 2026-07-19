@@ -75,10 +75,28 @@ $totalProfit = $totalIncome - $totalCompanyExpenses;
 
       </div>
       <div class="col-md-8" style="text-align:right;">
-        <div class="btn-group">
-          <a href="add-expense.php" class="btn btn-outline-primary">Add Expense</a>
-          <a href="view-expenses.php" class="btn btn-outline-success">View Expenses</a>
-          <a href="generate-finance-report.php" class="btn btn-outline-warning">Generate Finance Report</a>
+        <div class="btn-group" role="group">
+          <a href="add-expense.php" class="btn btn-outline-primary">
+            Add Expense
+          </a>
+
+          <a href="view-expenses.php" class="btn btn-outline-success">
+            View Expenses
+          </a>
+
+          <a href="refund.php" class="btn btn-outline-info">
+            Refunds
+           
+          </a>
+
+          <a href="purchase-order-payments.php" class="btn btn-outline-secondary">
+            PO Payments
+            
+          </a>
+
+          <a href="generate-finance-report.php" class="btn btn-outline-warning">
+            Generate Report
+          </a>
         </div>
       </div>
 
@@ -122,30 +140,7 @@ $totalProfit = $totalIncome - $totalCompanyExpenses;
 
     <div class="row">&nbsp;</div>
 
-    <div class="row cardgroupstyle">
-      <div class="col-md-3">
-        <a href="refund.php" class="text-decoration-none">
-          <div class="card shadow-sm text-center p-3">
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
-              <?php echo $approvedRefundsCount; ?>
-            </span>
-            <h4>Refund Management</h4>
-            <p>Handle customer refunds and transaction reversals</p>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-3">
-        <a href="purchase-order-payments.php" class="text-decoration-none">
-          <div class="card shadow-sm text-center p-3">
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
-              <?php echo $pendingPOPaymentsCount; ?>
-            </span>
-            <h4>PO Payments</h4>
-            <p>Manage supplier payments for purchase orders</p>
-          </div>
-        </a>
-      </div>
-    </div>
+    
 
 
 

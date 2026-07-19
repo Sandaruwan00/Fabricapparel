@@ -18,10 +18,28 @@ $userrow = $_SESSION["user"];
                 <a href="finance.php" type="button" class="btn btn-outline-secondary">Back</a>
             </div>
             <div class="col-md-8" style="text-align:right;">
-                <div class="btn-group">
-                    <a href="add-expense.php" class="btn btn-outline-primary active">Add Expense</a>
-                    <a href="view-expenses.php" class="btn btn-outline-success">View Expenses</a>
-                    <a href="generate-finance-report.php" class="btn btn-outline-warning">Generate Finance Report</a>
+                <div class="btn-group" role="group">
+                    <a href="add-expense.php" class="btn btn-outline-primary active">
+                        Add Expense
+                    </a>
+
+                    <a href="view-expenses.php" class="btn btn-outline-success">
+                        View Expenses
+                    </a>
+
+                    <a href="refund.php" class="btn btn-outline-info">
+                        Refunds
+                       
+                    </a>
+
+                    <a href="purchase-order-payments.php" class="btn btn-outline-secondary">
+                        PO Payments
+                       
+                    </a>
+
+                    <a href="generate-finance-report.php" class="btn btn-outline-warning">
+                        Generate Report
+                    </a>
                 </div>
             </div>
         </div>
