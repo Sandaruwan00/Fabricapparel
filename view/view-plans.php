@@ -38,7 +38,7 @@ $planResult = $planObj->getAllPlans();
                 <div class="btn-group">
                     <a href="add-plan.php" class="btn btn-outline-primary">Add Plan</a>
                     <a href="view-plans.php" class="btn btn-outline-success active">View Plans</a>
-                    <a href="generate-plan-report.php" class="btn btn-outline-warning">Generate Plan Reports</a>
+                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#reportModal">Generate Plan Reports</button>
                 </div>
             </div>
         </div>
@@ -82,8 +82,11 @@ $planResult = $planObj->getAllPlans();
                                     ?>
 
                                     <td class="<?= $class; ?>"><?= $row["plan_status"]; ?></td>
+                                    <?php
+                                    $plan_id = base64_encode($row["plan_id"]);
+                                    ?>
                                     <td>
-                                        <a href="view-plan.php?plan_id=<?php echo $row["plan_id"]; ?>" class="btn btn-success btn-sm">View</a>
+                                        <a href="view-plan.php?plan_id=<?php echo $plan_id; ?>" class="btn btn-success btn-sm">View</a>
                                     </td>
                                 </tr>
                             <?php
@@ -103,7 +106,51 @@ $planResult = $planObj->getAllPlans();
 
 
 
+<div class="modal fade" id="reportModal">
+        <div class="modal-dialog">
+            <form action="generate-plan-report.php" method="post" target="_blank">
 
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Generate Plan Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <label>Start Date</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                        <br>
+
+                        <label>End Date</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">
+                            Generate Report
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            let today = new Date().toISOString().split("T")[0];
+
+            document.getElementById("start_date").setAttribute("max", today);
+            document.getElementById("end_date").setAttribute("max", today);
+
+        });
+    </script>
 
 
 

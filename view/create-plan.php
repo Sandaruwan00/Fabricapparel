@@ -8,7 +8,7 @@ $userrow = $_SESSION["user"];
 
 $orderObj = new Order();
 
-$order_id = $_GET["order_id"];
+$order_id = base64_decode($_GET["order_id"]);
 
 // Get order main details
 $orderResult = $orderObj->getOrder($order_id);
@@ -53,7 +53,7 @@ $stockResult = $stockObj->getAllStocks();
                 <div class="btn-group">
                     <a href="add-plan.php" class="btn btn-outline-primary">Add Plan</a>
                     <a href="view-plans.php" class="btn btn-outline-success">View Plans</a>
-                    <a href="generate-plan-report.php" class="btn btn-outline-warning">Generate Plan Reports</a>
+                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#reportModal">Generate Plan Reports</button>
                 </div>
             </div>
         </div>
@@ -88,20 +88,63 @@ $stockResult = $stockObj->getAllStocks();
 
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="fw-bold m-auto">TOTAL AMOUNT:</p>
+                                <p class="fs-5">Rs <?php echo number_format($orderrow["total_amount"], 2); ?></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="fw-bold m-auto">DELIVERY CHARGE:</p>
+                                <p class="fs-5">Rs <?php echo number_format($orderrow["delivery_charge"], 2); ?></p>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <p class="fw-bold m-auto">COMMENTS:</p>
+                                <p class="fs-5"><?php echo $orderrow["comments"]; ?></p>
+                            </div>
+                        </div>
+
+                        <div class="row">&nbsp;</div>
+
+                        <!-- Delivery -->
+                        <h4 class="fw-bold"><i class="bi bi-truck"></i> Delivery Details</h4>
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5><?php echo $orderrow["address_line_1"] . ", " . $orderrow["address_line_2"] . ", " . $orderrow["address_line_3"]; ?></h5>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="fw-bold m-auto">DISTRICT:</p>
+                                <p class="fs-5"><?php echo $orderrow["district_name"]; ?></p>
+                            </div>
+                        </div>
+
+
+                        <br>
+
                         <?php
                         $expected = $orderrow["expected_delivery_date"];
-                        $today = date("Y-m-d");
-                        $days = ceil((strtotime($expected) - strtotime($today)) / (60 * 60 * 24));
+                        $badgeText = "-";
+                        if ($orderrow["status_name"] != "Cancelled" && $orderrow["status_name"] != "Delivered") {
+                            $expected = $orderrow["expected_delivery_date"];
+                            $today = date("Y-m-d");
+                            $days = ceil((strtotime($expected) - strtotime($today)) / (60 * 60 * 24));
 
-                        if ($days > 0) {
-                            $badgeClass = "bg-success text-white";
-                            $badgeText = "$days days left";
-                        } elseif ($days == 0) {
-                            $badgeClass = "bg-warning text-dark";
-                            $badgeText = "Due Today";
-                        } else {
-                            $badgeClass = "bg-danger text-white";
-                            $badgeText = abs($days) . " days overdue";
+                            if ($days > 0) {
+                                $badgeClass = "bg-success text-white";
+                                $badgeText = "$days days left";
+                            } elseif ($days == 0) {
+                                $badgeClass = "bg-warning text-dark";
+                                $badgeText = "Due Today";
+                            } else {
+                                $badgeClass = "bg-danger text-white";
+                                $badgeText = abs($days) . " days overdue";
+                            }
                         }
                         ?>
 
@@ -111,60 +154,11 @@ $stockResult = $stockObj->getAllStocks();
                                 <p class="fs-5"><?php echo $expected; ?></p>
                             </div>
                             <div class="col-md-6">
-                                <p class="fw-bold m-auto">DELIVERY STATUS:</p>
+                                <p class="fw-bold m-auto">DELIVERY DUE:</p>
                                 <p><span class="badge fs-6 <?php echo $badgeClass; ?>"><?php echo $badgeText; ?></span></p>
                             </div>
                         </div>
 
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p class="fw-bold m-auto">DESIGN</p>
-                                <iframe src="../files/design_pdfs/<?php echo $orderrow["design"]; ?>" width="100%" height="300px"></iframe>
-                            </div>
-                            <div class="col-md-6">
-                                <p class="fw-bold m-auto">COMMENTS:</p>
-                                <p class="fs-5"><?php echo $orderrow["comments"]; ?></p>
-                            </div>
-                        </div>
-
-                        <div class="row">&nbsp;</div>
-                        
-
-                        <h4 class="fw-bold"><i class="bi bi-journal-text"></i> Order History</h4>
-                        <hr>
-
-                        <table class="table table-bordered">
-                            <thead class="table-secondary text-center">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Date & Time</th>
-                                    <th>Status</th>
-                                    <th>Description</th>
-                                    <th>Remarks</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $no = 0;
-                                while ($log = $orderStatusLogResult->fetch_assoc()) {
-                                    $no++;
-                                ?>
-                                    <tr>
-                                        <td><?php echo $no; ?></td>
-                                        <td><?php echo $log["changed_at"]; ?></td>
-                                        <td class="text-center" style="background-color: <?php echo $log["color_code"]; ?> ;"><?php echo $log["status_name"]; ?></td>
-                                        <td><?php echo $log["description"]; ?></td>
-                                        <td><?php echo $log["remarks"]; ?></td>
-                                    </tr>
-                                <?php
-
-                                } ?>
-                            </tbody>
-                        </table>
-
-                        
-                        
                         <div class="row">&nbsp;</div>
 
                         <!-- Items -->
@@ -179,6 +173,7 @@ $stockResult = $stockObj->getAllStocks();
                                     <th>Qty</th>
                                     <th>Price</th>
                                     <th>Amount</th>
+                                    <th>Design</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -189,12 +184,27 @@ $stockResult = $stockObj->getAllStocks();
                                         <td><?php echo $item["qty"]; ?></td>
                                         <td class="text-end"><?php echo number_format($item["unit_price"], 2); ?></td>
                                         <td class="text-end"><?php echo number_format($item["qty"] * $item["unit_price"], 2); ?></td>
+                                        <td class="text-center">
+                                            <?php if (!empty($item["item_design"])) { ?>
+                                                <button type="button"
+                                                    class="btn btn-outline-primary btn-sm previewDesignBtn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#designPreviewModal"
+                                                    data-file="../files/designs/<?php echo $item["item_design"]; ?>"
+                                                    data-filename="<?php echo $item["item_design"]; ?>">
+                                                    <i class="bi bi-eye"></i> View
+                                                </button>
+                                            <?php } else { ?>
+                                                <span class="text-muted">-</span>
+                                            <?php } ?>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
                         </table>
 
                         <div class="row">&nbsp;</div>
+
 
                         <!-- request stocks -->
                         <h4 class="fw-bold"><i class="bi bi-clipboard-plus"></i> Request Stocks</h4>
@@ -248,7 +258,7 @@ $stockResult = $stockObj->getAllStocks();
                                 </div>
                             </div>
 
-                            
+
 
                             <div class="row">
                                 &nbsp;
@@ -281,13 +291,118 @@ $stockResult = $stockObj->getAllStocks();
         </div>
 
 
-
-
-
-
-
     </div>
+
+
     <?php include_once '../includes/footer_includes.php'; ?>
+
+    <!-- item design view modal -->
+
+    <!-- Design Preview Modal -->
+    <div class="modal fade" id="designPreviewModal" tabindex="-1" aria-labelledby="designPreviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="designPreviewModalLabel">Design Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="min-height: 400px;">
+                    <div id="designPreviewContent">
+                        <!-- populated via JS -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="designDownloadBtn" class="btn btn-outline-secondary" download>
+                        <i class="bi bi-download"></i> Download
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("click", function(e) {
+            const btn = e.target.closest(".previewDesignBtn");
+            if (!btn) return;
+
+            const filePath = btn.dataset.file;
+            const fileName = btn.dataset.filename;
+            const content = document.getElementById("designPreviewContent");
+            const downloadBtn = document.getElementById("designDownloadBtn");
+
+            const ext = fileName.split('.').pop().toLowerCase();
+            const imageExts = ["jpg", "jpeg", "png", "gif", "webp"];
+
+            if (ext === "pdf") {
+                content.innerHTML = `<iframe src="${filePath}" width="100%" height="500px" style="border:none;"></iframe>`;
+            } else if (imageExts.includes(ext)) {
+                content.innerHTML = `<img src="${filePath}" class="img-fluid" alt="Design Preview">`;
+            } else {
+                content.innerHTML = `
+                <p class="text-muted">Preview not available for this file type (.${ext}).</p>
+                <p><strong>${fileName}</strong></p>
+            `;
+            }
+
+            downloadBtn.href = filePath;
+            downloadBtn.setAttribute("download", fileName);
+        });
+
+        // Clean up content when modal closes, so old previews don't flash before new ones load
+        document.getElementById("designPreviewModal").addEventListener("hidden.bs.modal", function() {
+            document.getElementById("designPreviewContent").innerHTML = "";
+        });
+    </script>
+
+
+<div class="modal fade" id="reportModal">
+        <div class="modal-dialog">
+            <form action="generate-plan-report.php" method="post" target="_blank">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Generate Plan Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <label>Start Date</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                        <br>
+
+                        <label>End Date</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">
+                            Generate Report
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            let today = new Date().toISOString().split("T")[0];
+
+            document.getElementById("start_date").setAttribute("max", today);
+            document.getElementById("end_date").setAttribute("max", today);
+
+        });
+    </script>
+
+
 </body>
 <script src="../js/jquery-3.7.1.js"></script>
 <script src="../bootstrap/dist/js/bootstrap.js"></script>
@@ -298,25 +413,30 @@ $stockResult = $stockObj->getAllStocks();
 
 <script>
     document.getElementById('addBtn').addEventListener('click', function() {
-    const itemId = document.getElementById('stock_item_id').value;
-    const itemText = document.getElementById('stock_item_id').selectedOptions[0].text;
-    const qty = document.getElementById('qty').value;
+        const itemId = document.getElementById('stock_item_id').value;
+        const itemText = document.getElementById('stock_item_id').selectedOptions[0].text;
+        const qty = document.getElementById('qty').value;
 
-    if (!itemId || !qty) {
-        alert("Please select item and enter qty");
-        return;
-    }
-
-    // Check for duplicate item
-    const existingItems = document.querySelectorAll('#stockTableBody input[name="stock_item_id[]"]');
-    for (let input of existingItems) {
-        if (input.value === itemId) {
-            alert("This item has already been added.");
+        if (!itemId || !qty) {
+            alert("Please select item and enter qty");
             return;
         }
-    }
 
-    const row = `
+        if (qty < 1) {
+            alert("Qty must be at least 1");
+            return;
+        }
+
+        // Check for duplicate item
+        const existingItems = document.querySelectorAll('#stockTableBody input[name="stock_item_id[]"]');
+        for (let input of existingItems) {
+            if (input.value === itemId) {
+                alert("This item has already been added.");
+                return;
+            }
+        }
+
+        const row = `
     <tr>
         <td>${itemText}</td>
         <td>${qty}</td>
@@ -327,17 +447,17 @@ $stockResult = $stockObj->getAllStocks();
         </td>
     </tr>`;
 
-    document.getElementById('stockTableBody').innerHTML += row;
+        document.getElementById('stockTableBody').innerHTML += row;
 
-    document.getElementById('stock_item_id').value = "";
-    document.getElementById('qty').value = "";
-});
+        document.getElementById('stock_item_id').value = "";
+        document.getElementById('qty').value = "";
+    });
 
-document.addEventListener("click", function(e) {
-    if (e.target.classList.contains("removeBtn")) {
-        e.target.closest("tr").remove();
-    }
-});
+    document.addEventListener("click", function(e) {
+        if (e.target.classList.contains("removeBtn")) {
+            e.target.closest("tr").remove();
+        }
+    });
 </script>
 
 <!-- alert start -->

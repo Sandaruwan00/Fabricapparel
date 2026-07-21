@@ -10,7 +10,7 @@ $planObj = new Planning();
 $stockObj = new Stock();
 $orderObj = new Order();
 
-$plan_id = $_GET["plan_id"];
+$plan_id = base64_decode($_GET["plan_id"]);
 
 
 $planResult = $planObj->getPlan($plan_id);
@@ -48,7 +48,7 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
                 <div class="btn-group">
                     <a href="add-plan.php" class="btn btn-outline-primary">Add Plan</a>
                     <a href="view-plans.php" class="btn btn-outline-success">View Plans</a>
-                    <a href="generate-plan-report.php" class="btn btn-outline-warning">Generate Plan Reports</a>
+                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#reportModal">Generate Plan Reports</button>
                 </div>
             </div>
         </div>
@@ -100,10 +100,7 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
-                                <p class="fw-bold m-auto">DESIGN</p>
-                                <iframe src="../files/design_pdfs/<?php echo $planrow["design"]; ?>" width="100%" height="300px"></iframe>
-                            </div>
+                            
                             <div class="col-md-6">
                                 <p class="fw-bold m-auto">COMMENTS:</p>
                                 <p class="fs-5"><?php echo $planrow["comments"]; ?></p>
@@ -127,6 +124,7 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
                                     <th>Qty</th>
                                     <th>Price</th>
                                     <th>Amount</th>
+                                    <th>Design</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -137,6 +135,20 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
                                         <td><?php echo $item["qty"]; ?></td>
                                         <td class="text-end"><?php echo number_format($item["unit_price"], 2); ?></td>
                                         <td class="text-end"><?php echo number_format($item["qty"] * $item["unit_price"], 2); ?></td>
+                                        <td class="text-center">
+                                            <?php if (!empty($item["item_design"])) { ?>
+                                                <button type="button"
+                                                    class="btn btn-outline-primary btn-sm previewDesignBtn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#designPreviewModal"
+                                                    data-file="../files/designs/<?php echo $item["item_design"]; ?>"
+                                                    data-filename="<?php echo $item["item_design"]; ?>">
+                                                    <i class="bi bi-eye"></i> View
+                                                </button>
+                                            <?php } else { ?>
+                                                <span class="text-muted">-</span>
+                                            <?php } ?>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -285,6 +297,51 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
     </div>
 
 
+    <div class="modal fade" id="reportModal">
+        <div class="modal-dialog">
+            <form action="generate-plan-report.php" method="post" target="_blank">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Generate Plan Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <label>Start Date</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                        <br>
+
+                        <label>End Date</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">
+                            Generate Report
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            let today = new Date().toISOString().split("T")[0];
+
+            document.getElementById("start_date").setAttribute("max", today);
+            document.getElementById("end_date").setAttribute("max", today);
+
+        });
+    </script>
 
     <?php include_once '../includes/footer_includes.php'; ?>
 

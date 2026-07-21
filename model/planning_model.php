@@ -4,7 +4,8 @@ include_once  '../commons/db_connection.php';
 
 $dbcon = new DbConnection();
 
-class Planning{
+class Planning
+{
 
 
     public function addPlan($order_id)
@@ -15,7 +16,7 @@ class Planning{
         $plan_id = $con->insert_id;
         return $plan_id;
     }
-    
+
     public function getPlan($plan_id)
     {
         $con = $GLOBALS["con"];
@@ -24,25 +25,39 @@ class Planning{
         return $results;
     }
 
-    public function getAllPlans(){
+    public function getAllPlans()
+    {
         $con = $GLOBALS["con"];
         $sql = "SELECT * FROM plan p, orders o, buyer_company bc WHERE p.order_id = o.order_id AND o.company_id = bc.company_id";
         $results = $con->query($sql) or die($con->error);
         return $results;
     }
 
-    public function rejectPlan($plan_id, $status){
-        $con = $GLOBALS["con"];
-        $sql = "UPDATE plan SET plan_status ='$status' WHERE plan_id = '$plan_id'";
-        $con->query($sql) or die($con->error);
-    }
-    
-    public function approvePlan($plan_id, $status){
+    public function rejectPlan($plan_id, $status)
+    {
         $con = $GLOBALS["con"];
         $sql = "UPDATE plan SET plan_status ='$status' WHERE plan_id = '$plan_id'";
         $con->query($sql) or die($con->error);
     }
 
+    public function approvePlan($plan_id, $status)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "UPDATE plan SET plan_status ='$status' WHERE plan_id = '$plan_id'";
+        $con->query($sql) or die($con->error);
+    }
 
+    public function getMonthlyStockRequestTrend()
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT
+                DATE_FORMAT(request_date, '%b %Y') AS month,
+                COUNT(*) AS total_requests,
+                MIN(request_date) AS sort_date
+              FROM stock_requests
+              GROUP BY DATE_FORMAT(request_date, '%Y-%m')
+              ORDER BY sort_date";
 
+        return $con->query($sql);
+    }
 }

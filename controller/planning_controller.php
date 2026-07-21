@@ -71,9 +71,10 @@ switch ($status) {
         } catch (Exception $ex) {
             $msg = $ex->getMessage();
             $msg = base64_encode($msg);
+            $order_id = base64_encode($order_id);
         ?>
             <script>
-                window.location = "../view/add-plan.php?order_id=<?php echo $order_id; ?>&msg=<?php echo $msg; ?>";
+                window.location = "../view/create-plan.php?order_id=<?php echo $order_id; ?>&msg=<?php echo $msg; ?>";
             </script>
         <?php
         }
