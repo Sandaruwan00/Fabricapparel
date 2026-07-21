@@ -42,7 +42,83 @@ while ($row = $orderPaymentRequestResult->fetch_assoc()) {
   }
 }
 
+// Initialize an array to hold the counts for each order stage
+$orderStages = [
+  "Cancelled" => 0,
+  "Pending" => 0,
+  "Confirmed" => 0,
+  "In Planning" => 0,
+  "Planned" => 0,
+  "In Production" => 0,
+  "Production Started" => 0,
+  "Production Completed" => 0,
+  "In Packing" => 0,
+  "Packed" => 0,
+  "In Warehouse" => 0,
+  "Shipment Assigned" => 0,
+  "Dispatched" => 0,
+  "Transport Assigned" => 0,
+  "In Transport" => 0,
+  "Delivered" => 0
 
+];
+
+$orderResult = $orderObj->getAllOrders();
+
+while ($row = $orderResult->fetch_assoc()) {
+
+  switch ($row["status_id"]) {
+
+    case 0:
+      $orderStages["Cancelled"]++;
+      break;
+    case 1:
+      $orderStages["Pending"]++;
+      break;
+    case 2:
+      $orderStages["Confirmed"]++;
+      break;
+    case 3:
+      $orderStages["In Planning"]++;
+      break;
+    case 4:
+      $orderStages["Planned"]++;
+      break;
+    case 5:
+      $orderStages["In Production"]++;
+      break;
+    case 6:
+      $orderStages["Production Started"]++;
+      break;
+    case 7:
+      $orderStages["Production Completed"]++;
+      break;
+    case 8:
+      $orderStages["In Packing"]++;
+      break;
+    case 9:
+      $orderStages["Packed"]++;
+      break;
+    case 10:
+      $orderStages["In Warehouse"]++;
+      break;
+    case 11:
+      $orderStages["Shipment Assigned"]++;
+      break;
+    case 12:
+      $orderStages["Dispatched"]++;
+      break;
+    case 13:
+      $orderStages["Transport Assigned"]++;
+      break;
+    case 14:
+      $orderStages["In Transport"]++;
+      break;
+    case 15:
+      $orderStages["Delivered"]++;
+      break;
+  }
+}
 
 ?>
 <html>
@@ -50,6 +126,7 @@ while ($row = $orderPaymentRequestResult->fetch_assoc()) {
 <head>
   <?php include_once "../includes/bootstrap_css_includes.php" ?>
   <title>Order Management</title>
+  <script src="../js/plotly-3.0.1.min.js" charset="utf-8"></script>
 </head>
 
 <body style="border-radius:10px;">
@@ -76,7 +153,14 @@ while ($row = $orderPaymentRequestResult->fetch_assoc()) {
               <?php echo $pendingRefundRequestsCount; ?>
             </span> -->
           </a>
-          <a href="generate-order-report.php" class="btn btn-outline-warning">Generate Order Reports</a>
+          <button
+            class="btn btn-outline-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#reportModal">
+
+            Generate Order Reports
+
+          </button>
         </div>
       </div>
     </div>
@@ -122,24 +206,106 @@ while ($row = $orderPaymentRequestResult->fetch_assoc()) {
     <div class="row">
       &nbsp;
     </div>
-
-    
-
-
-    <div class="row">
-      &nbsp;
-    </div>
+   <div class="row">&nbsp;</div>
 
 
+    <div id="orderProgressChart" style="width:100%; height:700px;"></div>
 
 
-    <div class="row">
-      &nbsp;
-    </div>
 
   </div>
+
+  <div class="modal fade" id="reportModal">
+    <div class="modal-dialog">
+        <form action="generate-order-report.php" method="post" target="_blank">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Order Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label>Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                    <br>
+
+                    <label>End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Generate Report
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
+</script>
+  
+  
   <?php include_once '../includes/footer_includes.php'; ?>
 </body>
+
 <script src="../js/jquery-3.7.1.js"></script>
+<script src="../bootstrap/dist/js/bootstrap.js"></script>
+<script src="../js/datatable/bootstrap.bundle.min.js"></script>
+<script src="../js/datatable/dataTables.bootstrap5.js"></script>
+<script src="../js/datatable/dataTables.js"></script>
+
+<script>
+  var data = [{
+    type: "bar",
+    orientation: "h",
+    x: <?php echo json_encode(array_values($orderStages)); ?>,
+    y: <?php echo json_encode(array_keys($orderStages)); ?>,
+    text: <?php echo json_encode(array_values($orderStages)); ?>,
+    textposition: "outside",
+    marker: {
+      color: "#0d6efd"
+    }
+  }];
+
+  var layout = {
+    title: {"text": "Orders by Production Stage"},
+    height: 700,
+    margin: {
+      l: 180,
+      r: 40,
+      t: 60,
+      b: 50
+    },
+    xaxis: {
+      title: {"text": "Number of Orders"}
+    },
+    yaxis: {
+      automargin: true
+    }
+  };
+
+  Plotly.newPlot("orderProgressChart", data, layout, {
+    responsive: true
+  });
+</script>
+
+
 
 </html>

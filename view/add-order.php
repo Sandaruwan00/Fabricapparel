@@ -56,7 +56,14 @@ $disctrictResult = $transportObj->getAllDistrict();
                     <a href="view-orders.php" class="btn btn-outline-success">View Orders</a>
                     <a href="order-payments.php" class="btn btn-outline-info">Order Payments</a>
                     <a href="order-refund.php" class="btn btn-outline-secondary">Refund Requests</a>
-                    <a href="generate-order-report.php" class="btn btn-outline-warning">Generate Order Reports</a>
+                    <button
+                        class="btn btn-outline-warning"
+                        data-bs-toggle="modal"
+                        data-bs-target="#reportModal">
+
+                        Generate Order Reports
+
+                    </button>
                 </div>
             </div>
         </div>
@@ -80,7 +87,7 @@ $disctrictResult = $transportObj->getAllDistrict();
 
         <div class="row mt-4 justify-content-center">
             <div class="col-md-12">
-                <form action="../controller/order_controller.php?status=add_order" method="post" enctype="multipart/form-data">
+                <form id="addorder" action="../controller/order_controller.php?status=add_order" method="post" enctype="multipart/form-data">
                     <div class="row justify-content-center">
                         <div class="row">
                             <div class="col-md-12">
@@ -419,11 +426,7 @@ $disctrictResult = $transportObj->getAllDistrict();
         </div>
     </div>
 
-    <?php include_once '../includes/footer_includes.php'; ?>
-
-
-
-
+    
     <div class="modal fade" id="selectBuyerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -492,6 +495,55 @@ $disctrictResult = $transportObj->getAllDistrict();
         </div>
     </div>
 
+    <div class="modal fade" id="reportModal">
+    <div class="modal-dialog">
+        <form action="generate-order-report.php" method="post" target="_blank">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Order Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label>Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                    <br>
+
+                    <label>End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Generate Report
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
+</script>
+
+<?php include_once '../includes/footer_includes.php'; ?>
+
+</body>
 
     <script src="../js/jquery-3.7.1.js"></script>
     <script src="../js/order_validation.js"></script>

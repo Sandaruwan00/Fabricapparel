@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    $("form").submit(function () {
+    $("#addorder").submit(function () {
 
         var company_id = $("#company_id_input").val().trim();
         var order_date = $("#todayDate").val().trim();

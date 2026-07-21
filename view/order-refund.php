@@ -31,7 +31,7 @@ $orderPaymentRequestResult = $orderObj->getAllOrderRefunds();
                     <a href="view-orders.php" class="btn btn-outline-success">View Orders</a>
                     <a href="order-payments.php" class="btn btn-outline-info">Order Payments</a>
                     <a href="order-refund.php" class="btn btn-outline-secondary active">Refund Requests</a>
-                    <a href="generate-order-report.php" class="btn btn-outline-warning">Generate Order Reports</a>
+                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#reportModal">Generate Order Reports</button>
                 </div>
             </div>
 
@@ -172,6 +172,54 @@ $orderPaymentRequestResult = $orderObj->getAllOrderRefunds();
             document.getElementById("reject_refund_id").value = refund_id;
         }
     </script>
+    
+
+    <div class="modal fade" id="reportModal">
+    <div class="modal-dialog">
+        <form action="generate-order-refund-report.php" method="post" target="_blank">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Order Refund Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label>Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                    <br>
+
+                    <label>End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Generate Report
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
+</script>
+    
     
 
     <?php include_once '../includes/footer_includes.php'; ?>
