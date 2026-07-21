@@ -45,6 +45,8 @@ class VehicleReport extends FPDF
 $transportObj = new Transport();
 $vehicleResult = $transportObj->getAllVehicles();
 
+
+date_default_timezone_set('Asia/Colombo');
 $date = date("Y-m-d");
 $dateTime = date("Y-m-d H:i:s");
 

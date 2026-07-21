@@ -62,6 +62,7 @@ $buyer = $buyerResult->fetch_assoc();
 $businessTypeResult = $buyerObj->viewBusinessType($company_id);
 $business = $businessTypeResult->fetch_assoc();
 
+date_default_timezone_set('Asia/Colombo');
 $date = date("Y-m-d");
 $dateTime = date("Y-m-d H:i:s");
 

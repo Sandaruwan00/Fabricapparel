@@ -48,6 +48,7 @@ class DriverReport extends FPDF
 $transportObj = new Transport();
 $driverResult = $transportObj->getAllDrivers();
 
+date_default_timezone_set('Asia/Colombo');
 $date = date("Y-m-d");
 $dateTime = date("Y-m-d H:i:s");
 

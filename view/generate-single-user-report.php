@@ -65,6 +65,8 @@ if ($moduleResult) {
     }
 }
 
+date_default_timezone_set('Asia/Colombo');
+
 $date = date("Y-m-d");
 $time = date("H:i:s");
 $dateTime = date("Y-m-d H:i:s");

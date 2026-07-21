@@ -77,13 +77,14 @@ $poPayments = $financeObj->getAllPOPayments();
                     <table class="table table-striped table-bordered table-hover align-middle" id="table">
                         <thead class="table-secondary text-center">
                             <tr>
-                                <th width="5%">#</th>
-                                <th width="7%">PO ID</th>
-                                <th width="25%">Supplier</th>
-                                <th width="25%">Supplier Email</th>
-                                <th width="13%">Amount (Rs)</th>
-                                <th width="15%" class="text-center">Payment Status</th>
-                                <th width="10%">&nbsp;</th>
+                                <th>#</th>
+                                <th>PO ID</th>
+                                <th>Supplier</th>
+                                <th>Supplier Email</th>
+                                <th>Amount (Rs)</th>
+                                <th>Date</th>
+                                <th class="text-center">Payment Status</th>
+                                <th>&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -96,6 +97,7 @@ $poPayments = $financeObj->getAllPOPayments();
                                     <td><?php echo $row["supplier_name"]; ?></td>
                                     <td><?php echo $row["supplier_email"]; ?></td>
                                     <td><?php echo $row["po_amount"]; ?></td>
+                                    <td><?php echo $row["po_payment_date"]; ?></td>
 
                                     <?php
                                     if ($row["po_payment_status"] == "Pending") {
