@@ -165,14 +165,28 @@ switch ($status) {
     case "add_new_order_payment":
 
         $order_id = $_POST["order_id"];
+        $dueAmount = $_POST["dueAmount"];
         $amount = $_POST["amount"];
         $payment_method = $_POST["payment_method"];
         $reference_no = $_POST["reference_no"];
 
-        $orderObj->addNewOrderPayment($order_id, $amount, $payment_method, $reference_no);
-        $msg = "New Payment Added!";
-        $msg = base64_encode($msg);
-        $order_id = base64_encode($order_id);
+        try {
+
+        if($amount > $dueAmount){
+            
+            throw new Exception("Payment amount exceeds due amount!");
+        }
+
+            $orderObj->addNewOrderPayment($order_id, $amount, $payment_method, $reference_no);
+            $msg = "New Payment Added!";
+            $msg = base64_encode($msg);
+            $order_id = base64_encode($order_id);
+
+        } catch (Exception $ex) {
+            echo "Error: " . $ex->getMessage();
+            $msg = base64_encode($ex->getMessage());
+            $order_id = base64_encode($order_id);
+        }
     ?>
 
         <script>
@@ -255,21 +269,39 @@ switch ($status) {
 
         try {
 
-            if ($total_order_cost < $refund_amount) {
+            $totalApprovedPayments = 0;
+            $approvedPayementsResult = $orderObj->getApprovedOrderPayments();
+            while ($row = $approvedPayementsResult->fetch_assoc()) {
+                if ($row["order_id"] == $order_id) {
+                    $totalApprovedPayments = $totalApprovedPayments + $row["amount"];
+                }
+            }
+
+
+            if ($totalApprovedPayments >= $refund_amount) {
                 throw new Exception("Refund amount exceeded");
             }
 
             $requestedrefund = 0;
+            $paidRefund = 0;
             $orderRefundResult = $orderObj->getAllOrderRefunds();
             while ($row = $orderRefundResult->fetch_assoc()) {
                 if ($row["order_id"] == $order_id && $row["refund_status"] != "Rejected") {
                     $requestedrefund = $requestedrefund + $row["refund_amount"];
                 }
+                if ($row["order_id"] == $order_id && $row["refund_status"] == "Processed") {
+                    $paidRefund = $paidRefund + $row["refund_amount"];
+                }
             }
 
+            if ($paidRefund >= $refund_amount) {
+                throw new Exception("Already Processed Refund");
+            }
+            
             if ($requestedrefund >= $refund_amount) {
                 throw new Exception("Already Requested Refund");
             }
+            
 
             $orderObj->addOrderRefund($order_id, $refund_amount, $remarks);
 

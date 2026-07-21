@@ -97,7 +97,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                         </div>
 
                         <div class="row">
-                           
+
                             <div class="col-md-6">
                                 <p class="fw-bold m-auto">COMMENTS:</p>
                                 <p class="fs-5"><?php echo $orderrow["comments"]; ?></p>
@@ -157,7 +157,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
 
                         <div class="row">&nbsp;</div>
 
-                      <!-- Items -->
+                        <!-- Items -->
                         <h4 class="fw-bold"><i class="bi bi-box-seam"></i> Order Items</h4>
                         <hr>
 
@@ -183,11 +183,11 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                                         <td class="text-center">
                                             <?php if (!empty($item["item_design"])) { ?>
                                                 <button type="button"
-                                                        class="btn btn-outline-primary btn-sm previewDesignBtn"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#designPreviewModal"
-                                                        data-file="../files/designs/<?php echo $item["item_design"]; ?>"
-                                                        data-filename="<?php echo $item["item_design"]; ?>">
+                                                    class="btn btn-outline-primary btn-sm previewDesignBtn"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#designPreviewModal"
+                                                    data-file="../files/designs/<?php echo $item["item_design"]; ?>"
+                                                    data-filename="<?php echo $item["item_design"]; ?>">
                                                     <i class="bi bi-eye"></i> View
                                                 </button>
                                             <?php } else { ?>
@@ -325,7 +325,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                         <!-- Buttons -->
                         <div class="row justify-content-end">
                             <?php
-                            if ($orderrow['status_id'] != "0") {
+                            if ($orderrow['status_id'] != "0" && $orderrow['status_id'] != "15") {
 
                             ?>
                                 <div class="col-md-2">
@@ -335,33 +335,31 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                                         <i class="bi bi-credit-card"></i> Add Payment
                                     </button>
                                 </div>
-                                <div class="col-md-2">
-                                    <button href="#" class="btn w-100" style="background-color: #0D6EFD;"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#confirmModal" <?php
-                                                                        if ($orderrow['status_id'] >= "2") {
-                                                                            echo "disabled";
-                                                                        }
-                                                                        ?>
-                                                                        >
-                                        <i class="bi bi-check-lg"></i> Confirm
-                                    </button>
-                                </div>
 
-                                <div class="col-md-2">
-                                    <button href="#" type="button" id="cancelBtn" class="btn btn-danger w-100"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#cancelModal" <?php
-                                                                        if ($orderrow['status_id'] >= "6") {
-                                                                            echo "disabled";
-                                                                        }
-                                                                        ?>
-                                                                        >
-                                        <i class="bi bi-slash-circle"></i> Cancel
-                                    </button>
-                                </div>
+                                <?php if ($orderrow['status_id'] == "1") { ?>
+
+                                    <div class="col-md-2">
+                                        <button href="#" class="btn w-100" style="background-color: #0D6EFD;"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#confirmModal">
+                                            <i class="bi bi-check-lg"></i> Confirm
+                                        </button>
+                                    </div>
+                                <?php } ?>
+
+                                <?php if ($orderrow['status_id'] <= "2") { ?>
+                                    <div class="col-md-2">
+                                        <button href="#" type="button" id="cancelBtn" class="btn btn-danger w-100"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#cancelModal">
+                                            <i class="bi bi-slash-circle"></i> Cancel
+                                        </button>
+                                    </div>
+                                <?php } ?>
                             <?php
-                            } else { ?>
+                            }
+
+                            if ($orderrow['status_id'] == "0") { ?>
                                 <div class="col-md-3">
                                     <a href="#" class="btn btn-success w-100"
                                         data-bs-toggle="modal"
@@ -429,7 +427,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Amount</label>
-                                <input type="number" name="amount" id="amount" class="form-control" required>
+                                <input type="number" name="amount" id="amount" min="100" class="form-control" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Payment Method</label>
@@ -450,6 +448,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                         </div>
 
                         <input type="hidden" name="order_id" value="<?php echo $order_id; ?>">
+                        <input type="hidden" name="dueAmount" value="<?php echo $dueAmount; ?>">
 
                     </div>
                     <div class="modal-footer">
@@ -461,6 +460,13 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById("amount").addEventListener("input", function() {
+            if (this.value < 0) {
+                this.value = 0;
+            }
+        });
+    </script>
 
     <!-- Confrim Modal -->
     <div class="modal fade" id="confirmModal">
@@ -557,7 +563,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                                     <div class="input-group-prepend">
                                         <div class="input-group-text" id="btnGroupAddon">Rs</div>
                                     </div>
-                                    <input type="number" class="form-control" name="refund_amount" value="<?php echo $totalPayments;?>" readonly>
+                                    <input type="number" class="form-control" name="refund_amount" value="<?php echo $totalPayments; ?>" readonly>
                                 </div>
                                 <label class="form-label fw-bold mt-3">Remarks <span class="text-danger">*</span></label>
                                 <textarea name="remarks" class="form-control" rows="3" placeholder="Reason for refund..." required></textarea>
@@ -592,61 +598,61 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
     <!-- item design view modal -->
 
     <!-- Design Preview Modal -->
-<div class="modal fade" id="designPreviewModal" tabindex="-1" aria-labelledby="designPreviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="designPreviewModalLabel">Design Preview</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center" style="min-height: 400px;">
-                <div id="designPreviewContent">
-                    <!-- populated via JS -->
+    <div class="modal fade" id="designPreviewModal" tabindex="-1" aria-labelledby="designPreviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="designPreviewModalLabel">Design Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <a href="#" id="designDownloadBtn" class="btn btn-outline-secondary" download>
-                    <i class="bi bi-download"></i> Download
-                </a>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-body text-center" style="min-height: 400px;">
+                    <div id="designPreviewContent">
+                        <!-- populated via JS -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="designDownloadBtn" class="btn btn-outline-secondary" download>
+                        <i class="bi bi-download"></i> Download
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    document.addEventListener("click", function(e) {
-        const btn = e.target.closest(".previewDesignBtn");
-        if (!btn) return;
+    <script>
+        document.addEventListener("click", function(e) {
+            const btn = e.target.closest(".previewDesignBtn");
+            if (!btn) return;
 
-        const filePath = btn.dataset.file;
-        const fileName = btn.dataset.filename;
-        const content = document.getElementById("designPreviewContent");
-        const downloadBtn = document.getElementById("designDownloadBtn");
+            const filePath = btn.dataset.file;
+            const fileName = btn.dataset.filename;
+            const content = document.getElementById("designPreviewContent");
+            const downloadBtn = document.getElementById("designDownloadBtn");
 
-        const ext = fileName.split('.').pop().toLowerCase();
-        const imageExts = ["jpg", "jpeg", "png", "gif", "webp"];
+            const ext = fileName.split('.').pop().toLowerCase();
+            const imageExts = ["jpg", "jpeg", "png", "gif", "webp"];
 
-        if (ext === "pdf") {
-            content.innerHTML = `<iframe src="${filePath}" width="100%" height="500px" style="border:none;"></iframe>`;
-        } else if (imageExts.includes(ext)) {
-            content.innerHTML = `<img src="${filePath}" class="img-fluid" alt="Design Preview">`;
-        } else {
-            content.innerHTML = `
+            if (ext === "pdf") {
+                content.innerHTML = `<iframe src="${filePath}" width="100%" height="500px" style="border:none;"></iframe>`;
+            } else if (imageExts.includes(ext)) {
+                content.innerHTML = `<img src="${filePath}" class="img-fluid" alt="Design Preview">`;
+            } else {
+                content.innerHTML = `
                 <p class="text-muted">Preview not available for this file type (.${ext}).</p>
                 <p><strong>${fileName}</strong></p>
             `;
-        }
+            }
 
-        downloadBtn.href = filePath;
-        downloadBtn.setAttribute("download", fileName);
-    });
+            downloadBtn.href = filePath;
+            downloadBtn.setAttribute("download", fileName);
+        });
 
-    // Clean up content when modal closes, so old previews don't flash before new ones load
-    document.getElementById("designPreviewModal").addEventListener("hidden.bs.modal", function() {
-        document.getElementById("designPreviewContent").innerHTML = "";
-    });
-</script>
+        // Clean up content when modal closes, so old previews don't flash before new ones load
+        document.getElementById("designPreviewModal").addEventListener("hidden.bs.modal", function() {
+            document.getElementById("designPreviewContent").innerHTML = "";
+        });
+    </script>
 
 
 </body>
