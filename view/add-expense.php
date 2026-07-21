@@ -37,9 +37,14 @@ $userrow = $_SESSION["user"];
 
                     </a>
 
-                    <a href="generate-finance-report.php" class="btn btn-outline-warning">
-                        Generate Report
-                    </a>
+                    <button
+            class="btn btn-outline-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#reportModal">
+
+            Generate Report
+
+          </button>
                 </div>
             </div>
         </div>
@@ -71,7 +76,7 @@ $userrow = $_SESSION["user"];
                         Expenses Information
                     </div>
                     <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
-                        <form action="../controller/finance_controller.php?status=add_expense" method="post">
+                        <form id="expenseForm" action="../controller/finance_controller.php?status=add_expense" method="post">
 
                             <div class="mb-3">
                                 <label class="form-label">Expense Category</label>
@@ -120,8 +125,57 @@ $userrow = $_SESSION["user"];
         </div>
     </div>
     <?php include_once '../includes/footer_includes.php'; ?>
+
+    <div class="modal fade" id="reportModal">
+    <div class="modal-dialog">
+        <form action="generate-finance-report.php" method="post" target="_blank">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Finance Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label>Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                    <br>
+
+                    <label>End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Generate Report
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
+</script>
+    
+    
 </body>
 <script src="../js/jquery-3.7.1.js"></script>
+<script src="../bootstrap/dist/js/bootstrap.js"></script>
 
 <script>
     $(document).ready(function() {
@@ -129,7 +183,7 @@ $userrow = $_SESSION["user"];
         var today = new Date().toISOString().split("T")[0];
         $("#expense_date").attr("min", today);
 
-        $("form").submit(function() {
+        $("#expenseForm").submit(function() {
 
             $("#msg").removeClass("alert alert-danger").html("");
 

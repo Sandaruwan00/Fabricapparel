@@ -448,18 +448,18 @@ foreach ($monthlyIncomeData as $month) {
 
                 <div class="modal-header">
                     <h5 class="modal-title">Generate Finance Report</h5>
-                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
 
                     <label>Start Date</label>
-                    <input type="date" name="start_date" class="form-control" required>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
 
                     <br>
 
                     <label>End Date</label>
-                    <input type="date" name="end_date" class="form-control" required>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
 
                 </div>
 
@@ -474,6 +474,17 @@ foreach ($monthlyIncomeData as $month) {
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
+</script>
   
   
   
