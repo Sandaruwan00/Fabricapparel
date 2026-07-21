@@ -11,7 +11,4 @@ $badge = $pendingCount->fetch_assoc();
     <li class="nav-item">
         <a class="nav-link <?= $currentPage == 'pending-orders' ? 'active' : ''; ?>" href="view-orders-pending.php">Pending Orders <span class="badge text-bg-warning"><?php echo $badge["pending_orders_count"];  ?></span></a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link <?= $currentPage == 'confirmed-orders' ? 'active' : ''; ?>" href="view-orders-confirmed.php">Confirmed Orders</a>
-    </li>
 </ul>

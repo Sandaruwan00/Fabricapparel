@@ -24,15 +24,21 @@ $orderResult = $orderObj->getAllOrders();
             <div class="col-md-4 text-start">
                 <a href="order.php" class="btn btn-outline-secondary">Back</a>
             </div>
-            <div class="col-md-4 text-center">
-                <h1 style="font-size:28px; font-weight:600;">View Orders</h1>
-            </div>
-            <div class="col-md-4 text-end">
+
+            <div class="col-md-8" style="text-align:right;">
                 <div class="btn-group">
                     <a href="add-order.php" class="btn btn-outline-primary">Add Order</a>
                     <a href="view-orders.php" class="btn btn-outline-success active">View Orders</a>
+                    <a href="order-payments.php" class="btn btn-outline-info">Order Payments</a>
+                    <a href="order-refund.php" class="btn btn-outline-secondary">Refund Requests</a>
                     <a href="generate-order-report.php" class="btn btn-outline-warning">Generate Order Reports</a>
                 </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-4 text-center">
+                <h1 style="font-size:28px; font-weight:600;">View Orders</h1>
             </div>
         </div>
 
@@ -76,19 +82,19 @@ $orderResult = $orderObj->getAllOrders();
                                     <?php
 
                                     if ($row["status_name"] != "Cancelled" && $row["status_name"] != "Delivered") {
-                                    
-                                    $expected = $row["expected_delivery_date"];
-                                    $today = date("Y-m-d");
 
-                                    $days = ceil((strtotime($expected) - strtotime($today)) / (60 * 60 * 24));
+                                        $expected = $row["expected_delivery_date"];
+                                        $today = date("Y-m-d");
 
-                                    if ($days > 0) {
-                                        echo "bg-success text-white";
-                                    } elseif ($days == 0) {
-                                        echo "bg-warning text-dark";
-                                    } else {
-                                        echo "bg-danger text-white";
-                                    }
+                                        $days = ceil((strtotime($expected) - strtotime($today)) / (60 * 60 * 24));
+
+                                        if ($days > 0) {
+                                            echo "bg-success text-white";
+                                        } elseif ($days == 0) {
+                                            echo "bg-warning text-dark";
+                                        } else {
+                                            echo "bg-danger text-white";
+                                        }
                                     } else {
                                         echo "bg-info";
                                     }
@@ -105,7 +111,7 @@ $orderResult = $orderObj->getAllOrders();
                                                 echo abs($days) . " days overdue";
                                             }
                                         } else {
-                                           
+
                                             echo "-";
                                         }
                                         ?>

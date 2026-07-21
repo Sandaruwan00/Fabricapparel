@@ -25,10 +25,22 @@ $orderPaymentRequestResult = $orderObj->getAllOrderRefunds();
             <div class="col-md-4 text-start">
                 <a href="order.php" class="btn btn-outline-secondary">Back</a>
             </div>
+            <div class="col-md-8" style="text-align:right;">
+                <div class="btn-group">
+                    <a href="add-order.php" class="btn btn-outline-primary">Add Order</a>
+                    <a href="view-orders.php" class="btn btn-outline-success">View Orders</a>
+                    <a href="order-payments.php" class="btn btn-outline-info">Order Payments</a>
+                    <a href="order-refund.php" class="btn btn-outline-secondary active">Refund Requests</a>
+                    <a href="generate-order-report.php" class="btn btn-outline-warning">Generate Order Reports</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row justify-content-center mt-4">
             <div class="col-md-4 text-center">
                 <h1 style="font-size:28px; font-weight:600;">Refund Requests</h1>
             </div>
-
         </div>
 
 

@@ -27,10 +27,22 @@ $badge = $pendingCount->fetch_assoc();
             <div class="col-md-4 text-start">
                 <a href="order.php" class="btn btn-outline-secondary">Back</a>
             </div>
+            <div class="col-md-8" style="text-align:right;">
+                <div class="btn-group">
+                    <a href="add-order.php" class="btn btn-outline-primary">Add Order</a>
+                    <a href="view-orders.php" class="btn btn-outline-success">View Orders</a>
+                    <a href="order-payments.php" class="btn btn-outline-info active">Order Payments</a>
+                    <a href="order-refund.php" class="btn btn-outline-secondary">Refund Requests</a>
+                    <a href="generate-order-report.php" class="btn btn-outline-warning">Generate Order Reports</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row justify-content-center mt-4">
             <div class="col-md-4 text-center">
                 <h1 style="font-size:28px; font-weight:600;">Order Payments</h1>
             </div>
-
         </div>
 
 
@@ -47,12 +59,8 @@ $badge = $pendingCount->fetch_assoc();
             <li class="nav-item">
                 <a class="nav-link" href="order-payments-pending.php">Pending Payments <span class="badge text-bg-warning"><?php echo $badge["pending_count"];  ?></span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="order-payments-approved.php">Approved Payments</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="order-payments-rejected.php">Rejected Payments</a>
-            </li>
+            
+            
         </ul>
 
         <div class="row">&nbsp;</div>

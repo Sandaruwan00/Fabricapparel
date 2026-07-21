@@ -49,15 +49,21 @@ $disctrictResult = $transportObj->getAllDistrict();
             <div class="col-md-4 text-start">
                 <a href="order.php" type="button" class="btn btn-outline-secondary">Back</a>
             </div>
-            <div class="col-md-4 text-center">
-                <h1 style="font-size:28px; font-weight:600;">Add New Order</h1>
-            </div>
-            <div class="col-md-4 text-end">
+
+            <div class="col-md-8" style="text-align:right;">
                 <div class="btn-group">
                     <a href="add-order.php" class="btn btn-outline-primary active">Add Order</a>
                     <a href="view-orders.php" class="btn btn-outline-success">View Orders</a>
+                    <a href="order-payments.php" class="btn btn-outline-info">Order Payments</a>
+                    <a href="order-refund.php" class="btn btn-outline-secondary">Refund Requests</a>
                     <a href="generate-order-report.php" class="btn btn-outline-warning">Generate Order Reports</a>
                 </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-4 text-center">
+                <h1 style="font-size:28px; font-weight:600;">Add New Order</h1>
             </div>
         </div>
 
