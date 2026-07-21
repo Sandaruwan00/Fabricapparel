@@ -25,6 +25,15 @@ $userdetailrow = $userResult->fetch_assoc();
         <?php include_once "../includes/header_row_includes.php"; ?>
 
         <div class="row">
+            <div class="col-md-4" style="text-align:left;">
+                <button type="button" class="btn btn-outline-secondary" onclick="history.back()">
+                    Back
+                </button>
+            </div>
+            
+        </div>
+
+        <div class="row">
             <div class="col-md-4 text-center mt-5">
                 <?php
                 $img = $userdetailrow["user_image"];
