@@ -39,7 +39,7 @@ $supplierResult = $supplierObj->getAllSuppliers();
                     <a href="purchase-requests.php" class="btn btn-outline-info">
                         Purchase Requests
                     </a>
-                    
+
                     <a href="purchase-orders.php" class="btn btn-outline-success">
                         Purchase Orders
                     </a>
@@ -55,7 +55,7 @@ $supplierResult = $supplierObj->getAllSuppliers();
 
 
 
-        
+
 
         <div class="row">
             <div class="col-md-4">
@@ -153,70 +153,70 @@ $supplierResult = $supplierObj->getAllSuppliers();
 
     <!-- view modal -->
     <div class="modal fade" id="viewSupplierModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content border-0 shadow-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content border-0 shadow-lg">
 
-            <!-- Header -->
-            <div class="modal-header"
-                style="background: linear-gradient(90deg, #36D1DC, #5B86E5);">
-                <h5 class="modal-title">
-                    <i class="bi bi-building"></i> Supplier Details
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
+                <!-- Header -->
+                <div class="modal-header"
+                    style="background: linear-gradient(90deg, #36D1DC, #5B86E5);">
+                    <h5 class="modal-title">
+                        <i class="bi bi-building"></i> Supplier Details
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
 
-            <div class="modal-body p-4"
-                style="background: #f8f9fa;">
+                <div class="modal-body p-4"
+                    style="background: #f8f9fa;">
 
-                <div class="card border-0 shadow-lg p-4">
+                    <div class="card border-0 shadow-lg p-4">
 
-                    <div class="text-center">
-                        <h4 id="view_supplier_name" class="fw-bold text-primary"></h4>
-                        <h5 id="view_supplier_contact" class="fw-bold"></h5>
-                        <h6 id="view_supplier_contact_nic" class="fw-bold" hidden></h6>
-                    </div>
-
-                    <hr>
-
-                    <div class="row g-4">
-
-                       <div class="col-md-6">
-                            <div class="p-3 rounded bg-light shadow-lg">
-                                <label class="text-muted small">Phone</label>
-                                <h6 id="view_supplier_phone" class="fw-semibold mb-0"></h6>
-                            </div>
+                        <div class="text-center">
+                            <h4 id="view_supplier_name" class="fw-bold text-primary"></h4>
+                            <h5 id="view_supplier_contact" class="fw-bold"></h5>
+                            <h6 id="view_supplier_contact_nic" class="fw-bold" hidden></h6>
                         </div>
 
-                        <div class="col-md-6">
-                            <div class="p-3 rounded bg-light shadow-lg">
-                                <label class="text-muted small">Email</label>
-                                <h6 id="view_supplier_email" class="fw-semibold mb-0 text-break"></h6>
-                            </div>
-                        </div>
+                        <hr>
 
-                        <div class="col-md-12">
-                            <div class="p-3 rounded bg-light shadow-lg">
-                                <label class="text-muted small">Address</label>
-                                <h6 id="view_supplier_address" class="fw-semibold mb-0"></h6>
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+                                <div class="p-3 rounded bg-light shadow-lg">
+                                    <label class="text-muted small">Phone</label>
+                                    <h6 id="view_supplier_phone" class="fw-semibold mb-0"></h6>
+                                </div>
                             </div>
+
+                            <div class="col-md-6">
+                                <div class="p-3 rounded bg-light shadow-lg">
+                                    <label class="text-muted small">Email</label>
+                                    <h6 id="view_supplier_email" class="fw-semibold mb-0 text-break"></h6>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="p-3 rounded bg-light shadow-lg">
+                                    <label class="text-muted small">Address</label>
+                                    <h6 id="view_supplier_address" class="fw-semibold mb-0"></h6>
+                                </div>
+                            </div>
+
+
                         </div>
-                         
 
                     </div>
 
                 </div>
 
-            </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
 
-            <div class="modal-footer bg-light">
-                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
-                    Close
-                </button>
             </div>
-
         </div>
     </div>
-</div>
 
     <script>
         function loadViewSupplier(name, contact, nic, phone, email, address) {
@@ -245,41 +245,41 @@ $supplierResult = $supplierObj->getAllSuppliers();
                     <div class="modal-body"
                         style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
 
-
+                        <div id="msg"></div>
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Supplier Name</label>
-                                <input type="text" name="supplier_name" class="form-control" required>
+                                <input type="text" name="supplier_name" class="form-control">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Contact Person</label>
-                                <input type="text" name="supplier_contact_person" class="form-control" required>
+                                <input type="text" name="supplier_contact_person" class="form-control">
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Contact Person NIC</label>
-                                <input type="text" name="supplier_contact_person_nic" class="form-control" required>
+                                <input type="text" name="supplier_contact_person_nic" class="form-control">
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Phone</label>
-                                <input type="text" name="supplier_phone" class="form-control" required>
+                                <input type="text" name="supplier_phone" class="form-control">
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Email</label>
-                                <input type="email" name="supplier_email" class="form-control" required>
+                                <input type="email" name="supplier_email" class="form-control">
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Address</label>
-                                <textarea name="supplier_address" class="form-control" rows="1" required></textarea>
+                                <textarea name="supplier_address" class="form-control" rows="1"></textarea>
                             </div>
                         </div>
 
@@ -433,11 +433,11 @@ $supplierResult = $supplierObj->getAllSuppliers();
 
 <!-- alert start -->
 <?php
-        $msg = "";
-        if (isset($_GET["msg"])) {
-            $msg = base64_decode($_GET["msg"]);
-        }
-        ?>
+$msg = "";
+if (isset($_GET["msg"])) {
+    $msg = base64_decode($_GET["msg"]);
+}
+?>
 
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="msgToast" class="toast align-items-center text-bg-secondary border-0" role="alert" data-bs-delay="5000">
@@ -451,7 +451,7 @@ $supplierResult = $supplierObj->getAllSuppliers();
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         let msg = "<?php echo $msg; ?>";
 
         if (msg !== "") {

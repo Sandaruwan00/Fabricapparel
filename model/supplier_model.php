@@ -54,4 +54,57 @@ class Supplier
         $result = $con->query($sql) or die($con->error);
         return $result->fetch_assoc();
     }
+
+    public function checkSupplierNIC($nic)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM supplier WHERE supplier_nic = '$nic'";
+        $result = $con->query($sql);
+        if ($result->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkSupplierEmail($email)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM supplier WHERE supplier_email = '$email'";
+        $result = $con->query($sql);
+        if ($result->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkSupplierNICUpdate($nic, $supplier_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM supplier 
+            WHERE supplier_nic = '$nic' 
+            AND supplier_id != '$supplier_id'";
+        $result = $con->query($sql);
+        if ($result->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public function checkSupplierEmailUpdate($email, $supplier_id)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM supplier 
+            WHERE supplier_email = '$email' 
+            AND supplier_id != '$supplier_id'";
+        $result = $con->query($sql);
+        if ($result->num_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
