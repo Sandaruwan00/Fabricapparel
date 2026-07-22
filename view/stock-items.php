@@ -26,16 +26,29 @@ $stockUnitResult = $stockObj->getAllStockUnits();
             <div class="col-md-4 text-start">
                 <a href="stock.php" class="btn btn-outline-secondary">Back</a>
             </div>
+
+            <div class="col-md-8" style="text-align:right;">
+                <div class="btn-group">
+                    <a href="stock-items.php" class="btn btn-outline-primary active">Materials</a>
+                    <a href="stock-list.php" class="btn btn-outline-success">Inventory</a>
+                    <a href="stock-material-request.php" class="btn btn-outline-info">Stock Requests</a>
+                    <a href="stock-purchase-requests.php" class="btn btn-outline-secondary">Purchase Requests</a>
+                    <a href="generate-stock-report.php" class="btn btn-outline-warning">Generate Reports</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row justify-content-center mt-4">
             <div class="col-md-4 text-center">
                 <h1 style="font-size:28px; font-weight:600;">Materials Management</h1>
             </div>
-
         </div>
 
 
         <div class="row">&nbsp;</div>
 
-        
+
 
         <div class="row">
             <div class="col-md-12">
@@ -377,11 +390,11 @@ $stockUnitResult = $stockObj->getAllStockUnits();
 
 <!-- alert start -->
 <?php
-        $msg = "";
-        if (isset($_GET["msg"])) {
-            $msg = base64_decode($_GET["msg"]);
-        }
-        ?>
+$msg = "";
+if (isset($_GET["msg"])) {
+    $msg = base64_decode($_GET["msg"]);
+}
+?>
 
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="msgToast" class="toast align-items-center text-bg-secondary border-0" role="alert" data-bs-delay="5000">
@@ -395,7 +408,7 @@ $stockUnitResult = $stockObj->getAllStockUnits();
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         let msg = "<?php echo $msg; ?>";
 
         if (msg !== "") {

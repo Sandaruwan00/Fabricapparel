@@ -1,10 +1,19 @@
 <?php
 
 include_once '../commons/session.php';
+include_once '../model/stock_model.php';
 
 //get user information from session
 $userrow = $_SESSION["user"];
 
+$stockObj = new Stock();
+$stockItemResult = $stockObj->getAllStockItems();
+
+$materialsCount = 0;
+$materialResult = $stockItemResult->fetch_assoc();
+while ($row = $stockItemResult->fetch_assoc()) {
+  $materialsCount++;
+}
 
 ?>
 
@@ -24,6 +33,15 @@ $userrow = $_SESSION["user"];
       <div class="col-md-4" style="text-align:left;">
         <a href="dashboard.php" type="button" class="btn btn-outline-secondary">Back</a>
       </div>
+      <div class="col-md-8" style="text-align:right;">
+        <div class="btn-group">
+          <a href="stock-items.php" class="btn btn-outline-primary">Materials</a>
+          <a href="stock-list.php" class="btn btn-outline-success">Inventory</a>
+          <a href="stock-material-request.php" class="btn btn-outline-info">Stock Requests</a>
+          <a href="stock-purchase-requests.php" class="btn btn-outline-secondary">Purchase Requests</a>
+          <a href="generate-stock-report.php" class="btn btn-outline-warning">Generate Reports</a>
+        </div>
+      </div>
     </div>
 
     <div class="row">&nbsp;</div>
@@ -32,21 +50,22 @@ $userrow = $_SESSION["user"];
       <span class="h3 mb-4 fw-bold">Stock Summary</span>
       <div class="row d-flex justify-content-around text-center">
         <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
-          <div class="card-header">---------</div>
+          <div class="card-header">Materials</div>
           <div class="card-body">
             <h1 class="card-title">
-              0 </h1>
+              <?php echo $materialsCount; ?> 
+            </h1>
           </div>
         </div>
         <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
-          <div class="card-header">---------</div>
+          <div class="card-header">Low Stocks</div>
           <div class="card-body">
             <h1 class="card-title">
               0</h1>
           </div>
         </div>
         <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
-          <div class="card-header">---------</div>
+          <div class="card-header">Material Requests</div>
           <div class="card-body">
             <h1 class="card-title">
               0
@@ -54,7 +73,7 @@ $userrow = $_SESSION["user"];
           </div>
         </div>
         <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
-          <div class="card-header">--------</div>
+          <div class="card-header">Purchase Requests</div>
           <div class="card-body">
             <h1 class="card-title">
               0
@@ -66,47 +85,9 @@ $userrow = $_SESSION["user"];
     <div class="row">&nbsp;</div>
 
 
-    
 
-    <div class="row mt-4 d-flex justify-content-around align-items-center shadow-lg cardgroupstyle">
 
-      <div class="col-md-3">
-        <a href="stock-items.php" class="text-decoration-none">
-          <div class="card shadow-sm text-center p-3">
-            <h4>Materials</h4>
-            <p>Manage items, categories, and units</p>
-          </div>
-        </a>
-      </div>
 
-      <div class="col-md-3">
-        <a href="stock-list.php" class="text-decoration-none">
-          <div class="card shadow-sm text-center p-3">
-            <h4>Inventory</h4>
-            <p>View and manage stock levels</p>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-3">
-        <a href="stock-material-request.php" class="text-decoration-none">
-          <div class="card shadow-sm text-center p-3">
-            <h4>Stock Requests</h4>
-            <p>Approve and issue materials</p>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-md-3">
-        <a href="stock-purchase-requests.php" class="text-decoration-none">
-          <div class="card shadow-sm text-center p-3">
-            <h4>Purchase Requests</h4>
-            <p>Handle low stock purchasing</p>
-          </div>
-        </a>
-      </div>
-
-    </div>
 
     <div class="row">&nbsp;</div>
 
