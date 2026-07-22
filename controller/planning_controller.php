@@ -60,6 +60,7 @@ switch ($status) {
 
             $msg = "Plan Successfully Added";
             $msg = base64_encode($msg);
+            $order_id = base64_encode($order_id);
 
     ?>
             <script>

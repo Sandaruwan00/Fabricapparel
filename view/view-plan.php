@@ -343,6 +343,65 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
         });
     </script>
 
+     <!-- item design view modal -->
+
+    <!-- Design Preview Modal -->
+    <div class="modal fade" id="designPreviewModal" tabindex="-1" aria-labelledby="designPreviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="designPreviewModalLabel">Design Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center" style="min-height: 400px;">
+                    <div id="designPreviewContent">
+                        <!-- populated via JS -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="designDownloadBtn" class="btn btn-outline-secondary" download>
+                        <i class="bi bi-download"></i> Download
+                    </a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("click", function(e) {
+            const btn = e.target.closest(".previewDesignBtn");
+            if (!btn) return;
+
+            const filePath = btn.dataset.file;
+            const fileName = btn.dataset.filename;
+            const content = document.getElementById("designPreviewContent");
+            const downloadBtn = document.getElementById("designDownloadBtn");
+
+            const ext = fileName.split('.').pop().toLowerCase();
+            const imageExts = ["jpg", "jpeg", "png", "gif", "webp"];
+
+            if (ext === "pdf") {
+                content.innerHTML = `<iframe src="${filePath}" width="100%" height="500px" style="border:none;"></iframe>`;
+            } else if (imageExts.includes(ext)) {
+                content.innerHTML = `<img src="${filePath}" class="img-fluid" alt="Design Preview">`;
+            } else {
+                content.innerHTML = `
+                <p class="text-muted">Preview not available for this file type (.${ext}).</p>
+                <p><strong>${fileName}</strong></p>
+            `;
+            }
+
+            downloadBtn.href = filePath;
+            downloadBtn.setAttribute("download", fileName);
+        });
+
+        // Clean up content when modal closes, so old previews don't flash before new ones load
+        document.getElementById("designPreviewModal").addEventListener("hidden.bs.modal", function() {
+            document.getElementById("designPreviewContent").innerHTML = "";
+        });
+    </script>
+
     <?php include_once '../includes/footer_includes.php'; ?>
 
     <script src="../js/jquery-3.7.1.js"></script>

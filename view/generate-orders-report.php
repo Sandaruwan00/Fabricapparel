@@ -130,7 +130,7 @@ if (count($statusSummary) > 0) {
         $pdf->SetFillColor($fill ? 245 : 255, $fill ? 245 : 255, $fill ? 245 : 255);
         $pdf->Cell(70, 8, $status, 1, 0, "L", true);
         $pdf->Cell(50, 8, $data["count"], 1, 0, "C", true);
-        $pdf->Cell(70, 8, number_format($data["total"], 2), 1, 1, "C", true);
+        $pdf->Cell(70, 8, number_format($data["total"], 2), 1, 1, "R", true);
         $fill = !$fill;
     }
 
@@ -138,7 +138,7 @@ if (count($statusSummary) > 0) {
     $pdf->SetFillColor(220, 220, 220);
     $pdf->Cell(70, 9, "Grand Total", 1, 0, "L", true);
     $pdf->Cell(50, 9, $grandTotalCount, 1, 0, "C", true);
-    $pdf->Cell(70, 9, "Rs " . number_format($grandTotalAmount, 2), 1, 1, "C", true);
+    $pdf->Cell(70, 9, "Rs " . number_format($grandTotalAmount, 2), 1, 1, "R", true);
 
 } else {
     $pdf->SetFont("Arial", "", 10);
@@ -177,7 +177,7 @@ if (count($orderRows) > 0) {
         $pdf->Cell(45, 8, $company, 1, 0, "L", true);
         $pdf->Cell(35, 8, $contact, 1, 0, "L", true);
         $pdf->Cell(25, 8, $orderDate, 1, 0, "C", true);
-        $pdf->Cell(25, 8, number_format($row["total_amount"], 2), 1, 0, "C", true);
+        $pdf->Cell(25, 8, number_format($row["total_amount"], 2), 1, 0, "R", true);
         $pdf->Cell(25, 8, $dueDate, 1, 0, "C", true);
         $pdf->Cell(15, 8, $status, 1, 1, "C", true);
 

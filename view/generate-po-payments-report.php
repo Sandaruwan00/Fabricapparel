@@ -110,11 +110,11 @@ $pdf->Ln(5);
 $pdf->SetFont("Arial", "B", 10);
 $pdf->SetFillColor(220, 245, 220);
 $pdf->Cell(95, 10, "Total Paid Amount", 1, 0, "L", true);
-$pdf->Cell(95, 10, "Rs " . number_format($totalPaid, 2), 1, 1, "C", true);
+$pdf->Cell(95, 10, "Rs " . number_format($totalPaid, 2), 1, 1, "R", true);
 
 $pdf->SetFillColor(255, 243, 205);
 $pdf->Cell(95, 10, "Total Pending Amount", 1, 0, "L", true);
-$pdf->Cell(95, 10, "Rs " . number_format($totalPending, 2), 1, 1, "C", true);
+$pdf->Cell(95, 10, "Rs " . number_format($totalPending, 2), 1, 1, "R", true);
 
 $pdf->Ln(8);
 
@@ -145,7 +145,7 @@ if (count($paidRows) > 0) {
         $pdf->Cell(20, 8, "PO" . $row["po_id"], 1, 0, "C", true);
         $pdf->Cell(45, 8, $supplier, 1, 0, "L", true);
         $pdf->Cell(60, 8, $email, 1, 0, "L", true);
-        $pdf->Cell(30, 8, number_format($row["po_amount"], 2), 1, 0, "C", true);
+        $pdf->Cell(30, 8, number_format($row["po_amount"], 2), 1, 0, "R", true);
         $pdf->Cell(25, 8, $paymentDate, 1, 1, "C", true);
 
         $fill = !$fill;
@@ -154,7 +154,7 @@ if (count($paidRows) > 0) {
     $pdf->SetFont("Arial", "B", 9);
     $pdf->SetFillColor(220, 245, 220);
     $pdf->Cell(135, 9, "Total Paid", 1, 0, "R", true);
-    $pdf->Cell(30, 9, number_format($totalPaid, 2), 1, 0, "C", true);
+    $pdf->Cell(30, 9, number_format($totalPaid, 2), 1, 0, "R", true);
     $pdf->Cell(25, 9, "", 1, 1, "C", true);
 
 } else {
@@ -195,7 +195,7 @@ if (count($pendingRows) > 0) {
         $pdf->Cell(20, 8, "PO" . $row["po_id"], 1, 0, "C", true);
         $pdf->Cell(45, 8, $supplier, 1, 0, "L", true);
         $pdf->Cell(60, 8, $email, 1, 0, "L", true);
-        $pdf->Cell(30, 8, number_format($row["po_amount"], 2), 1, 0, "C", true);
+        $pdf->Cell(30, 8, number_format($row["po_amount"], 2), 1, 0, "R", true);
         $pdf->Cell(25, 8, $paymentDate, 1, 1, "C", true);
 
         $fill = !$fill;
@@ -204,7 +204,7 @@ if (count($pendingRows) > 0) {
     $pdf->SetFont("Arial", "B", 9);
     $pdf->SetFillColor(255, 243, 205);
     $pdf->Cell(135, 9, "Total Pending", 1, 0, "R", true);
-    $pdf->Cell(30, 9, number_format($totalPending, 2), 1, 0, "C", true);
+    $pdf->Cell(30, 9, number_format($totalPending, 2), 1, 0, "R", true);
     $pdf->Cell(25, 9, "", 1, 1, "C", true);
 
 } else {

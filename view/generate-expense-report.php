@@ -34,7 +34,7 @@ class ExpenseReport extends FPDF
         $this->SetFont("Arial", "B", 11);
         $this->SetFillColor(220, 220, 220);
         $this->Cell(140, 8, $category, 1, 0, "L", true);
-        $this->Cell(50, 8, "Rs " . number_format($subtotal, 2), 1, 1, "C", true);
+        $this->Cell(50, 8, "Rs " . number_format($subtotal, 2), 1, 1, "R", true);
     }
 
     function TableHeader()
@@ -136,14 +136,14 @@ if (count($categoryData) > 0) {
     foreach ($categoryData as $category => $data) {
         $pdf->SetFillColor($fill ? 245 : 255, $fill ? 245 : 255, $fill ? 245 : 255);
         $pdf->Cell(140, 8, $category, 1, 0, "L", true);
-        $pdf->Cell(50, 8, number_format($data["subtotal"], 2), 1, 1, "C", true);
+        $pdf->Cell(50, 8, number_format($data["subtotal"], 2), 1, 1, "R", true);
         $fill = !$fill;
     }
 
     $pdf->SetFont("Arial", "B", 10);
     $pdf->SetFillColor(220, 220, 220);
     $pdf->Cell(140, 9, "Grand Total", 1, 0, "L", true);
-    $pdf->Cell(50, 9, "Rs " . number_format($grandTotal, 2), 1, 1, "C", true);
+    $pdf->Cell(50, 9, "Rs " . number_format($grandTotal, 2), 1, 1, "R", true);
 
 } else {
     $pdf->SetFont("Arial", "", 10);
@@ -186,7 +186,7 @@ if (count($categoryData) > 0) {
             $pdf->SetFillColor($fill ? 245 : 255, $fill ? 245 : 255, $fill ? 245 : 255);
             $pdf->Cell(20, 7, $row["expense_id"], 1, 0, "C", true);
             $pdf->Cell(30, 7, $row["expense_date"], 1, 0, "C", true);
-            $pdf->Cell(25, 7, number_format($row["expense_amount"], 2), 1, 0, "C", true);
+            $pdf->Cell(25, 7, number_format($row["expense_amount"], 2), 1, 0, "R", true);
             $pdf->Cell(65, 7, $desc, 1, 0, "L", true);
             $pdf->Cell(30, 7, $status, 1, 1, "C", true);
 

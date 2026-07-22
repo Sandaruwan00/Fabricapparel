@@ -119,7 +119,7 @@ if (count($refundRows) > 0) {
         $pdf->Cell(10, 8, $count++, 1, 0, "C", true);
         $pdf->Cell(30, 8, "ORD" . $row["order_id"], 1, 0, "C", true);
         $pdf->Cell(55, 8, $companyName, 1, 0, "L", true);
-        $pdf->Cell(35, 8, number_format($row["refund_amount"], 2), 1, 0, "C", true);
+        $pdf->Cell(35, 8, number_format($row["refund_amount"], 2), 1, 0, "R", true);
         $pdf->Cell(30, 8, $requestedOn, 1, 0, "C", true);
         $pdf->Cell(30, 8, $row["refund_status"], 1, 1, "C", true);
 
@@ -130,7 +130,7 @@ if (count($refundRows) > 0) {
     $pdf->SetFont("Arial", "B", 10);
     $pdf->SetFillColor(220, 220, 220);
     $pdf->Cell(95, 9, "Total Processed Refunds", 1, 0, "R", true);
-    $pdf->Cell(35, 9, "Rs " . number_format($totalProcessedRefunds, 2), 1, 0, "C", true);
+    $pdf->Cell(35, 9, "Rs " . number_format($totalProcessedRefunds, 2), 1, 0, "R", true);
     $pdf->Cell(30, 9, "", 1, 0, "C", true);
     $pdf->Cell(30, 9, "", 1, 1, "C", true);
 

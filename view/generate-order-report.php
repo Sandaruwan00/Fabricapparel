@@ -162,7 +162,7 @@ $pdf->Cell(49, 10, $cancelledCount, 1, 1, "C", true);
 
 $pdf->Ln(5);
 $pdf->SetFont("Arial", "B", 10);
-$pdf->Cell(0, 8, "Total Orders in Period: $grandTotalCount   |   Total Order Value: Rs " . number_format($grandTotalAmount, 2), 0, 1, "L");
+$pdf->Cell(0, 8, "Total Orders in Period: $grandTotalCount   |   Total Order Value: Rs " . number_format($grandTotalAmount, 2), 0, 1, "R");
 
 $pdf->Ln(6);
 
@@ -232,7 +232,7 @@ if (count($orderRows) > 0) {
         $pdf->Cell(45, 8, $company, 1, 0, "L", true);
         $pdf->Cell(35, 8, $contact, 1, 0, "L", true);
         $pdf->Cell(25, 8, $orderDate, 1, 0, "C", true);
-        $pdf->Cell(25, 8, number_format($row["total_amount"], 2), 1, 0, "C", true);
+        $pdf->Cell(25, 8, number_format($row["total_amount"], 2), 1, 0, "R", true);
         $pdf->Cell(40, 8, $stage, 1, 1, "C", true);
 
         $fill = !$fill;

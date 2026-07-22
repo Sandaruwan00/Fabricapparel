@@ -326,7 +326,7 @@ if (count($categoryRows) > 0) {
         $pdf->SetFillColor($fill ? 245 : 255, $fill ? 245 : 255, $fill ? 245 : 255);
         $pdf->Cell(90, 8, $row["category_name"], 1, 0, "L", true);
         $pdf->Cell(30, 8, $row["item_count"], 1, 0, "C", true);
-        $pdf->Cell(70, 8, number_format($row["total_qty"], 2) . " " . $row["unit_short_name"], 1, 1, "C", true);
+        $pdf->Cell(70, 8, number_format($row["total_qty"], 2) . " " . $row["unit_short_name"], 1, 1, "R", true);
         $fill = !$fill;
     }
 } else {

@@ -175,15 +175,15 @@ $pdf->SectionTitle("Overall Summary");
 $pdf->SetFont("Arial", "B", 10);
 $pdf->SetFillColor(220, 245, 220);
 $pdf->Cell(90, 10, "Total Income", 1, 0, "L", true);
-$pdf->Cell(90, 10, "Rs " . number_format($totalIncome, 2), 1, 1, "C", true);
+$pdf->Cell(90, 10, "Rs " . number_format($totalIncome, 2), 1, 1, "R", true);
 
 $pdf->SetFillColor(245, 220, 220);
 $pdf->Cell(90, 10, "Total Expenses", 1, 0, "L", true);
-$pdf->Cell(90, 10, "Rs " . number_format($totalExpenses, 2), 1, 1, "C", true);
+$pdf->Cell(90, 10, "Rs " . number_format($totalExpenses, 2), 1, 1, "R", true);
 
 $pdf->SetFillColor($netTotal >= 0 ? 220 : 245, $netTotal >= 0 ? 245 : 220, 220);
 $pdf->Cell(90, 10, "Net (Income - Expenses)", 1, 0, "L", true);
-$pdf->Cell(90, 10, "Rs " . number_format($netTotal, 2), 1, 1, "C", true);
+$pdf->Cell(90, 10, "Rs " . number_format($netTotal, 2), 1, 1, "R", true);
 
 $pdf->Ln(8);
 
@@ -205,7 +205,7 @@ if (count($expenseCategoryData) > 0) {
 
         $pdf->SetFillColor($fill ? 245 : 255, $fill ? 245 : 255, $fill ? 245 : 255);
         $pdf->Cell(120, 8, $category, 1, 0, "L", true);
-        $pdf->Cell(60, 8, number_format($amount, 2), 1, 1, "C", true);
+        $pdf->Cell(60, 8, number_format($amount, 2), 1, 1, "R", true);
         $fill = !$fill;
     }
 
@@ -213,7 +213,7 @@ if (count($expenseCategoryData) > 0) {
     $pdf->SetFont("Arial", "B", 9);
     $pdf->SetFillColor(230, 230, 230);
     $pdf->Cell(120, 8, "Total Expenses", 1, 0, "L", true);
-    $pdf->Cell(60, 8, number_format($totalExpenses, 2), 1, 1, "C", true);
+    $pdf->Cell(60, 8, number_format($totalExpenses, 2), 1, 1, "R", true);
 } else {
     $pdf->SetFont("Arial", "", 10);
     $pdf->Cell(190, 10, "No expense records found for this period.", 1, 1, "C");

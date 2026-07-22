@@ -110,11 +110,11 @@ $pdf->Ln(5);
 $pdf->SetFont("Arial", "B", 10);
 $pdf->SetFillColor(220, 245, 220);
 $pdf->Cell(95, 10, "Total Approved Amount", 1, 0, "L", true);
-$pdf->Cell(95, 10, "Rs " . number_format($totalApproved, 2), 1, 1, "C", true);
+$pdf->Cell(95, 10, "Rs " . number_format($totalApproved, 2), 1, 1, "R", true);
 
 $pdf->SetFillColor(255, 243, 205);
 $pdf->Cell(95, 10, "Total Pending Amount", 1, 0, "L", true);
-$pdf->Cell(95, 10, "Rs " . number_format($totalPending, 2), 1, 1, "C", true);
+$pdf->Cell(95, 10, "Rs " . number_format($totalPending, 2), 1, 1, "R", true);
 
 $pdf->Ln(8);
 
@@ -143,7 +143,7 @@ if (count($approvedRows) > 0) {
         $pdf->SetFillColor($fill ? 245 : 255, $fill ? 245 : 255, $fill ? 245 : 255);
         $pdf->Cell(10, 8, $count++, 1, 0, "C", true);
         $pdf->Cell(30, 8, "ORD" . $row["order_id"], 1, 0, "C", true);
-        $pdf->Cell(35, 8, number_format($row["amount"], 2), 1, 0, "C", true);
+        $pdf->Cell(35, 8, number_format($row["amount"], 2), 1, 0, "R", true);
         $pdf->Cell(35, 8, $paymentDate, 1, 0, "C", true);
         $pdf->Cell(35, 8, $method, 1, 0, "C", true);
         $pdf->Cell(35, 8, $refNo, 1, 1, "C", true);
@@ -154,7 +154,7 @@ if (count($approvedRows) > 0) {
     $pdf->SetFont("Arial", "B", 9);
     $pdf->SetFillColor(220, 245, 220);
     $pdf->Cell(40, 9, "Total Approved", 1, 0, "R", true);
-    $pdf->Cell(35, 9, number_format($totalApproved, 2), 1, 0, "C", true);
+    $pdf->Cell(35, 9, number_format($totalApproved, 2), 1, 0, "R", true);
     $pdf->Cell(105, 9, "", 1, 1, "C", true);
 
 } else {
@@ -193,7 +193,7 @@ if (count($pendingRows) > 0) {
         $pdf->SetFillColor($fill ? 245 : 255, $fill ? 245 : 255, $fill ? 245 : 255);
         $pdf->Cell(10, 8, $count++, 1, 0, "C", true);
         $pdf->Cell(30, 8, "ORD" . $row["order_id"], 1, 0, "C", true);
-        $pdf->Cell(35, 8, number_format($row["amount"], 2), 1, 0, "C", true);
+        $pdf->Cell(35, 8, number_format($row["amount"], 2), 1, 0, "R", true);
         $pdf->Cell(35, 8, $paymentDate, 1, 0, "C", true);
         $pdf->Cell(35, 8, $method, 1, 0, "C", true);
         $pdf->Cell(35, 8, $refNo, 1, 1, "C", true);
@@ -204,7 +204,7 @@ if (count($pendingRows) > 0) {
     $pdf->SetFont("Arial", "B", 9);
     $pdf->SetFillColor(255, 243, 205);
     $pdf->Cell(40, 9, "Total Pending", 1, 0, "R", true);
-    $pdf->Cell(35, 9, number_format($totalPending, 2), 1, 0, "C", true);
+    $pdf->Cell(35, 9, number_format($totalPending, 2), 1, 0, "R", true);
     $pdf->Cell(105, 9, "", 1, 1, "C", true);
 
 } else {
