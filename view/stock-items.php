@@ -314,7 +314,7 @@ $stockUnitResult = $stockObj->getAllStockUnits();
                         <!-- Min Stock -->
                         <div class="mb-3">
                             <label class="form-label">Minimum Stock Level</label>
-                            <input type="number" name="min_stock_level" id="min_stock_level" value="<?php echo $row["min_stock_level"]; ?>" class="form-control" required>
+                            <input type="number" name="min_stock_level" id="min_stock_level" min="1" value="<?php echo $row["min_stock_level"]; ?>" class="form-control" required>
                         </div>
 
 

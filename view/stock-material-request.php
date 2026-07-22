@@ -45,7 +45,14 @@ while ($rowcount = $psrCount->fetch_assoc()) {
           <a href="stock-list.php" class="btn btn-outline-success">Inventory</a>
           <a href="stock-material-request.php" class="btn btn-outline-info active">Stock Requests</a>
           <a href="stock-purchase-requests.php" class="btn btn-outline-secondary">Purchase Requests</a>
-          <a href="generate-stock-report.php" class="btn btn-outline-warning">Generate Reports</a>
+          <button
+            class="btn btn-outline-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#reportModal">
+
+            Generate Report
+
+          </button>
         </div>
       </div>
 
@@ -223,6 +230,52 @@ while ($rowcount = $psrCount->fetch_assoc()) {
         </div>
     </div>
 
+
+    <div class="modal fade" id="reportModal">
+    <div class="modal-dialog">
+        <form action="generate-stock-material-request-report.php" method="post" target="_blank">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Stock Material Request Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label>Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                    <br>
+
+                    <label>End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Generate Report
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
+</script>
 
 
 

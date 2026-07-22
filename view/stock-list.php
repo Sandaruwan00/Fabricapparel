@@ -32,7 +32,7 @@ $stockResult = $stockObj->getAllStocks(); // JOIN query
                     <a href="stock-list.php" class="btn btn-outline-success active">Inventory</a>
                     <a href="stock-material-request.php" class="btn btn-outline-info">Stock Requests</a>
                     <a href="stock-purchase-requests.php" class="btn btn-outline-secondary">Purchase Requests</a>
-                    <a href="generate-stock-report.php" class="btn btn-outline-warning">Generate Reports</a>
+                    <a href="generate-stock-list-report.php" class="btn btn-outline-warning">Generate Reports</a>
                 </div>
             </div>
 
@@ -160,7 +160,7 @@ $stockResult = $stockObj->getAllStocks(); // JOIN query
                         <!-- Quantity -->
                         <div class="mb-3">
                             <label class="form-label">Quantity</label>
-                            <input type="number" name="quantity" class="form-control" required>
+                            <input type="number" name="quantity" min="1" class="form-control" required>
                         </div>
 
                         <!-- Reference -->
@@ -332,7 +332,7 @@ $stockResult = $stockObj->getAllStocks(); // JOIN query
 
                         <div class="mb-3">
                             <label>Requested Quantity</label>
-                            <input type="number" name="requested_qty" class="form-control" required>
+                            <input type="number" name="requested_qty" min="1" class="form-control" required>
                         </div>
 
                     </div>
