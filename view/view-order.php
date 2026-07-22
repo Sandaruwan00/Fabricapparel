@@ -39,7 +39,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
             <div class="col-md-4 text-start">
                 <a href="view-orders.php" class="btn btn-outline-secondary">Back</a>
             </div>
-            
+
             <div class="col-md-8" style="text-align:right;">
                 <div class="btn-group">
                     <a href="add-order.php" class="btn btn-outline-primary">Add Order</a>
@@ -374,6 +374,13 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                                     </a>
                                 </div>
                             <?php } ?>
+                            <div class="col-md-2">
+                                <a href="generate-order-bill.php?order_id=<?php echo base64_encode($order_id); ?>"
+                                    target="_blank"
+                                    class="btn btn-outline-danger">
+                                    <i class="bi bi-file-earmark-pdf"></i> Print Bill
+                                </a>
+                            </div>
                         </div>
 
                         <?php

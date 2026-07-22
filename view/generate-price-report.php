@@ -143,7 +143,7 @@ $sizeResult = $priceObj->getAllSizes();
                                 <small class="text-muted">If nothing selected, all statuses will be included</small>
                             </div>
 
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label class="form-label fw-bold">Include Size Charts</label>
 
                                 <div class="form-check">
@@ -155,7 +155,7 @@ $sizeResult = $priceObj->getAllSizes();
                                     <input class="form-check-input" type="radio" name="include_size_chart" value="0" checked>
                                     <label class="form-check-label">No</label>
                                 </div>
-                            </div>
+                            </div> -->
 
 
                             <!-- BUTTONS -->
