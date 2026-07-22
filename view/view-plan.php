@@ -100,7 +100,7 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
                         </div>
 
                         <div class="row">
-                            
+
                             <div class="col-md-6">
                                 <p class="fw-bold m-auto">COMMENTS:</p>
                                 <p class="fs-5"><?php echo $planrow["comments"]; ?></p>
@@ -213,7 +213,7 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
                             <div class="row justify-content-end">
 
                                 <div class="col-md-3">
-                                    <button href="#" class="btn btn-primary w-100"
+                                    <button href="#" class="btn btn-success w-100"
                                         data-bs-toggle="modal"
                                         data-bs-target="#approveModal">
                                         <i class="bi bi-check-lg"></i> Confirm Plan
@@ -224,6 +224,13 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
                                         data-bs-toggle="modal"
                                         data-bs-target="#rejectModal">
                                         <i class="bi bi-slash-circle"></i> Reject Plan
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button href="#" class="btn btn-primary w-100"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#viewModal" onclick="loadorder('<?php echo $planrow['order_id']; ?>');">
+                                        <i class="bi bi-eye-fill"></i> View Order
                                     </button>
                                 </div>
                             </div>
@@ -343,7 +350,7 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
         });
     </script>
 
-     <!-- item design view modal -->
+    <!-- item design view modal -->
 
     <!-- Design Preview Modal -->
     <div class="modal fade" id="designPreviewModal" tabindex="-1" aria-labelledby="designPreviewModalLabel" aria-hidden="true">
@@ -400,6 +407,45 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
         document.getElementById("designPreviewModal").addEventListener("hidden.bs.modal", function() {
             document.getElementById("designPreviewContent").innerHTML = "";
         });
+    </script>
+
+    <div class="modal fade" id="viewModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Order Details</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div id="display_data">
+                <div class="modal-body text-center">
+                    <div class="spinner-border text-secondary" role="status"></div>
+                    <p class="mt-2 text-muted">Loading order details...</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+        function loadorder(order_id) {
+
+            var url = "../controller/order_controller.php?status=load_order";
+
+            $.post(url, {
+                order_id: order_id
+            }, function(data) {
+                $("#display_data").html(data).show();
+            });
+        }
     </script>
 
     <?php include_once '../includes/footer_includes.php'; ?>
