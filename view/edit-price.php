@@ -43,25 +43,22 @@ $pricerow = $priceresult->fetch_assoc();
         </div>
         <div class="row mt-4 justify-content-center">
             <div class="col-md-10">
-                <?php
-                if (isset($_GET["msg"])) {
-                    $msg = base64_decode($_GET["msg"]);
-                ?>
-                    <div class="row justify-content-center" id="msg">
-                        <div class=" col-md-6 alert alert-success text-center">
-                            <?php echo $msg; ?>
-                        </div>
+                <div class="row justify-content-center" style="margin-top:25px;">
+                    <div id="msg" class="col-md-4 text-center">
+                        <?php if (isset($_GET["msg"])) { ?>
+                            <div class="alert alert-danger text-center">
+                                <?php echo base64_decode($_GET["msg"]); ?>
+                            </div>
+                        <?php } ?>
                     </div>
-                <?php
-                }
-                ?>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card mb-4">
                             <div class="card-header bg-dark text-white fw-semibold">
                                 Add Price
                             </div>
-                            <form action="../controller/price_controller.php?status=update_price" method="post" enctype="multipart/form-data">
+                            <form id="editprice" action="../controller/price_controller.php?status=update_price" method="post" enctype="multipart/form-data">
                                 <div class="card-body">
                                     <div class="row mb-3">
                                         <div class="col-md-6">
@@ -93,7 +90,7 @@ $pricerow = $priceresult->fetch_assoc();
                                     <div class="row mb-3">
                                         <div class="col-md-6">
                                             <label class="form-label">Price (LKR)</label>
-                                            <input type="number" id="price" name="price" class="form-control" value="<?php echo $pricerow["price"]; ?>">
+                                            <input type="number" id="price" name="price" class="form-control" min="1" value="<?php echo $pricerow["price"]; ?>">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Size Chart</label>
@@ -160,6 +157,73 @@ $pricerow = $priceresult->fetch_assoc();
             reader.readAsDataURL(input.files[0]);
         }
     }
+</script>
+
+<script>
+    $(document).ready(function() {
+
+        $("#editprice").submit(function() {
+
+            $("#msg").removeClass("alert alert-danger").html("");
+
+            var select_product = $("#select_product").val();
+            var select_size = $("#select_size").val();
+            var price = $("#price").val().trim();
+            var size_chart = $("#size_chart").val();
+
+
+            if (select_product == "") {
+                $("#msg").html("Please Select a Product!");
+                $("#msg").addClass("alert alert-danger");
+                return false;
+            }
+
+
+            if (select_size == "") {
+                $("#msg").html("Please Select a Size!");
+                $("#msg").addClass("alert alert-danger");
+                return false;
+            }
+
+
+            if (price == "") {
+                $("#msg").html("Price Cannot Be Empty!");
+                $("#msg").addClass("alert alert-danger");
+                return false;
+            }
+
+
+            if (isNaN(price) || parseFloat(price) <= 0) {
+                $("#msg").html("Price Must Be Greater Than Zero!");
+                $("#msg").addClass("alert alert-danger");
+                return false;
+            }
+
+
+            // File validation (if user uploads a file)
+            if (size_chart != "") {
+
+                var file = $("#size_chart")[0].files[0];
+                var fileExtension = size_chart.split('.').pop().toLowerCase();
+
+                if ($.inArray(fileExtension, ['jpg', 'jpeg', 'png']) == -1) {
+                    $("#msg").html("Only JPG, JPEG and PNG Images Are Allowed!");
+                    $("#msg").addClass("alert alert-danger");
+                    return false;
+                }
+
+
+                if (file.size > 2 * 1024 * 1024) {
+                    $("#msg").html("Image Size Must Be Less Than 2MB!");
+                    $("#msg").addClass("alert alert-danger");
+                    return false;
+                }
+
+            }
+
+        });
+
+    });
 </script>
 
 </html>
