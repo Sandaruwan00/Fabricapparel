@@ -263,7 +263,7 @@ $orderHistoryResult = $buyerObj->getOrderHistory($company_id);
 </script>
 
 
-<div class="modal fade" id="viewModal">
+<div class="modal fade" id="viewModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
 
@@ -292,7 +292,7 @@ $orderHistoryResult = $buyerObj->getOrderHistory($company_id);
 <script>
         function loadorder(order_id) {
 
-            var url = "../controller/warehouse_controller.php?status=load_order";
+            var url = "../controller/order_controller.php?status=load_order";
 
             $.post(url, {
                 order_id: order_id
@@ -309,7 +309,35 @@ $orderHistoryResult = $buyerObj->getOrderHistory($company_id);
 <script src="../js/datatable/bootstrap.bundle.min.js"></script>
 
 
-
+<!-- alert start -->
+<?php
+$msg = "";
+if (isset($_GET["msg"])) {
+    $msg = base64_decode($_GET["msg"]);
+}
+?>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="msgToast" class="toast align-items-center text-bg-secondary border-0" role="alert" data-bs-delay="5000">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMsg">
+                <!-- Message -->
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let msg = "<?php echo $msg; ?>";
+        if (msg !== "") {
+            document.getElementById("toastMsg").innerText = msg;
+            let toastEl = document.getElementById("msgToast");
+            let toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+    });
+</script>
+<!-- alert end -->
 
 
 </html>

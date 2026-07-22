@@ -172,16 +172,15 @@ switch ($status) {
 
         try {
 
-        if($amount > $dueAmount){
-            
-            throw new Exception("Payment amount exceeds due amount!");
-        }
+            if ($amount > $dueAmount) {
+
+                throw new Exception("Payment amount exceeds due amount!");
+            }
 
             $orderObj->addNewOrderPayment($order_id, $amount, $payment_method, $reference_no);
             $msg = "New Payment Added!";
             $msg = base64_encode($msg);
             $order_id = base64_encode($order_id);
-
         } catch (Exception $ex) {
             echo "Error: " . $ex->getMessage();
             $msg = base64_encode($ex->getMessage());
@@ -297,11 +296,11 @@ switch ($status) {
             if ($paidRefund >= $refund_amount) {
                 throw new Exception("Already Processed Refund");
             }
-            
+
             if ($requestedrefund >= $refund_amount) {
                 throw new Exception("Already Requested Refund");
             }
-            
+
 
             $orderObj->addOrderRefund($order_id, $refund_amount, $remarks);
 
@@ -399,7 +398,7 @@ switch ($status) {
         ?>
         <div class="modal-body">
             <div class="row justify-content-center">
-                <div class="col-md-10">
+                <div class="col-md-12">
                     <div class="card" style="box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
 
                         <!-- Header -->
@@ -526,10 +525,8 @@ switch ($status) {
                                             <td class="text-end"><?php echo number_format($item["qty"] * $item["unit_price"], 2); ?></td>
                                             <td class="text-center">
                                                 <?php if (!empty($item["item_design"])) { ?>
-                                                    <button type="button"
+                                                    <button
                                                         class="btn btn-outline-primary btn-sm previewDesignBtn"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#designPreviewModal"
                                                         data-file="../files/designs/<?php echo $item["item_design"]; ?>"
                                                         data-filename="<?php echo $item["item_design"]; ?>">
                                                         <i class="bi bi-eye"></i> View
@@ -542,6 +539,30 @@ switch ($status) {
                                     <?php } ?>
                                 </tbody>
                             </table>
+
+                            <div class="row">&nbsp;</div>
+
+
+                            <h4 class="fw-bold">
+                                <i class="bi bi-image"></i> Design Preview
+                            </h4>
+                            <hr>
+
+                            <div class="card shadow-sm">
+                                <div class="card-body text-center" style="min-height:300px;">
+
+                                    <div id="designPreviewContent">
+
+                                        <div class="text-muted mt-5">
+                                            <i class="bi bi-image fs-1"></i>
+                                            <p>Select a design to preview.</p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
 
                             <div class="row">&nbsp;</div>
 
@@ -669,6 +690,56 @@ switch ($status) {
                 </div>
             </div>
         </div>
+
+
+        <script>
+            document.addEventListener("click", function(e) {
+
+    const btn = e.target.closest(".previewDesignBtn");
+    if (!btn) return;
+
+    const file = btn.dataset.file;
+    const filename = btn.dataset.filename;
+
+    const preview = document.getElementById("designPreviewContent");
+
+    const ext = filename.split(".").pop().toLowerCase();
+
+    const imageTypes = ["jpg","jpeg","png","gif","webp"];
+
+    if (imageTypes.includes(ext)) {
+
+        preview.innerHTML = `
+            <img src="${file}"
+                 class="img-fluid rounded shadow"
+                 style="max-height:400px;">
+        `;
+
+    } else if (ext === "pdf") {
+
+        preview.innerHTML = `
+            <iframe src="${file}"
+                    width="100%"
+                    height="500"
+                    style="border:none;">
+            </iframe>
+        `;
+
+    } else {
+
+        preview.innerHTML = `
+            <div class="alert alert-warning">
+                Preview is not available.
+                <br><br>
+                <a href="${file}" class="btn btn-primary" download>
+                    Download ${filename}
+                </a>
+            </div>
+        `;
+    }
+
+});
+        </script>
 
 <?php
 
