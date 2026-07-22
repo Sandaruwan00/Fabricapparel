@@ -106,4 +106,53 @@ class Buyer
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
+
+    public function getTopFiveBuyers()
+    {
+        $con = $GLOBALS["con"];
+
+        $sql = "SELECT
+                b.company_name,
+                SUM(o.total_amount + o.delivery_charge) AS total_sales
+            FROM buyer_company b
+            INNER JOIN orders o
+                ON b.company_id = o.company_id
+            GROUP BY b.company_id
+            ORDER BY total_sales DESC
+            LIMIT 5";
+
+        return $con->query($sql);
+    }
+
+    public function checkBuyerEmailExists($contact_email){
+        
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM buyer_contact_person WHERE contact_email='$contact_email'";
+        $result = $con->query($sql) or die($con->error);
+        return $result;
+    }
+
+    public function checkBuyerEmailExistsForUpdate($contact_email, $company_id){
+        
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM buyer_contact_person WHERE contact_email='$contact_email' AND company_id != '$company_id'";
+        $result = $con->query($sql) or die($con->error);
+        return $result;
+    }
+
+    public function checkBuyerNICExists($contact_nic){
+        
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM buyer_contact_person WHERE contact_nic='$contact_nic'";
+        $result = $con->query($sql) or die($con->error);
+        return $result;
+    }
+
+    public function checkBuyerNICExistsForUpdate($contact_nic, $company_id){
+        
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM buyer_contact_person WHERE contact_nic='$contact_nic' AND company_id != '$company_id'";
+        $result = $con->query($sql) or die($con->error);
+        return $result;
+    }
 }

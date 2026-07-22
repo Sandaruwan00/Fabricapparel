@@ -40,6 +40,17 @@ switch ($status) {
 
         try {
 
+        $emailCheckResult = $buyerObj->checkBuyerEmailExists($contact_email);
+        if ($emailCheckResult->num_rows > 0) {
+            throw new Exception("Email already exists. Please use a different email.");
+        }
+
+        $nicCheckResult = $buyerObj->checkBuyerNICExists($contact_nic);
+        if ($nicCheckResult->num_rows > 0) {
+            throw new Exception("NIC already exists. Please use a different NIC.");
+        }
+
+
             $company_id = $buyerObj->addBuyerCompany($company_name, $company_registration, $business_type, $website, $company_address_line_1, $company_address_line_2, $company_city, $company_postal_code, $company_country);
 
             if ($company_id > 0) {
@@ -119,7 +130,15 @@ switch ($status) {
 
         try {
 
+        $emailCheckResult = $buyerObj->checkBuyerEmailExistsForUpdate($contact_email, $company_id);
+        if ($emailCheckResult->num_rows > 0) {
+            throw new Exception("Email already exists. Please use a different email.");
+        }
 
+        $nicCheckResult = $buyerObj->checkBuyerNICExistsForUpdate($contact_nic, $company_id);
+        if ($nicCheckResult->num_rows > 0) {
+            throw new Exception("NIC already exists. Please use a different NIC.");
+        }
 
             $buyerObj->updateBuyerCompany($company_name, $company_registration, $business_type, $website, $company_address_line_1, $company_address_line_2, $company_city, $company_postal_code, $company_country, $company_id);
 
@@ -139,9 +158,10 @@ switch ($status) {
         } catch (Exception $ex) {
             $msg = $ex->getMessage();
             $msg = base64_encode($msg);
+            $company_id = base64_encode($company_id);
         ?>
             <script>
-                window.location = "../view/edit-buyer.php?msg=<?php echo $msg; ?>";
+                window.location = "../view/edit-buyer.php?company_id=<?php echo $company_id; ?>&msg=<?php echo $msg; ?>";
             </script>
 <?php
 
