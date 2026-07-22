@@ -203,7 +203,7 @@ $poResults = $purchaseObj->getPOs();
                             <!-- Unit Price -->
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Unit Price (Rs.)</label>
-                                <input type="number" class="form-control" name="unit_price" min="0" step="0.01" required>
+                                <input type="number" class="form-control" name="unit_price" min="1" step="0.01" required>
                             </div>
 
                             <!-- Total Price (auto calculated) -->

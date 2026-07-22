@@ -107,4 +107,21 @@ class Supplier
             return false;
         }
     }
+
+    public function getTopSuppliers()
+{
+    $con = $GLOBALS["con"];
+
+    $sql = "SELECT 
+                s.supplier_name,
+                SUM(po.total_price) AS total_purchase
+            FROM purchase_orders po
+            INNER JOIN supplier s ON po.supplier_id = s.supplier_id
+            WHERE po_status != 'Cancelled'
+            GROUP BY s.supplier_id
+            ORDER BY total_purchase DESC
+            LIMIT 5";
+
+    return $con->query($sql);
+}
 }

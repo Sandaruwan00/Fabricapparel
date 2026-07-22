@@ -2,28 +2,63 @@
 include_once '../commons/session.php';
 include_once '../model/user_model.php';
 include_once '../model/supplier_model.php';
+include_once '../model/stock_model.php';
+include_once '../model/purchase_model.php';
+
+
 // include_once '../model/purchase_model.php';
 // get user information from session
 $userrow = $_SESSION["user"];
 // // objects
 $supplierObj = new Supplier();
-// $purchaseObj = new Purchase();
+$stockObj = new Stock();
+$purchaseObj = new Purchase();
 
 
 $totalSuppliersResult = $supplierObj->getAllSupplierCount();
 $totalSuppliers = 0;
 while ($row = $totalSuppliersResult->fetch_assoc()) {
-  $totalSuppliers = $row['supplier_count'];;
+    $totalSuppliers = $row['supplier_count'];;
 }
-// $activeSuppliers = $supplierObj->getActiveSupplierCount();
-// $totalPR = $purchaseObj->getPRCount();
-// $totalPO = $purchaseObj->getPOCount();
+
+$pendingPurchaseRequestsCount = 0;
+$pendingPOCount = 0;
+$unpaidPOCount = 0;
+
+$requests = $stockObj->getAllPurchaseRequests();
+while ($requestsrow = $requests->fetch_assoc()) {
+    if ($requestsrow["request_status"] == "Pending") {
+        $pendingPurchaseRequestsCount++;
+    }
+}
+
+$poResults = $purchaseObj->getPOs();
+while ($porow = $poResults->fetch_assoc()) {
+    if ($porow["po_status"] == "Pending") {
+        $pendingPOCount++;
+    }
+    if ($porow["po_status"] == "Delivered") {
+        $unpaidPOCount++;
+    }
+}
+
+$topSupplierResults = $supplierObj->getTopSuppliers();
+$supplierNames = [];
+$supplierValues = [];
+
+while ($supplier = $topSupplierResults->fetch_assoc()) {
+
+    $supplierNames[] = $supplier["supplier_name"];
+    $supplierValues[] = $supplier["total_purchase"];
+}
+
 ?>
 <html>
 
 <head>
     <?php include_once "../includes/bootstrap_css_includes.php" ?>
     <title>Purchasing Management</title>
+    <script src="../js/plotly-3.0.1.min.js" charset="utf-8"></script>
 </head>
 
 <body style="border-radius:10px;">
@@ -72,43 +107,103 @@ while ($row = $totalSuppliersResult->fetch_assoc()) {
                 </div>
                 <!-- Active Suppliers -->
                 <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
-                    <div class="card-header">Active Suppliers</div>
+                    <div class="card-header">Pending Purchase Requests</div>
                     <div class="card-body">
                         <h1 class="card-title">
                             <?php
-                            // echo $activeSuppliers;
+                            echo $pendingPurchaseRequestsCount;
                             ?>
                         </h1>
                     </div>
                 </div>
                 <!-- Purchase Requests -->
                 <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
-                    <div class="card-header">Purchase Requests</div>
+                    <div class="card-header">Pending Purchase Orders</div>
                     <div class="card-body">
                         <h1 class="card-title">
                             <?php
-                            // echo $totalPR;
+                            echo $pendingPOCount;
                             ?>
                         </h1>
                     </div>
                 </div>
                 <!-- Purchase Orders -->
                 <div class="col-md-3 shadow-lg card text-dark bg-white mb-3" style="max-width: 18rem;">
-                    <div class="card-header">Purchase Orders</div>
+                    <div class="card-header">Unpaid Purchase Orders</div>
                     <div class="card-body">
                         <h1 class="card-title">
                             <?php
-                            // echo $totalPO;
+                            echo $unpaidPOCount;
                             ?>
                         </h1>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div id="supplierChart"></div>
+            </div>
+        </div>
+
+
         <div class="row">&nbsp;</div>
     </div>
     <?php include_once '../includes/footer_includes.php'; ?>
 </body>
 <script src="../js/jquery-3.7.1.js"></script>
+<script src="../bootstrap/dist/js/bootstrap.js"></script>
+<script src="../js/datatable/bootstrap.bundle.min.js"></script>
+<script src="../js/datatable/dataTables.bootstrap5.js"></script>
+<script src="../js/datatable/dataTables.js"></script>
+
+<script>
+    var supplierNames = <?php echo json_encode($supplierNames); ?>;
+    var supplierValues = <?php echo json_encode($supplierValues); ?>;
+
+
+    var data = [{
+        y: supplierNames,
+        x: supplierValues,
+        type: 'bar',
+        orientation: 'h',
+        text: supplierValues.map(String),
+        textposition: 'auto'
+    }];
+
+
+    var layout = {
+
+        title: {
+            text: "Top 5 Suppliers by Purchase Value"
+        },
+
+        xaxis: {
+            title: "Total Purchase (Rs.)"
+        },
+
+        yaxis: {
+            title: "Supplier"
+        },
+
+        height: 450,
+
+        margin: {
+        l: 250,   // left margin (for supplier names)
+        r: 50,    // right margin
+        t: 80,    // top margin (for title)
+        b: 80     // bottom margin
+    }
+
+    };
+
+
+    Plotly.newPlot(
+        'supplierChart',
+        data,
+        layout
+    );
+</script>
 
 </html>
