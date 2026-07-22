@@ -249,6 +249,14 @@ class Stock
         return $con->query($sql);
     }
 
+    public function getOutOfStocksCount()
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT COUNT(stock_id) as total FROM stock WHERE quantity = 0";
+        $result = $con->query($sql) or die($con->error);
+        return $result;
+    }
+
     public function getAllStockRequests()
     {
         $con = $GLOBALS['con'];
