@@ -33,7 +33,7 @@ $stockUnitResult = $stockObj->getAllStockUnits();
                     <a href="stock-list.php" class="btn btn-outline-success">Inventory</a>
                     <a href="stock-material-request.php" class="btn btn-outline-info">Stock Requests</a>
                     <a href="stock-purchase-requests.php" class="btn btn-outline-secondary">Purchase Requests</a>
-                    <a href="generate-stock-report.php" class="btn btn-outline-warning">Generate Reports</a>
+                    <a href="generate-stock-material-items-report.php" class="btn btn-outline-warning">Generate Reports</a>
                 </div>
             </div>
 
