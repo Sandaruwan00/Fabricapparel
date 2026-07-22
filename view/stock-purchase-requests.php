@@ -32,7 +32,14 @@ $lowStockItems = $stockObj->getLowStockItems();
           <a href="stock-list.php" class="btn btn-outline-success">Inventory</a>
           <a href="stock-material-request.php" class="btn btn-outline-info">Stock Requests</a>
           <a href="stock-purchase-requests.php" class="btn btn-outline-secondary active">Purchase Requests</a>
-          <a href="generate-stock-report.php" class="btn btn-outline-warning">Generate Reports</a>
+          <button
+            class="btn btn-outline-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#reportModal">
+
+            Generate Report
+
+          </button>
         </div>
       </div>
         </div>
@@ -110,7 +117,7 @@ $lowStockItems = $stockObj->getLowStockItems();
 
                         <div class="mb-3">
                             <label>Requested Quantity</label>
-                            <input type="number" name="requested_qty" class="form-control" required>
+                            <input type="number" name="requested_qty" min="1" class="form-control" required>
                         </div>
 
                     </div>
@@ -209,6 +216,54 @@ $lowStockItems = $stockObj->getLowStockItems();
         </div>
     </div>
 </div>
+
+
+
+ <div class="modal fade" id="reportModal">
+    <div class="modal-dialog">
+        <form action="generate-stock-purchase-request-report.php" method="post" target="_blank">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Stock Purchase Request Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label>Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                    <br>
+
+                    <label>End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Generate Report
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
+</script>
 
 
 
