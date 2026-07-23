@@ -29,12 +29,25 @@ while ($row = $warehouseResult->fetch_assoc()) {
 }
 
 
+$shipmentLocationResult = $warehouseObj->getShipmentLocationAnalysis();
+
+$districtNames = [];
+$shipmentCounts = [];
+
+while($row = $shipmentLocationResult->fetch_assoc())
+{
+    $districtNames[] = $row["district_name"];
+    $shipmentCounts[] = $row["shipment_count"];
+}
+
+
 ?>
 <html>
 
 <head>
     <?php include_once "../includes/bootstrap_css_includes.php" ?>
     <title>Warehouse Management</title>
+    <script src="../js/plotly-3.0.1.min.js" charset="utf-8"></script>
 </head>
 
 <body style="border-radius:10px;">
@@ -56,9 +69,7 @@ while ($row = $warehouseResult->fetch_assoc()) {
                     </a>
                     <a href="create-shipment.php" class="btn btn-outline-info">Create Shipment</a>
                     <a href="view-shipments.php" class="btn btn-outline-success">View Shipments</a>
-                    <a href="generate-warehouse-reports.php" class="btn btn-outline-warning">
-                        Generate Reports
-                    </a>
+                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#reportModal">Generate Reports</button>
                 </div>
             </div>
         </div>
@@ -117,9 +128,119 @@ while ($row = $warehouseResult->fetch_assoc()) {
             </div>
         </div>
         <div class="row">&nbsp;</div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div id="deliveryLocationChart"></div>
+            </div>
+        </div>
+
+        <script>
+
+var districts = <?php echo json_encode($districtNames); ?>;
+var shipmentCounts = <?php echo json_encode($shipmentCounts); ?>;
+
+
+var data = [
+    {
+        y: districts,
+        x: shipmentCounts,
+        type: 'bar',
+        orientation: 'h',
+        text: shipmentCounts.map(String),
+        textposition: 'auto'
+    }
+];
+
+
+var layout = {
+    title: {
+        text: "Delivery Location Analysis"
+    },
+
+    xaxis: {
+        title: "Number of Shipments"
+    },
+
+    yaxis: {
+        title: "Delivery Location"
+    },
+
+    height: 500,
+
+    margin: {
+        l: 120,
+        r: 30,
+        t: 60,
+        b: 60
+    }
+};
+
+
+Plotly.newPlot(
+    "deliveryLocationChart",
+    data,
+    layout
+);
+
+</script>
+        
+        
     </div>
+
+    <div class="modal fade" id="reportModal">
+    <div class="modal-dialog">
+        <form action="generate-warehouse-report.php" method="post" target="_blank">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Warehouse Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label>Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                    <br>
+
+                    <label>End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Generate Report
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
+</script>
+    
+    
     <?php include_once '../includes/footer_includes.php'; ?>
 </body>
 <script src="../js/jquery-3.7.1.js"></script>
+<script src="../bootstrap/dist/js/bootstrap.js"></script>
+<script src="../js/datatable/bootstrap.bundle.min.js"></script>
+<script src="../js/datatable/dataTables.bootstrap5.js"></script>
+<script src="../js/datatable/dataTables.js"></script>
 
 </html>

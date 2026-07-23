@@ -455,6 +455,7 @@ switch ($status) {
                     <tbody>
                         <?php
                         $stock_items = [];
+                        $hasOutOfStock = false;
                         ?>
 
                         <?php while ($item = $stockRequestItems->fetch_assoc()) {
@@ -470,6 +471,7 @@ switch ($status) {
                             if ($qty == 0) {
                                 $status = "Out of Stock";
                                 $status_color = "bg-danger";
+                                $hasOutOfStock = true;
                             } elseif ($qty <= $min) {
                                 $status = "Low Stock";
                                 $status_color = "bg-warning";
@@ -523,11 +525,19 @@ switch ($status) {
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <?php
                 if ($stock_request_status == "Pending") {
-                ?>
-                    <button type="submit" class="btn btn-success">Issue</button>
-                <?php
-                }
 
+                    if (!$hasOutOfStock) {
+                ?>
+                        <button type="submit" class="btn btn-success">Issue</button>
+                    <?php
+                    } else {
+                    ?>
+                        <span class="text-danger fw-bold">
+                            Cannot issue stock because one or more requested items are out of stock.
+                        </span>
+                <?php
+                    }
+                }
                 ?>
 
             </div>
@@ -607,7 +617,7 @@ switch ($status) {
 
         try {
 
-        $stockObj->rejectProductionStockRequest($psr_id);
+            $stockObj->rejectProductionStockRequest($psr_id);
 
             $msg = "Production Stock Request Rejected!";
             $msg = base64_encode($msg);
@@ -631,42 +641,38 @@ switch ($status) {
 
         break;
 
-        case "issue_psr":
-        
-                $psr_id = $_GET["psr_id"];
-                $stock_item_id = $_GET["stock_item_id"];
-                $quantity = $_GET["quantity"];
-        
-                try {
+    case "issue_psr":
 
-                if (!$stockObj->checkStockExist($stock_item_id, $quantity)) {
-                    throw new Exception("Insufficient stock for item ID: $stock_item_id");
-                }
+        $psr_id = $_GET["psr_id"];
+        $stock_item_id = $_GET["stock_item_id"];
+        $quantity = $_GET["quantity"];
 
-                $stockObj->outInventoryStockItem($stock_item_id, $quantity);
-                $stockObj->issueProductionStockRequest($psr_id);
-        
-                    
-                    $msg = "Production Stock Request Issued!";
-                    $msg = base64_encode($msg);
-                ?>
-                    <script>
-                        window.location = "../view/stock-material-request.php?msg=<?php echo $msg; ?>";
-                    </script>
-                <?php
-        
-                } catch (Exception $ex) {
-                    $msg = $ex->getMessage();
-                    $msg = base64_encode($msg);
-                ?>
-                    <script>
-                        window.location = "../view/stock-material-request.php?msg=<?php echo $msg; ?>";
-                    </script>
-                <?php
-                }
-                break;
+        try {
 
-    
+            if (!$stockObj->checkStockExist($stock_item_id, $quantity)) {
+                throw new Exception("Insufficient stock for item ID: $stock_item_id");
+            }
 
-        
+            $stockObj->outInventoryStockItem($stock_item_id, $quantity);
+            $stockObj->issueProductionStockRequest($psr_id);
+
+
+            $msg = "Production Stock Request Issued!";
+            $msg = base64_encode($msg);
+        ?>
+            <script>
+                window.location = "../view/stock-material-request.php?msg=<?php echo $msg; ?>";
+            </script>
+        <?php
+
+        } catch (Exception $ex) {
+            $msg = $ex->getMessage();
+            $msg = base64_encode($msg);
+        ?>
+            <script>
+                window.location = "../view/stock-material-request.php?msg=<?php echo $msg; ?>";
+            </script>
+<?php
+        }
+        break;
 }

@@ -77,7 +77,10 @@ $orderResult = $orderObj->getAllOrders();
                                     <td><?php echo $row["company_name"]; ?></td>
                                     <td><?php echo $row["contact_name"]; ?></td>
                                     <td><?php echo $row["order_date"]; ?></td>
-                                    <td><?php echo $row["total_amount"]; ?></td>
+                                    <?php
+                                    $totalAmount = $row["total_amount"] + $row["delivery_charge"]
+                                    ?>
+                                    <td><?php echo number_format($totalAmount,2); ?></td>
                                     <td class="text-center
                                     <?php
 

@@ -40,7 +40,7 @@ $pkgResults = $warehouseObj->getAllWarehousePackages();
                     </a>
                     <a href="create-shipment.php" class="btn btn-outline-info">Create Shipment</a>
                     <a href="view-shipments.php" class="btn btn-outline-success">View Shipments</a>
-                    <a href="generate-warehouse-reports.php" class="btn btn-outline-warning">
+                    <a href="generate-warehouse-packages-reports.php" class="btn btn-outline-warning">
                         Generate Reports
                     </a>
                 </div>
@@ -209,7 +209,7 @@ $pkgResults = $warehouseObj->getAllWarehousePackages();
         <script>
         function loadorder(order_id) {
 
-            var url = "../controller/warehouse_controller.php?status=load_order";
+            var url = "../controller/order_controller.php?status=load_order";
 
             $.post(url, {
                 order_id: order_id
