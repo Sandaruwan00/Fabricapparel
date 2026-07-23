@@ -242,7 +242,7 @@ $disctrictResult = $transportObj->getAllDistrict();
     <script>
         function loadorder(order_id) {
 
-            var url = "../controller/warehouse_controller.php?status=load_order";
+            var url = "../controller/order_controller.php?status=load_order";
 
             $.post(url, {
                 order_id: order_id

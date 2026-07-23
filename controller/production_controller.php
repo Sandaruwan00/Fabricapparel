@@ -42,105 +42,97 @@ switch ($status) {
         <div class="modal-body">
             <div class="card-body" style="margin:20px;">
 
-                <!-- Order Info -->
-                <h4 class="fw-bold"><i class="bi bi-receipt"></i> Order Information</h4>
-                <hr>
+                 <!-- Plan Info -->
+                        <h4 class="fw-bold"><i class="bi bi-receipt"></i> Order Information</h4>
+                        <hr>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="fw-bold fs-5 m-auto">ORDER #<?php echo $orderrow["order_id"]; ?></p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="fw-bold m-auto">ORDER DATE:</p>
-                        <p class="fs-5"><?php echo $orderrow["order_date"]; ?></p>
-                    </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="fs-5 fw-bold">Order #<?php echo $orderrow["order_id"]; ?></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="fw-bold m-auto">ORDER DATE:</p>
+                                <p class="fs-5"><?php echo $orderrow["order_date"]; ?></p>
+                            </div>
+                        </div>
 
-                </div>
+                        <div class="row">
 
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="fw-bold m-auto">DESIGN</p>
-                        <iframe src="../files/design_pdfs/<?php echo $orderrow["design"]; ?>" width="100%" height="300px"></iframe>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="fw-bold m-auto">COMMENTS:</p>
-                        <p class="fs-5"><?php echo $orderrow["comments"]; ?></p>
-                    </div>
-                </div>
-
-                <div class="row">&nbsp;</div>
-
-                <!-- Delivery -->
-                <h4 class="fw-bold"><i class="bi bi-truck"></i> Delivery Details</h4>
-                <hr>
-
-                <h5><?php echo $orderrow["address_line_1"] . ", " . $orderrow["address_line_2"] . ", " . $orderrow["address_line_3"]; ?></h5>
-                <br>
-
-                <?php
-                        $expected = $orderrow["expected_delivery_date"];
-                        $badgeText = "-";
-                        if ($orderrow["status_name"] != "Cancelled" && $orderrow["status_name"] != "Delivered") {
-                            $expected = $orderrow["expected_delivery_date"];
-                            $today = date("Y-m-d");
-                            $days = ceil((strtotime($expected) - strtotime($today)) / (60 * 60 * 24));
-
-                            if ($days > 0) {
-                                $badgeClass = "bg-success text-white";
-                                $badgeText = "$days days left";
-                            } elseif ($days == 0) {
-                                $badgeClass = "bg-warning text-dark";
-                                $badgeText = "Due Today";
-                            } else {
-                                $badgeClass = "bg-danger text-white";
-                                $badgeText = abs($days) . " days overdue";
-                            }
-                        }
-                        ?>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="fw-bold m-auto">EXPECTED DELIVERY DATE:</p>
-                        <p class="fs-5"><?php echo $expected; ?></p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="fw-bold m-auto">DELIVERY STATUS:</p>
-                        <p><span class="badge fs-6 <?php echo $badgeClass; ?>"><?php echo $badgeText; ?></span></p>
-                    </div>
-                </div>
-
-                <div class="row">&nbsp;</div>
-
-                <!-- order Items -->
-                <h4 class="fw-bold"><i class="bi bi-box-seam"></i> Order Items</h4>
-                <hr>
-
-                <table class="table table-bordered">
-                    <thead class="table-dark text-center">
-                        <tr>
-                            <th>Product</th>
-                            <th>Size</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($item = $orderItemsResult->fetch_assoc()) { ?>
-                            <tr>
-                                <td><?php echo $item["product_type_name"]; ?></td>
-                                <td><?php echo $item["size_short_name"]; ?></td>
-                                <td><?php echo $item["qty"]; ?></td>
-                                <td class="text-end"><?php echo number_format($item["unit_price"], 2); ?></td>
-                                <td class="text-end"><?php echo number_format($item["qty"] * $item["unit_price"], 2); ?></td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                            <div class="col-md-6">
+                                <p class="fw-bold m-auto">COMMENTS:</p>
+                                <p class="fs-5"><?php echo $orderrow["comments"]; ?></p>
+                            </div>
+                        </div>
 
 
-                <div class="row">&nbsp;</div>
+                        <div class="row">&nbsp;</div>
+
+                        <?php $orderItemsResult = $orderObj->getOrderItems($orderrow["order_id"]); ?>
+
+                        <!-- Items -->
+                        <h4 class="fw-bold"><i class="bi bi-box-seam"></i> Order Items</h4>
+                        <hr>
+
+                        <table class="table table-bordered">
+                            <thead class="table-dark text-center">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Size</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Amount</th>
+                                    <th>Design</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php while ($item = $orderItemsResult->fetch_assoc()) { ?>
+                                    <tr>
+                                        <td><?php echo $item["product_type_name"]; ?></td>
+                                        <td><?php echo $item["size_short_name"]; ?></td>
+                                        <td><?php echo $item["qty"]; ?></td>
+                                        <td class="text-end"><?php echo number_format($item["unit_price"], 2); ?></td>
+                                        <td class="text-end"><?php echo number_format($item["qty"] * $item["unit_price"], 2); ?></td>
+                                        <td class="text-center">
+                                            <?php if (!empty($item["item_design"])) { ?>
+                                                <button
+                                                        class="btn btn-outline-primary btn-sm previewDesignBtn"
+                                                        data-file="../files/designs/<?php echo $item["item_design"]; ?>"
+                                                        data-filename="<?php echo $item["item_design"]; ?>">
+                                                        <i class="bi bi-eye"></i> View
+                                                    </button>
+                                            <?php } else { ?>
+                                                <span class="text-muted">-</span>
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+
+                        <div class="row">&nbsp;</div>
+
+                         <h4 class="fw-bold">
+                                <i class="bi bi-image"></i> Design Preview
+                            </h4>
+                            <hr>
+
+                            <div class="card shadow-sm">
+                                <div class="card-body text-center" style="min-height:300px;">
+
+                                    <div id="designPreviewContent">
+
+                                        <div class="text-muted mt-5">
+                                            <i class="bi bi-image fs-1"></i>
+                                            <p>Select a design to preview.</p>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="row">&nbsp;</div>
 
                 <!-- Items -->
                 <h4 class="fw-bold"><i class="bi bi-clipboard-plus"></i> Stock Request Items</h4>
@@ -189,6 +181,55 @@ switch ($status) {
 
             </div>
         </div>
+
+        <script>
+            document.addEventListener("click", function(e) {
+
+    const btn = e.target.closest(".previewDesignBtn");
+    if (!btn) return;
+
+    const file = btn.dataset.file;
+    const filename = btn.dataset.filename;
+
+    const preview = document.getElementById("designPreviewContent");
+
+    const ext = filename.split(".").pop().toLowerCase();
+
+    const imageTypes = ["jpg","jpeg","png","gif","webp"];
+
+    if (imageTypes.includes(ext)) {
+
+        preview.innerHTML = `
+            <img src="${file}"
+                 class="img-fluid rounded shadow"
+                 style="max-height:400px;">
+        `;
+
+    } else if (ext === "pdf") {
+
+        preview.innerHTML = `
+            <iframe src="${file}"
+                    width="100%"
+                    height="500"
+                    style="border:none;">
+            </iframe>
+        `;
+
+    } else {
+
+        preview.innerHTML = `
+            <div class="alert alert-warning">
+                Preview is not available.
+                <br><br>
+                <a href="${file}" class="btn btn-primary" download>
+                    Download ${filename}
+                </a>
+            </div>
+        `;
+    }
+
+});
+        </script>
 
         <?php
 

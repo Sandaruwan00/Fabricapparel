@@ -60,7 +60,7 @@ switch ($status) {
 
             $msg = "Plan Successfully Added";
             $msg = base64_encode($msg);
-            $order_id = base64_encode($order_id);
+            $plan_id = base64_encode($plan_id);
 
     ?>
             <script>
@@ -105,6 +105,7 @@ switch ($status) {
 
             $msg = "Plan Rejected Successfully";
             $msg = base64_encode($msg);
+            $plan_id = base64_encode($plan_id);
 
 
             ?>
@@ -117,6 +118,7 @@ switch ($status) {
         } catch (Exception $ex) {
             $msg = $ex->getMessage();
             $msg = base64_encode($msg);
+            $order_id = base64_encode($order_id);
         ?>
             <script>
                 window.location = "../view/view-plan.php?plan_id=<?php echo $plan_id; ?>&msg=<?php echo $msg; ?>";
@@ -148,6 +150,7 @@ switch ($status) {
 
             $msg = "Plan Approved Successfully";
             $msg = base64_encode($msg);
+            $plan_id = base64_encode($plan_id);
 
 
             ?>
@@ -160,6 +163,7 @@ switch ($status) {
         } catch (Exception $ex) {
             $msg = $ex->getMessage();
             $msg = base64_encode($msg);
+            $plan_id = base64_encode($plan_id);
         ?>
             <script>
                 window.location = "../view/view-plan.php?plan_id=<?php echo $plan_id; ?>&msg=<?php echo $msg; ?>";
