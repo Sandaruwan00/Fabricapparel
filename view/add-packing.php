@@ -7,7 +7,7 @@ $userrow = $_SESSION["user"];
 
 $packingObj = new Packing();
 
-$completedProductions = $packingObj->getAllCompletedProductions()
+$completedProductions = $packingObj->getAllCompletedProductions();
 
 ?>
 <html>
@@ -30,7 +30,7 @@ $completedProductions = $packingObj->getAllCompletedProductions()
                 <div class="btn-group">
                     <a href="add-packing.php" class="btn btn-outline-primary active">Add Packing</a>
                     <a href="view-packing-list.php" class="btn btn-outline-success">View Packings</a>
-                    <a href="generate-packing-report.php" class="btn btn-outline-warning">Generate Packing Reports</a>
+                    <a href="generate-ready-to-pack-report.php" class="btn btn-outline-warning">Generate Packing Reports</a>
                 </div>
             </div>
         </div>

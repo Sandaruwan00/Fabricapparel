@@ -104,7 +104,7 @@ $disctrictResult = $transportObj->getAllDistrict();
                                         </div>
                                     </div>
                                     <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
-                                        <!-- Add this inside your <form> -->
+                                        
                                         <input type="hidden" name="company_id" id="company_id_input" value="<?php echo $selectedBuyer ? $selectedBuyer['company_id'] : ''; ?>">
 
                                         <div class="row">
@@ -282,9 +282,9 @@ $disctrictResult = $transportObj->getAllDistrict();
                                     <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
                                         <div class="mb-3">
                                             <label class="form-label">Delivery Address</label>
-                                            <input type="text" class="form-control mb-3" name="address_line_1" id="address_line_1" placeholder="Address Line 1">
-                                            <input type="text" class="form-control mb-3" name="address_line_2" id="address_line_2" placeholder="Address Line 2">
-                                            <input type="text" class="form-control" name="address_line_3" id="address_line_3" placeholder="Address Line 3">
+                                            <input type="text" class="form-control mb-3" name="address_line_1" id="address_line_1" placeholder="Address Line 1" value="<?php echo $selectedBuyer ? $selectedBuyer['company_address_line_1'] : ''; ?>">
+                                            <input type="text" class="form-control mb-3" name="address_line_2" id="address_line_2" placeholder="Address Line 2" value="<?php echo $selectedBuyer ? $selectedBuyer['company_address_line_2'] : ''; ?>">
+                                            <input type="text" class="form-control" name="address_line_3" id="address_line_3" placeholder="Address Line 3" value="<?php echo $selectedBuyer ? $selectedBuyer['company_city'] : ''; ?>">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">

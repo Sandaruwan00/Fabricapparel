@@ -8,7 +8,7 @@ $userrow = $_SESSION["user"];
 $packingObj = new Packing();
 
 $packingObj = new Packing();
-$packingResults = $packingObj->getAllPackings()
+$packingResults = $packingObj->getAllPackings();
 
 
 
