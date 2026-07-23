@@ -34,8 +34,8 @@ $driverResult = $transportObj->getAllDrivers();
                     <a href="add-transport.php" class="btn btn-outline-primary">Create Transport</a>
                     <a href="view-transports.php" class="btn btn-outline-success">View Transports</a>
                     <a href="driver.php" class="btn btn-outline-info active">Drivers</a>
-                    <a href="vehicle.php" class="btn btn-outline-dark">Vehicles</a>
-                    <a href="generate-driver-report.php" class="btn btn-outline-warning">Generate Transport Reports</a>
+                    <a href="vehicle.php" class="btn btn-outline-secondary">Vehicles</a>
+                    <a href="generate-driver-report.php" class="btn btn-outline-warning">Generate Reports</a>
                 </div>
             </div>
         </div>
@@ -260,7 +260,7 @@ $driverResult = $transportObj->getAllDrivers();
 
                     <div class="mb-3">
                         <label>Address</label>
-                        <textarea name="driver_address" class="form-control"></textarea>
+                        <textarea name="driver_address" class="form-control" required></textarea>
                     </div>
 
                 </div>

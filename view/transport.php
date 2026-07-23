@@ -56,8 +56,8 @@ while ($row = $totalTransportresult->fetch_assoc()) {
                     <a href="add-transport.php" class="btn btn-outline-primary">Create Transport</a>
                     <a href="view-transports.php" class="btn btn-outline-success">View Transports</a>
                     <a href="driver.php" class="btn btn-outline-info">Drivers</a>
-                    <a href="vehicle.php" class="btn btn-outline-dark">Vehicles</a>
-                    <a href="generate-transport-report.php" class="btn btn-outline-warning">Generate Transport Reports</a>
+                    <a href="vehicle.php" class="btn btn-outline-secondary">Vehicles</a>
+                    <a href="generate-transport-report.php" class="btn btn-outline-warning">Generate Reports</a>
                 </div>
             </div>
         </div>

@@ -14,7 +14,7 @@ class Transport
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
-    
+
     public function getAllVehicles()
     {
         $con = $GLOBALS["con"];
@@ -22,7 +22,7 @@ class Transport
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
-    
+
     public function getAllAvailableVehicles()
     {
         $con = $GLOBALS["con"];
@@ -30,26 +30,45 @@ class Transport
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
-    
+
+    public function checkVehicleNumberExists($vehicle_number)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM vehicles WHERE vehicle_number = '$vehicle_number'";
+        $result = $con->query($sql);
+        return $result;
+    }
+
     public function addVehicle($vehicle_number, $vehicle_type, $vehicle_capacity)
     {
         $con = $GLOBALS["con"];
         $sql = "INSERT INTO vehicles(vehicle_number, vehicle_type, vehicle_capacity) VALUES ('$vehicle_number','$vehicle_type','$vehicle_capacity')";
         $con->query($sql) or die($con->error);
     }
-    
+
+
     public function updateVehicleStatus($vehicle_id, $vehicle_status)
     {
         $con = $GLOBALS["con"];
         $sql = "UPDATE vehicles SET vehicle_status='$vehicle_status' WHERE vehicle_id = '$vehicle_id'";
         $con->query($sql) or die($con->error);
     }
-    
+
     public function updateVehicle($vehicle_id, $vehicle_number, $vehicle_type, $vehicle_capacity)
     {
         $con = $GLOBALS["con"];
         $sql = "UPDATE vehicles SET vehicle_number='$vehicle_number',vehicle_type='$vehicle_type',vehicle_capacity='$vehicle_capacity' WHERE vehicle_id = '$vehicle_id'";
         $con->query($sql) or die($con->error);
+    }
+
+    public function checkVehicleNumberExistsForUpdate($vehicle_id, $vehicle_number)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM vehicles 
+            WHERE vehicle_number = '$vehicle_number' 
+            AND vehicle_id != '$vehicle_id'";
+        $result = $con->query($sql);
+        return $result;
     }
 
     public function getVehicle($vehicle_id)
@@ -59,7 +78,7 @@ class Transport
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
-    
+
     public function getVehicleLogs($vehicle_id)
     {
         $con = $GLOBALS["con"];
@@ -82,7 +101,7 @@ class Transport
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
-    
+
     public function getAllAvailableDrivers()
     {
         $con = $GLOBALS["con"];
@@ -90,28 +109,46 @@ class Transport
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
-    
+
     public function activateDriver($driver_id)
     {
         $con = $GLOBALS["con"];
         $sql = "UPDATE drivers SET driver_status = 'Available' WHERE driver_id = '$driver_id'";
         $con->query($sql) or die($con->error);
     }
-    
+
     public function deactivateDriver($driver_id)
     {
         $con = $GLOBALS["con"];
         $sql = "UPDATE drivers SET driver_status = 'Deactive' WHERE driver_id = '$driver_id'";
         $con->query($sql) or die($con->error);
     }
-    
+
     public function addDriver($driver_name, $driver_nic, $driver_phone, $driver_license_no, $driver_address)
     {
         $con = $GLOBALS["con"];
         $sql = "INSERT INTO drivers(driver_name, driver_nic, driver_phone, driver_license_no, driver_address) VALUES ('$driver_name','$driver_nic','$driver_phone','$driver_license_no','$driver_address')";
         $con->query($sql) or die($con->error);
     }
-    
+
+    public function checkDriverNICExists($driver_nic)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM drivers WHERE driver_nic = '$driver_nic'";
+        $result = $con->query($sql);
+        return $result;
+    }
+
+    public function checkDriverNICExistsForUpdate($driver_id, $driver_nic)
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT * FROM drivers 
+            WHERE driver_nic = '$driver_nic' 
+            AND driver_id != '$driver_id'";
+        $result = $con->query($sql);
+        return $result;
+    }
+
     public function updateDriver($driver_id, $driver_name, $driver_nic, $driver_phone, $driver_license_no, $driver_address)
     {
         $con = $GLOBALS["con"];
@@ -125,7 +162,7 @@ class Transport
         $sql = "UPDATE drivers SET driver_status='$driver_status' WHERE driver_id = '$driver_id'";
         $con->query($sql) or die($con->error);
     }
-    
+
     public function getDriver($driver_id)
     {
         $con = $GLOBALS["con"];
@@ -171,28 +208,28 @@ class Transport
         $sql = "INSERT INTO transport(shipment_id, transport_location, vehicle_id, driver_id) VALUES ('$shipment_id','$district_id','$vehicle_id','$driver_id')";
         $con->query($sql) or die($con->error);
     }
-    
+
     public function rejectTransport($transport_id)
     {
         $con = $GLOBALS["con"];
         $sql = "UPDATE transport SET transport_status='Rejected' WHERE transport_id = '$transport_id'";
         $con->query($sql) or die($con->error);
     }
-    
+
     public function confirmTransport($transport_id)
     {
         $con = $GLOBALS["con"];
         $sql = "UPDATE transport SET transport_status='Confirmed' WHERE transport_id = '$transport_id'";
         $con->query($sql) or die($con->error);
     }
-    
+
     public function startTransport($transport_id)
     {
         $con = $GLOBALS["con"];
         $sql = "UPDATE transport SET transport_status='Started' WHERE transport_id = '$transport_id'";
         $con->query($sql) or die($con->error);
     }
-    
+
     public function deliverTransport($transport_id)
     {
         $con = $GLOBALS["con"];
@@ -207,6 +244,4 @@ class Transport
         $result = $con->query($sql) or die($con->error);
         return $result;
     }
-
-
 }

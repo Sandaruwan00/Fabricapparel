@@ -32,6 +32,17 @@ switch ($status) {
 
         try {
 
+            // Number Plate Validation
+            if (!preg_match('/^([A-Z]{2,3}[0-9]{4}|[0-9]{2,3}[0-9]{4})$/', strtoupper($vehicle_number))) {
+                throw new Exception("Invalid Vehicle Number Plate!");
+            }
+
+            $vehicleCheckResult = $transportObj->checkVehicleNumberExists($vehicle_number);
+
+            if ($vehicleCheckResult->num_rows > 0) {
+                throw new Exception("Vehicle number already exists. Please use a different vehicle number.");
+            }
+
             $transportObj->addVehicle($vehicle_number, $vehicle_type, $vehicle_capacity);
 
             $msg = "Vehicle Added";
@@ -62,6 +73,17 @@ switch ($status) {
         $vehicle_capacity = $_POST["vehicle_capacity"];
 
         try {
+
+            // Number Plate Validation
+            if (!preg_match('/^([A-Z]{2,3}[0-9]{4}|[0-9]{2,3}[0-9]{4})$/', strtoupper($vehicle_number))) {
+                throw new Exception("Invalid Vehicle Number Plate!");
+            }
+
+            $vehicleCheckResult = $transportObj->checkVehicleNumberExistsForUpdate($vehicle_id, $vehicle_number);
+
+            if ($vehicleCheckResult->num_rows > 0) {
+                throw new Exception("Vehicle number already exists. Please use a different vehicle number.");
+            }
 
             $transportObj->updateVehicle($vehicle_id, $vehicle_number, $vehicle_type, $vehicle_capacity);
 
@@ -224,7 +246,7 @@ switch ($status) {
                             <tr>
                                 <td><?php echo $row['vehicle_log_id']; ?></td>
                                 <td><?php echo $row['vehicle_log_time']; ?></td>
-                                <td><?php echo "TRA".$row['transport_id'] ?? "-"; ?></td>
+                                <td><?php echo "TRA" . $row['transport_id'] ?? "-"; ?></td>
                                 <td><?php echo $row['vehicle_action']; ?></td>
                                 <td><?php echo $row['vehicle_remarks']; ?></td>
 
@@ -329,6 +351,17 @@ switch ($status) {
 
         try {
 
+            // NIC validation
+            if (!preg_match('/^([0-9]{9}[vVxX]|[0-9]{12})$/', $driver_nic)) {
+                throw new Exception("Invalid NIC Number!");
+            }
+
+            $nicCheckResult = $transportObj->checkDriverNICExists($driver_nic);
+
+            if ($nicCheckResult->num_rows > 0) {
+                throw new Exception("NIC already exists. Please use a different NIC.");
+            }
+
             $transportObj->addDriver($driver_name, $driver_nic, $driver_phone, $driver_license_no, $driver_address);
 
             $msg = "Driver Successfuly Added";
@@ -360,6 +393,17 @@ switch ($status) {
         $driver_address = $_POST["driver_address"];
 
         try {
+
+            // NIC validation
+            if (!preg_match('/^([0-9]{9}[vVxX]|[0-9]{12})$/', $driver_nic)) {
+                throw new Exception("Invalid NIC Number!");
+            }
+
+            $nicCheckResult = $transportObj->checkDriverNICExistsForUpdate($driver_id, $driver_nic);
+
+            if ($nicCheckResult->num_rows > 0) {
+                throw new Exception("NIC already exists. Please use a different NIC.");
+            }
 
             $transportObj->updateDriver($driver_id, $driver_name, $driver_nic, $driver_phone, $driver_license_no, $driver_address);
 
@@ -454,7 +498,7 @@ switch ($status) {
                                     <th width="18%">Transport ID</th>
                                     <th width="10%">Action</th>
                                     <th width="42%">Remarks</th>
-                                </tr>                          
+                                </tr>
                             </thead>
                             <tbody>
                                 <?php
@@ -464,7 +508,7 @@ switch ($status) {
                                     <tr>
                                         <td><?php echo $row['driver_log_id']; ?></td>
                                         <td><?php echo $row['driver_log_time']; ?></td>
-                                        <td><?php echo "TRA".$row['transport_id']; ?></td>
+                                        <td><?php echo "TRA" . $row['transport_id']; ?></td>
                                         <td><?php echo $row['driver_action']; ?></td>
                                         <td><?php echo $row['driver_remarks']; ?></td>
                                     </tr>
@@ -629,11 +673,11 @@ switch ($status) {
             <script>
                 window.location = "../view/view-transports.php?msg=<?php echo $msg; ?>";
             </script>
-<?php
+        <?php
         }
         break;
 
-        case "start_transport":
+    case "start_transport":
 
         $transport_id = $_POST["transport_id"];
         $shipment_id = $_POST["shipment_id"];
@@ -661,7 +705,7 @@ switch ($status) {
             $vehicle_id = $_POST["vehicle_id"];
             $vehicle_action = "Assigned";
             $vehicle_remarks = "Transport Started";
-            
+
             $transportObj->addVehicleLog($vehicle_id, $transport_id, $vehicle_action, $vehicle_remarks);
 
             $driver_id = $_POST["driver_id"];
@@ -685,11 +729,11 @@ switch ($status) {
             <script>
                 window.location = "../view/view-transports.php?msg=<?php echo $msg; ?>";
             </script>
-<?php
+        <?php
         }
         break;
 
-        case "deliver_transport":
+    case "deliver_transport":
 
         $transport_id = $_POST["transport_id"];
         $shipment_id = $_POST["shipment_id"];
@@ -717,7 +761,7 @@ switch ($status) {
             $vehicle_id = $_POST["vehicle_id"];
             $vehicle_status = "Available";
             $vehicle_remarks = "Transport Completed";
-            
+
             $transportObj->updateVehicleStatus($vehicle_id, $vehicle_status);
             $transportObj->addVehicleLog($vehicle_id, $transport_id, $vehicle_status, $vehicle_remarks);
 
