@@ -30,7 +30,8 @@ $ordersInProduction = $productionObj->getAllOrdersInProduction()
                 <div class="btn-group">
                     <a href="add-production.php" class="btn btn-outline-primary active">Start Production</a>
                     <a href="view-production-list.php" class="btn btn-outline-success">Production List</a>
-                    <a href="generate-production-report.php" class="btn btn-outline-warning">Generate Production Reports</a>
+                    <a href="production-request-material.php" class="btn btn-outline-secondary">Request Materials</a>
+                    <a href="generate-start-production-report.php" class="btn btn-outline-warning">Generate Reports</a>
                 </div>
             </div>
         </div>

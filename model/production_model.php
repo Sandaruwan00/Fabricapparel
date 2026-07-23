@@ -43,4 +43,12 @@ class Production
         $sql = "UPDATE production SET production_end = NOW() , production_status = 'Finished' WHERE production_id = '$production_id'";
         $con->query($sql) or die($con->error);
     }
+
+    public function getFinishedProductionCount()
+    {
+        $con = $GLOBALS["con"];
+        $sql = "SELECT COUNT(production_id) as total FROM production WHERE production_status = 'Finished'";
+        $result = $con->query($sql) or die($con->error);
+        return $result;
+    }
 }

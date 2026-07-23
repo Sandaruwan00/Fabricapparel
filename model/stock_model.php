@@ -436,4 +436,24 @@ class Stock
         $sql = "UPDATE production_stock_request SET psr_status='Issued' WHERE psr_id = '$psr_id'";
         $con->query($sql) or die($con->error);
     }
+
+    public function getTopRequestedMaterials()
+{
+    $con = $GLOBALS["con"];
+
+    $sql = "SELECT 
+                s.stock_item_name,
+                s.stock_item_color_code,
+                SUM(psr.psr_qty) AS total_qty
+            FROM production_stock_request psr
+            JOIN stock_items s 
+            ON psr.stock_item_id = s.stock_item_id
+            GROUP BY psr.stock_item_id
+            ORDER BY total_qty DESC
+            LIMIT 10";
+
+    $result = $con->query($sql) or die($con->error);
+
+    return $result;
+}
 }

@@ -48,3 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+
+
+<script src="../js/plotly-3.0.1.min.js" charset="utf-8"></script>
