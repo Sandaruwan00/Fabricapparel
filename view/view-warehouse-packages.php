@@ -41,7 +41,7 @@ $pkgResults = $warehouseObj->getAllWarehousePackages();
                     <a href="create-shipment.php" class="btn btn-outline-info">Create Shipment</a>
                     <a href="view-shipments.php" class="btn btn-outline-success">View Shipments</a>
                     <a href="generate-warehouse-reports.php" class="btn btn-outline-warning">
-                        Generate Warehouse Reports
+                        Generate Reports
                     </a>
                 </div>
             </div>
