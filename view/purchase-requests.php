@@ -40,9 +40,15 @@ $requests = $stockObj->getAllPurchaseRequests();
                     <a href="purchase-orders.php" class="btn btn-outline-success">
                         Purchase Orders
                     </a>
-                    <a href="generate-purchase-reports.php" class="btn btn-outline-warning">
-                        Generate Purchasing Reports
-                    </a>
+                    <button
+            class="btn btn-outline-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#reportModal">
+
+            Generate Reports
+
+          </button>
+                   
                 </div>
             </div>
         </div>
@@ -193,6 +199,53 @@ $requests = $stockObj->getAllPurchaseRequests();
         document.getElementById('supplier_stock_item_name').textContent = stock_item_name;
         document.getElementById('supplier_stock_item_color_code').textContent = stock_item_color_code;
     }
+</script>
+
+
+<div class="modal fade" id="reportModal">
+    <div class="modal-dialog">
+        <form action="generate-purchase-requests-report.php" method="post" target="_blank">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Purchase Requests Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label>Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                    <br>
+
+                    <label>End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Generate Report
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
 </script>
 
 

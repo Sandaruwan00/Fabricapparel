@@ -44,9 +44,14 @@ $poResults = $purchaseObj->getPOs();
                     <a href="purchase-orders.php" class="btn btn-outline-success active">
                         Purchase Orders
                     </a>
-                    <a href="generate-purchase-reports.php" class="btn btn-outline-warning">
-                        Generate Purchasing Reports
-                    </a>
+                    <button
+                        class="btn btn-outline-warning"
+                        data-bs-toggle="modal"
+                        data-bs-target="#reportModal">
+
+                        Generate Reports
+
+                    </button>
                 </div>
             </div>
         </div>
@@ -378,68 +383,115 @@ $poResults = $purchaseObj->getPOs();
     </script>
 
     <!-- Delivered Modal -->
-<div class="modal fade" id="deliveredModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal fade" id="deliveredModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-            <div class="modal-header bg-info">
-                <h5 class="modal-title">
-                    
-                    Good Received Note
-                </h5>
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title">
 
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        Good Received Note
+                    </h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form method="POST" action="../controller/purchase_controller.php?status=delivered_po">
+
+                    <div class="modal-body">
+
+                        <input type="hidden" id="delivered_po_id" name="po_id">
+                        <input type="hidden" id="delivered_stock_item_id" name="stock_item_id">
+
+                        <p class="mb-3">
+                            Purchase Order #<b id="delivered_po_text"></b>
+                        </p>
+
+                        <div class="mb-3">
+                            <label class="form-label">Qty</label>
+                            <input type="number" class="form-control" name="ordered_qty" id="delivered_ordered_qty" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Reference/Invoice No.</label>
+                            <input type="text" name="delivery_ref" class="form-control" required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit" class="btn btn-info">
+                            Delivered
+                        </button>
+
+                    </div>
+
+                </form>
+
             </div>
+        </div>
+    </div>
 
-            <form method="POST" action="../controller/purchase_controller.php?status=delivered_po">
+    <script>
+        function loadDelivered(po_id, stock_item_id, ordered_qty) {
+
+            document.getElementById("delivered_po_id").value = po_id;
+            document.getElementById("delivered_po_text").innerHTML = po_id;
+            document.getElementById("delivered_stock_item_id").value = stock_item_id;
+            document.getElementById("delivered_ordered_qty").value = ordered_qty;
+        }
+    </script>
+
+
+<div class="modal fade" id="reportModal">
+    <div class="modal-dialog">
+        <form action="generate-purchase-orders-report.php" method="post" target="_blank">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Purchase Orders Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
                 <div class="modal-body">
 
-                    <input type="hidden" id="delivered_po_id" name="po_id">
-                    <input type="hidden" id="delivered_stock_item_id" name="stock_item_id">
+                    <label>Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
 
-                    <p class="mb-3">
-                        Purchase Order #<b id="delivered_po_text"></b>
-                    </p>
+                    <br>
 
-                    <div class="mb-3">
-                        <label class="form-label">Qty</label>
-                        <input type="number" class="form-control" name="ordered_qty" id="delivered_ordered_qty" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Reference/Invoice No.</label>
-                        <input type="text" name="delivery_ref" class="form-control" required>
-                        
-                    </div>
+                    <label>End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
 
                 </div>
 
                 <div class="modal-footer">
-
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Cancel
+                    <button class="btn btn-primary">
+                        Generate Report
                     </button>
-
-                    <button type="submit" class="btn btn-info">
-                       Delivered
-                    </button>
-
                 </div>
 
-            </form>
+            </div>
 
-        </div>
+        </form>
     </div>
 </div>
 
 <script>
-function loadDelivered(po_id,stock_item_id,ordered_qty){
-    
-    document.getElementById("delivered_po_id").value = po_id;
-    document.getElementById("delivered_po_text").innerHTML=po_id;
-    document.getElementById("delivered_stock_item_id").value=stock_item_id;
-    document.getElementById("delivered_ordered_qty").value=ordered_qty;
-    }
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
 </script>
 
 

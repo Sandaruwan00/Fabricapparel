@@ -43,8 +43,8 @@ $supplierResult = $supplierObj->getAllSuppliers();
                     <a href="purchase-orders.php" class="btn btn-outline-success">
                         Purchase Orders
                     </a>
-                    <a href="generate-purchase-reports.php" class="btn btn-outline-warning">
-                        Generate Purchasing Reports
+                    <a href="generate-supplier-report.php" class="btn btn-outline-warning">
+                        Generate Reports
                     </a>
                 </div>
             </div>

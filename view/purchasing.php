@@ -81,9 +81,14 @@ while ($supplier = $topSupplierResults->fetch_assoc()) {
                     <a href="purchase-orders.php" class="btn btn-outline-success">
                         Purchase Orders
                     </a>
-                    <a href="generate-purchase-reports.php" class="btn btn-outline-warning">
-                        Generate Purchasing Reports
-                    </a>
+                    <button
+                        class="btn btn-outline-warning"
+                        data-bs-toggle="modal"
+                        data-bs-target="#reportModal">
+
+                        Generate Reports
+
+                    </button>
                 </div>
             </div>
         </div>
@@ -150,6 +155,54 @@ while ($supplier = $topSupplierResults->fetch_assoc()) {
 
         <div class="row">&nbsp;</div>
     </div>
+
+    <div class="modal fade" id="reportModal">
+    <div class="modal-dialog">
+        <form action="generate-purchase-report.php" method="post" target="_blank">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Generate Purchase Report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <label>Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                    <br>
+
+                    <label>End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Generate Report
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    let today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("start_date").setAttribute("max", today);
+    document.getElementById("end_date").setAttribute("max", today);
+
+});
+</script>
+    
+    
     <?php include_once '../includes/footer_includes.php'; ?>
 </body>
 <script src="../js/jquery-3.7.1.js"></script>
