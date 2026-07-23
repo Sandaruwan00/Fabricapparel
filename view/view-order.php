@@ -46,7 +46,7 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                     <a href="view-orders.php" class="btn btn-outline-success">View Orders</a>
                     <a href="order-payments.php" class="btn btn-outline-info">Order Payments</a>
                     <a href="order-refund.php" class="btn btn-outline-secondary">Refund Requests</a>
-                    <a href="generate-order-report.php" class="btn btn-outline-warning">Generate Order Reports</a>
+                    <a href="generate-order-bill.php?order_id=<?php echo base64_encode($order_id); ?>" class="btn btn-outline-warning">Generate Order Reports</a>
                 </div>
             </div>
         </div>
