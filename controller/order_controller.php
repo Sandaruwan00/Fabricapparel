@@ -36,7 +36,7 @@ switch ($status) {
 
             $order_items = $_POST["order_items"]; // pass orderItems as JSON from JS
 
-            $delivery_charge = $total_amount * 0.10;
+            $delivery_charge = $total_amount * 0.05;
 
             if ($delivery_charge < 1000) {
                 $delivery_charge = 1000;
