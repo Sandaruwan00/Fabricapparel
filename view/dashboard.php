@@ -8,7 +8,7 @@ include_once '../model/user_model.php';
 $userrow = $_SESSION["user"];
 
 $moduleObj = new Module();
-$moduleResult = $moduleObj->getAllModules();
+$moduleResult = $moduleObj->getRoleModules($userrow["user_role"]);
 
 ?>
 

@@ -57,14 +57,15 @@ $orderResult = $orderObj->getAllOrders();
                     <table class="table table-striped table-bordered table-hover align-middle" id="ordertable">
                         <thead class="table-secondary text-center">
                             <tr>
-                                <th width="8%">Order ID</th>
-                                <th width="22%">Company</th>
-                                <th width="17%">Contact Person</th>
-                                <th width="13%">Order Date</th>
-                                <th width="10%">Total (Rs)</th>
-                                <th width="10%">Due Date</th>
-                                <th width="10%">Status</th>
-                                <th width="10%">&nbsp;</th>
+                                <th>Order ID</th>
+                                <th>Company</th>
+                                <th>Contact Person</th>
+                                <th>Order Date</th>
+                                <th>Total (Rs)</th>
+                                <!-- <th>Priority</th> -->
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -80,7 +81,43 @@ $orderResult = $orderObj->getAllOrders();
                                     <?php
                                     $totalAmount = $row["total_amount"] + $row["delivery_charge"]
                                     ?>
-                                    <td><?php echo number_format($totalAmount,2); ?></td>
+                                    <td><?php echo number_format($totalAmount, 2); ?></td>
+
+
+                                    <!-- code modification -->
+
+                                    <?php
+                                    
+                                    
+                                    // if ($totalAmount >= 50000) {
+
+                                    //     $priority = "Priority 1";
+                                    //     $priorityColor = "bg-danger";
+
+                                    // } else if ($totalAmount < 50000 && $totalAmount >= 10000) {
+
+                                    //     $priority = "Priority 2";
+                                    //     $priorityColor = "bg-warning";
+
+                                    // } else if ($totalAmount < 10000) {
+                                        
+                                    //     $priority = "Priority 3";
+                                    //     $priorityColor = "bg-info";
+                                    // }
+
+                                    ?>
+                                    <!-- <td class="
+                                     <?php 
+                                    //  echo $priorityColor; 
+                                     ?> text-center">
+                                     <?php 
+                                    //  echo $priority; 
+                                     ?></td> -->
+
+
+                                    <!-- end code modification -->
+
+
                                     <td class="text-center
                                     <?php
 
@@ -143,50 +180,50 @@ $orderResult = $orderObj->getAllOrders();
     </div>
 
     <div class="modal fade" id="reportModal">
-    <div class="modal-dialog">
-        <form action="generate-orders-report.php" method="post" target="_blank">
+        <div class="modal-dialog">
+            <form action="generate-orders-report.php" method="post" target="_blank">
 
-            <div class="modal-content">
+                <div class="modal-content">
 
-                <div class="modal-header">
-                    <h5 class="modal-title">Generate Orders Report</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Generate Orders Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <label>Start Date</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                        <br>
+
+                        <label>End Date</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">
+                            Generate Report
+                        </button>
+                    </div>
+
                 </div>
 
-                <div class="modal-body">
-
-                    <label>Start Date</label>
-                    <input type="date" id="start_date" name="start_date" class="form-control" required>
-
-                    <br>
-
-                    <label>End Date</label>
-                    <input type="date" id="end_date" name="end_date" class="form-control" required>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-primary">
-                        Generate Report
-                    </button>
-                </div>
-
-            </div>
-
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
 
-    let today = new Date().toISOString().split("T")[0];
+            let today = new Date().toISOString().split("T")[0];
 
-    document.getElementById("start_date").setAttribute("max", today);
-    document.getElementById("end_date").setAttribute("max", today);
+            document.getElementById("start_date").setAttribute("max", today);
+            document.getElementById("end_date").setAttribute("max", today);
 
-});
-</script>
+        });
+    </script>
 
     <?php include_once '../includes/footer_includes.php'; ?>
 
