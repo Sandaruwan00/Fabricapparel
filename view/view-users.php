@@ -16,7 +16,12 @@ $moduleResult = $moduleObj->getAllModules();
 
 $userResult = $userObj->getAllUsers();
 
-
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 2)) {
+    header("Location: access_denied.php");
+    exit();
+}
 
 
 

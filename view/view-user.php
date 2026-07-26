@@ -39,6 +39,13 @@ while ($fun_row = $userfunctionResult->fetch_assoc()) {
 
 //print_r($moduleResult);
 // print_r($userrow);
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 3)) {
+    header("Location: access_denied.php");
+    exit();
+}
 ?>
 
 <html>

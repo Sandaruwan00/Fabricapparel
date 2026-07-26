@@ -3,12 +3,20 @@
 include_once '../commons/session.php';
 include_once '../model/user_model.php';
 
+
 //get user information from session
 $userrow = $_SESSION["user"];
 
 $userObj = new User();
 
 $roleResult = $userObj->getAllRoles();
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 1)) {
+    header("Location: access_denied.php");
+    exit();
+}
 
 ?>
 
@@ -63,126 +71,126 @@ $roleResult = $userObj->getAllRoles();
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-12">
-                        
-                    <div class="card mb-4">
-                        <div class="card-header bg-dark text-white fw-semibold">
-                                    User Information
-                                </div>
-                        <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
-                            <form action="../controller/user_controller.php?status=add_user" method="post" enctype="multipart/form-data">
-                                <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">First Name</label>
-                                            <div class="input-group">
-                                                <input type="text" id="fname" name="fname" class="form-control">
+
+                        <div class="card mb-4">
+                            <div class="card-header bg-dark text-white fw-semibold">
+                                User Information
+                            </div>
+                            <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
+                                <form action="../controller/user_controller.php?status=add_user" method="post" enctype="multipart/form-data">
+                                    <div class="row mt-3">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">First Name</label>
+                                                <div class="input-group">
+                                                    <input type="text" id="fname" name="fname" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Last Name</label>
+                                                <div class="input-group">
+                                                    <input type="text" id="lname" name="lname" class="form-control">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Last Name</label>
-                                            <div class="input-group">
-                                                <input type="text" id="lname" name="lname" class="form-control">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Date of Birth</label>
+                                                <div class="input-group">
+                                                    <input type="date" id="dob" name="dob" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">NIC</label>
+                                                <div class="input-group">
+                                                    <input type="text" id="nic" name="nic" class="form-control">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Date of Birth</label>
-                                            <div class="input-group">
-                                                <input type="date" id="dob" name="dob" class="form-control">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Email</label>
+                                                <div class="input-group">
+                                                    <input type="email" id="email" name="email" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Profile Photo</label>
+                                                <input type="file" class="form-control" name="user_image" id="user_image" onchange="displayImage(this);">
+                                                <br>
+                                                <img id="img_prev" style="" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">NIC</label>
-                                            <div class="input-group">
-                                                <input type="text" id="nic" name="nic" class="form-control">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Contact Mobile</label>
+                                                <div class="input-group">
+                                                    <input type="text" id="cno1" name="cno1" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Contact Fixed</label>
+                                                <div class="input-group">
+                                                    <input type="text" id="cno2" name="cno2" class="form-control">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Email</label>
-                                            <div class="input-group">
-                                                <input type="email" id="email" name="email" class="form-control">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Role</label>
+                                                <select name="user_role" id="user_role" class="form-select">
+                                                    <option value="">--------</option>
+                                                    <?php
+                                                    while ($roleRow = $roleResult->fetch_assoc()) {
+                                                    ?>
+                                                        <option value="<?php echo $roleRow["role_id"]; ?>">
+                                                            <?php echo $roleRow["role_name"]; ?>
+                                                        </option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Profile Photo</label>
-                                            <input type="file" class="form-control" name="user_image" id="user_image" onchange="displayImage(this);">
-                                            <br>
-                                            <img id="img_prev" style="" />
+                                    <div class="row">
+                                        &nbsp;
+                                    </div>
+                                    <div class="row">
+                                        <div id="display_functions">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Contact Mobile</label>
-                                            <div class="input-group">
-                                                <input type="text" id="cno1" name="cno1" class="form-control">
-                                            </div>
+                                    <div class="row">
+                                        &nbsp;
+                                    </div>
+                                    <div class="row d-flex justify-content-center align-items-center">
+                                        <div class="col-md-3">
+                                            <input type="submit" id="submit" name="submit" class="btn btn-success w-100" value="Submit" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="reset" id="reset" name="reset" class="btn btn-danger w-100" value="Reset" />
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Contact Fixed</label>
-                                            <div class="input-group">
-                                                <input type="text" id="cno2" name="cno2" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Role</label>
-                                            <select name="user_role" id="user_role" class="form-select">
-                                                <option value="">--------</option>
-                                                <?php
-                                                while ($roleRow = $roleResult->fetch_assoc()) {
-                                                ?>
-                                                    <option value="<?php echo $roleRow["role_id"]; ?>">
-                                                        <?php echo $roleRow["role_name"]; ?>
-                                                    </option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    &nbsp;
-                                </div>
-                                <div class="row">
-                                    <div id="display_functions">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    &nbsp;
-                                </div>
-                                <div class="row d-flex justify-content-center align-items-center">
-                                    <div class="col-md-3">
-                                        <input type="submit" id="submit" name="submit" class="btn btn-success w-100" value="Submit" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="reset" id="reset" name="reset" class="btn btn-danger w-100" value="Reset" />
-                                    </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                
+
                     </div>
                 </div>
             </div>
