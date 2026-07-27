@@ -6,8 +6,16 @@ include_once '../model/user_model.php';
 
 // FPDF library – used to generate PDF documents
 include '../commons/fpdf186/fpdf.php';
+include_once '../commons/session.php';
 
 
+$userrow = $_SESSION["user"];
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 8)) {
+    header("Location: access_denied.php");
+    exit();
+}
 // ---------------- PDF CLASS DEFINITION ----------------
 
 // Extend FPDF to customize header, footer, and table layout

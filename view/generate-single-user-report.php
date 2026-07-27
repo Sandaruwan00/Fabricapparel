@@ -10,6 +10,14 @@ if (!isset($_GET["user_id"]) || empty($_GET["user_id"])) {
     exit();
 }
 
+$userrow = $_SESSION["user"];
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 8)) {
+    header("Location: access_denied.php");
+    exit();
+}
+
 $user_id = ($_GET["user_id"]); // safer than raw value
 $user_id = base64_decode($user_id);
 

@@ -64,7 +64,7 @@ if (!$permissionObj->hasPermission($userrow["user_id"], 4)) {
                 <div class="btn-group">
                     <a href="add-user.php" class="btn btn-outline-primary">Add User</a>
                     <a href="view-users.php" class="btn btn-outline-success">View Users</a>
-                    <a href="generate-user-report.php" class="btn btn-outline-warning">Generate User Report</a>
+                    <a href="generate-single-user-report.php?user_id=<?php echo $_GET["user_id"]; ?>" class="btn btn-outline-warning">Generate User Report</a>
                 </div>
             </div>
         </div>
