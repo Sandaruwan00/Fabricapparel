@@ -51,3 +51,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 <script src="../js/plotly-3.0.1.min.js" charset="utf-8"></script>
+
+
+<?php
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 10)) {
+    header("Location: access_denied.php");
+    exit();
+}
+
+
+?>
+
+
+<?php if ($permissionObj->hasPermission($userrow["user_id"], 10)) { ?>
+
+<?php } ?>
