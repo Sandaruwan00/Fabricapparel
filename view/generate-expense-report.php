@@ -3,6 +3,13 @@ include_once '../commons/session.php';
 include '../model/finance_model.php';
 include '../commons/fpdf186/fpdf.php';
 
+$userrow = $_SESSION["user"];
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 15)) {
+    header("Location: access_denied.php");
+    exit();
+}
 class ExpenseReport extends FPDF
 {
     public $startDate;

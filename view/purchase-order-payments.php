@@ -8,6 +8,12 @@ $financeObj = new Finance();
 
 $poPayments = $financeObj->getAllPOPayments();
 
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 14)) {
+    header("Location: access_denied.php");
+    exit();
+}
 ?>
 
 <html>

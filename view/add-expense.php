@@ -1,6 +1,13 @@
 <?php
 include_once '../commons/session.php';
 $userrow = $_SESSION["user"];
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 9)) {
+    header("Location: access_denied.php");
+    exit();
+}
 ?>
 <html>
 

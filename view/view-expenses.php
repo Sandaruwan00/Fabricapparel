@@ -7,6 +7,13 @@ $financeObj = new Finance();
 
 $expenseresult = $financeObj->getAllExpenses();
 
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 10)) {
+    header("Location: access_denied.php");
+    exit();
+}
+
 ?>
 <html>
 
@@ -35,22 +42,22 @@ $expenseresult = $financeObj->getAllExpenses();
 
                     <a href="refund.php" class="btn btn-outline-info">
                         Refunds
-                       
+
                     </a>
 
                     <a href="purchase-order-payments.php" class="btn btn-outline-secondary">
                         PO Payments
-                       
+
                     </a>
 
                     <button
-            class="btn btn-outline-warning"
-            data-bs-toggle="modal"
-            data-bs-target="#reportModal">
+                        class="btn btn-outline-warning"
+                        data-bs-toggle="modal"
+                        data-bs-target="#reportModal">
 
-            Generate Report
+                        Generate Report
 
-          </button>
+                    </button>
                 </div>
             </div>
         </div>
@@ -109,10 +116,16 @@ $expenseresult = $financeObj->getAllExpenses();
                                         <td>
                                             <?php
                                             if ($row["expense_status"] == "Pending") { ?>
-                                                <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#approveModal" onclick="approveExpense('<?php echo $row['expense_id']; ?>');">
-                                                    <i class="bi bi-check-circle"></i> Approve
-                                                </a>
-                                                <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rejectModal" onclick="rejectExpense('<?php echo $row['expense_id']; ?>');"><i class="bi bi-x-circle"></i> Reject</a>
+                                                <?php if ($permissionObj->hasPermission($userrow["user_id"], 11)) { ?>
+                                                    <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#approveModal" onclick="approveExpense('<?php echo $row['expense_id']; ?>');">
+                                                        <i class="bi bi-check-circle"></i> Approve
+                                                    </a>
+                                                <?php } ?>
+
+                                                <?php if ($permissionObj->hasPermission($userrow["user_id"], 12)) { ?>
+                                                    <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#rejectModal" onclick="rejectExpense('<?php echo $row['expense_id']; ?>');"><i class="bi bi-x-circle"></i> Reject</a>
+                                                <?php } ?>
+
 
                                             <?php
                                             }
@@ -194,51 +207,51 @@ $expenseresult = $financeObj->getAllExpenses();
     </script>
 
 
-  <div class="modal fade" id="reportModal">
-    <div class="modal-dialog">
-        <form action="generate-expense-report.php" method="post" target="_blank">
+    <div class="modal fade" id="reportModal">
+        <div class="modal-dialog">
+            <form action="generate-expense-report.php" method="post" target="_blank">
 
-            <div class="modal-content">
+                <div class="modal-content">
 
-                <div class="modal-header">
-                    <h5 class="modal-title">Generate Expense Report</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Generate Expense Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <label>Start Date</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" required>
+
+                        <br>
+
+                        <label>End Date</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control" required>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-primary">
+                            Generate Report
+                        </button>
+                    </div>
+
                 </div>
 
-                <div class="modal-body">
-
-                    <label>Start Date</label>
-                    <input type="date" id="start_date" name="start_date" class="form-control" required>
-
-                    <br>
-
-                    <label>End Date</label>
-                    <input type="date" id="end_date" name="end_date" class="form-control" required>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-primary">
-                        Generate Report
-                    </button>
-                </div>
-
-            </div>
-
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
 
-    let today = new Date().toISOString().split("T")[0];
+            let today = new Date().toISOString().split("T")[0];
 
-    document.getElementById("start_date").setAttribute("max", today);
-    document.getElementById("end_date").setAttribute("max", today);
+            document.getElementById("start_date").setAttribute("max", today);
+            document.getElementById("end_date").setAttribute("max", today);
 
-});
-</script>
+        });
+    </script>
 
 
     <?php include_once '../includes/footer_includes.php'; ?>
