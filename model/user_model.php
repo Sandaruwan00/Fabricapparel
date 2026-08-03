@@ -93,7 +93,7 @@ class User
     public function getAllUsers()
     {
         $con = $GLOBALS["con"];
-        $sql = "SELECT * FROM user WHERE user_status != -1";
+        $sql = "SELECT * FROM user u, role r WHERE u.user_status != -1 AND u.user_role = r.role_id";
         $result = $con->query($sql) or die($con->error);
         return $result;
     }

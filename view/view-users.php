@@ -77,6 +77,7 @@ if (!$permissionObj->hasPermission($userrow["user_id"], 2)) {
                                     <tr>
                                         <th>&nbsp</th>
                                         <th>Name</th>
+                                        <th>Role</th>
                                         <th>Email</th>
                                         <th>Status</th>
                                         <th>&nbsp</th>
@@ -114,6 +115,13 @@ if (!$permissionObj->hasPermission($userrow["user_id"], 2)) {
                                             <td>
                                                 <?php
 
+                                                echo $userdetailrow["role_name"];
+
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?php
+
                                                 echo $userdetailrow["user_email"];
 
                                                 ?>
@@ -134,55 +142,72 @@ if (!$permissionObj->hasPermission($userrow["user_id"], 2)) {
                                                 ?>> <?php echo $status ?>
                                             </td>
                                             <td>
-                                                <span class="d-flex justify-content-between">
-                                                    <a href="view-user.php?user_id=<?php echo $user_id; ?>" class="btn btn-primary">
+                                                <?php if ($permissionObj->hasPermission($userrow["user_id"], 3)) { ?>
+                                                    <a href="view-user.php?user_id=<?php echo $user_id; ?>" class="btn btn-primary btn-sm">
                                                         <i class="bi bi-eye-fill"></i>
                                                         &nbsp
                                                         View
                                                     </a>
+                                                <?php } ?>
 
-                                                    <a href="edit-user.php?user_id=<?php echo $user_id; ?>" class="btn btn-info">
+
+
+                                                <?php if ($permissionObj->hasPermission($userrow["user_id"], 4)) { ?>
+                                                    <a href="edit-user.php?user_id=<?php echo $user_id; ?>" class="btn btn-info btn-sm">
                                                         <i class="bi bi-pencil-fill"></i>
                                                         &nbsp
                                                         Edit
                                                     </a>
+                                                <?php } ?>
 
-                                                    <?php
-                                                    if ($userdetailrow["user_status"] == 0) {
 
-                                                    ?>
-                                                        <a href="../controller/user_controller.php?status=activate&user_id=<?php echo $user_id; ?>" class="btn btn-success">
+
+                                                <?php
+                                                if ($userdetailrow["user_status"] == 0) {
+
+                                                    if ($permissionObj->hasPermission($userrow["user_id"], 5)) {
+
+                                                ?>
+                                                        <a href="../controller/user_controller.php?status=activate&user_id=<?php echo $user_id; ?>" class="btn btn-success btn-sm">
                                                             <i class="bi bi-check-lg"></i>
                                                             &nbsp
                                                             Activate
                                                         </a>
-                                                    <?php
+                                                <?php
                                                     }
+                                                }
 
-                                                    ?>
+                                                ?>
 
 
-                                                    <?php
-                                                    if ($userdetailrow["user_status"] == 1) {
+                                                <?php
+                                                if ($userdetailrow["user_status"] == 1) {
+                                                    if ($permissionObj->hasPermission($userrow["user_id"], 6)) {
 
-                                                    ?>
-                                                        <a href="../controller/user_controller.php?status=deactivate&user_id=<?php echo $user_id; ?>" class="btn btn-warning">
+                                                ?>
+                                                        <a href="../controller/user_controller.php?status=deactivate&user_id=<?php echo $user_id; ?>" class="btn btn-warning btn-sm">
                                                             <i class="bi bi-x-lg"></i>
                                                             &nbsp
                                                             De-activate
                                                         </a>
-                                                    <?php
+                                                <?php
                                                     }
+                                                }
 
-                                                    ?>
+                                                ?>
 
-                                                    <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="loaduser( '<?php echo $userdetailrow['user_id']; ?>','<?php echo htmlspecialchars($userdetailrow['user_fname'].' '. $userdetailrow['user_lname'], ENT_QUOTES); ?>');">
+                                                <?php if ($permissionObj->hasPermission($userrow["user_id"], 7)) { ?>
+                                                    <a href="#" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="loaduser( '<?php echo $userdetailrow['user_id']; ?>','<?php echo htmlspecialchars($userdetailrow['user_fname'] . ' ' . $userdetailrow['user_lname'], ENT_QUOTES); ?>');">
                                                         <i class="bi bi-trash-fill"></i>
                                                         &nbsp
                                                         Delete
                                                     </a>
-                                                    
-                                                </span>
+
+                                                <?php } ?>
+
+
+
+
 
 
                                             </td>

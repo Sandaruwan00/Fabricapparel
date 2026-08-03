@@ -76,25 +76,25 @@ if (!$permissionObj->hasPermission($userrow["user_id"], 4)) {
         <div class="row justify-content-center" style="margin-top:25px;">
             <div id="msg" class="col-md-4 text-center">
                 <?php if (isset($_GET["msg"])) { ?>
-                    <div class="alert alert-danger text-center">
+                    <div class="alert alert-success text-center">
                         <?php echo base64_decode($_GET["msg"]); ?>
                     </div>
                 <?php } ?>
             </div>
         </div>
+        <form action="../controller/user_controller.php?status=update_user" method="post" enctype="multipart/form-data">
+            <div class="row justify-content-center">
 
-        <div class="row justify-content-center">
 
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-dark text-white fw-semibold">
+                                    User Information
+                                </div>
+                                <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
 
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header bg-dark text-white fw-semibold">
-                                User Information
-                            </div>
-                            <div class="card-body" style="background: linear-gradient(90deg, #FDE9E1 0%, #B9D9EB 100%);">
-                                <form action="../controller/user_controller.php?status=update_user" method="post" enctype="multipart/form-data">
                                     <div class="row mt-3">
                                         <div class="col-md-6">
                                             <div class="mb-3">
@@ -305,18 +305,20 @@ if (!$permissionObj->hasPermission($userrow["user_id"], 4)) {
 
 
 
-                                </form>
-                            </div>
 
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
+
+
             </div>
 
-
-
-
-        </div>
+        </form>
 
 
 

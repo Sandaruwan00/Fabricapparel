@@ -62,6 +62,12 @@ if (!$permissionObj->hasPermission($userrow["user_id"], 10)) {
     exit();
 }
 
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 10)) {
+    throw new Exception("Access Denied");
+}
+
 
 ?>
 

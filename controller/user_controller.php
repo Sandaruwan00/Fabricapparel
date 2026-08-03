@@ -16,6 +16,12 @@ include '../model/login_model.php';
 $userObj = new User();
 $loginObj = new Login();
 
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+
+//get user information from session
+$userrow = $_SESSION["user"];
+
 switch ($status) {
     case "load_functions":
 
@@ -83,7 +89,7 @@ switch ($status) {
 
 
         try {
-            
+
 
             ///  uploading image
             $file_name = "";
@@ -240,7 +246,7 @@ switch ($status) {
             $msg = base64_encode($msg);
         ?>
             <script>
-                window.location = "../view/view-users.php?msg=<?php echo $msg; ?>";
+                window.location = "../view/edit-user.php?user_id=<?php echo base64_encode($user_id); ?>&msg=<?php echo $msg; ?>";
             </script>
         <?php
 
@@ -262,9 +268,22 @@ switch ($status) {
 
         $user_id = $_GET["user_id"];
         $user_id = base64_decode($user_id);
-        $userObj->activateUser($user_id);
-        $msg = "Successfully Activated!!!";
-        $msg = base64_encode($msg);
+
+        try {
+
+            if (!$permissionObj->hasPermission($userrow["user_id"], 5)) {
+                throw new Exception("Access Denied");
+            }
+
+            $userObj->activateUser($user_id);
+            $msg = "Successfully Activated!!!";
+            $msg = base64_encode($msg);
+        } catch (Exception $ex) {
+
+            $msg = $ex->getMessage();
+            $msg = base64_encode($msg);
+        }
+
         ?>
 
         <script>
@@ -280,9 +299,22 @@ switch ($status) {
 
         $user_id = $_GET["user_id"];
         $user_id = base64_decode($user_id);
-        $userObj->deactivateUser($user_id);
-        $msg = "Successfully Deactivated!!!";
-        $msg = base64_encode($msg);
+
+
+        try {
+
+            if (!$permissionObj->hasPermission($userrow["user_id"], 6)) {
+                throw new Exception("Access Denied");
+            }
+
+            $userObj->deactivateUser($user_id);
+            $msg = "Successfully Deactivated!!!";
+            $msg = base64_encode($msg);
+        } catch (Exception $ex) {
+
+            $msg = $ex->getMessage();
+            $msg = base64_encode($msg);
+        }
     ?>
 
         <script>
@@ -299,9 +331,22 @@ switch ($status) {
     case "delete":
         $user_id = $_GET["user_id"];
         $user_id = base64_decode($user_id);
-        $userObj->deleteUser($user_id);
-        $msg = "Successfully Deleted!!!";
-        $msg = base64_encode($msg);
+
+
+        try {
+
+            if (!$permissionObj->hasPermission($userrow["user_id"], 7)) {
+                throw new Exception("Access Denied");
+            }
+
+            $userObj->deleteUser($user_id);
+            $msg = "Successfully Deleted!!!";
+            $msg = base64_encode($msg);
+        } catch (Exception $ex) {
+
+            $msg = $ex->getMessage();
+            $msg = base64_encode($msg);
+        }
     ?>
 
         <script>

@@ -277,7 +277,7 @@ switch ($status) {
             }
 
 
-            if ($totalApprovedPayments >= $refund_amount) {
+            if ($totalApprovedPayments > $refund_amount) {
                 throw new Exception("Refund amount exceeded");
             }
 

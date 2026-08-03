@@ -153,18 +153,25 @@ if (!$permissionObj->hasPermission($userrow["user_id"], 3)) {
                     <?php $user_id = base64_encode($user_id); ?>
                     <div class="col-md-3"></div>
                     <div class="col-md-3">
-                        <a href="edit-user.php?user_id=<?php echo $user_id; ?>" class="btn btn-success w-100">
-                            <i class="bi bi-pencil-fill"></i>
-                            &nbsp
-                            Edit
-                        </a>
+                        <?php if ($permissionObj->hasPermission($userrow["user_id"], 4)) { ?>
+                            <a href="edit-user.php?user_id=<?php echo $user_id; ?>" class="btn btn-success w-100">
+                                <i class="bi bi-pencil-fill"></i>
+                                &nbsp
+                                Edit
+                            </a>
+
+                        <?php } ?>
+
                     </div>
                     <div class="col-md-3">
-                        <a href="#" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="loaduser( '<?php echo $userdetailrow['user_id']; ?>','<?php echo htmlspecialchars($userdetailrow['user_fname'].' '. $userdetailrow['user_lname'], ENT_QUOTES); ?>');">
-                                                        <i class="bi bi-trash-fill"></i>
-                                                        &nbsp
-                                                        Delete
-                                                    </a>
+                        <?php if ($permissionObj->hasPermission($userrow["user_id"], 7)) { ?>
+                            <a href="#" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="loaduser( '<?php echo $userdetailrow['user_id']; ?>','<?php echo htmlspecialchars($userdetailrow['user_fname'] . ' ' . $userdetailrow['user_lname'], ENT_QUOTES); ?>');">
+                                <i class="bi bi-trash-fill"></i>
+                                &nbsp
+                                Delete
+                            </a>
+                        <?php } ?>
+
                     </div>
                     <div class="col-md-3"></div>
                 </div>
