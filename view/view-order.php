@@ -19,6 +19,13 @@ $orderItemsResult = $orderObj->getOrderItems($order_id);
 $paymentResult = $orderObj->getOrderPayments($order_id);
 
 $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 18)) {
+    header("Location: access_denied.php");
+    exit();
+}
 ?>
 
 <html>
@@ -334,34 +341,45 @@ $orderStatusLogResult = $orderObj->getOrderStatusLogs($order_id);
                             if ($orderrow['status_id'] != "0" && $orderrow['status_id'] != "15") {
 
                             ?>
-                                <div class="col-md-2">
-                                    <button href="#" class="btn btn-success w-100"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#addNewPaymentModal">
-                                        <i class="bi bi-credit-card"></i> Add Payment
-                                    </button>
-                                </div>
 
-                                <?php if ($orderrow['status_id'] == "1") { ?>
-
+                                <?php if ($permissionObj->hasPermission($userrow["user_id"], 20)) { ?>
                                     <div class="col-md-2">
-                                        <button href="#" class="btn w-100" style="background-color: #0D6EFD;"
+                                        <button href="#" class="btn btn-success w-100"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#confirmModal">
-                                            <i class="bi bi-check-lg"></i> Confirm
+                                            data-bs-target="#addNewPaymentModal">
+                                            <i class="bi bi-credit-card"></i> Add Payment
                                         </button>
                                     </div>
                                 <?php } ?>
 
-                                <?php if ($orderrow['status_id'] <= "2") { ?>
-                                    <div class="col-md-2">
-                                        <button href="#" type="button" id="cancelBtn" class="btn btn-danger w-100"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#cancelModal">
-                                            <i class="bi bi-slash-circle"></i> Cancel
-                                        </button>
-                                    </div>
+
+
+                                <?php if ($permissionObj->hasPermission($userrow["user_id"], 19)) { ?>
+
+                                    <?php if ($orderrow['status_id'] == "1") { ?>
+
+                                        <div class="col-md-2">
+                                            <button href="#" class="btn w-100" style="background-color: #0D6EFD;"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#confirmModal">
+                                                <i class="bi bi-check-lg"></i> Confirm
+                                            </button>
+                                        </div>
+                                    <?php } ?>
+
+                                    <?php if ($orderrow['status_id'] <= "2") { ?>
+                                        <div class="col-md-2">
+                                            <button href="#" type="button" id="cancelBtn" class="btn btn-danger w-100"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#cancelModal">
+                                                <i class="bi bi-slash-circle"></i> Cancel
+                                            </button>
+                                        </div>
+                                    <?php } ?>
+
                                 <?php } ?>
+
+
                             <?php
                             }
 

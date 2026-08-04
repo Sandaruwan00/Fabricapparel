@@ -246,7 +246,7 @@ switch ($status) {
             $msg = base64_encode($msg);
         ?>
             <script>
-                window.location = "../view/edit-user.php?user_id=<?php echo base64_encode($user_id); ?>&msg=<?php echo $msg; ?>";
+                window.location = "../view/view-user.php?user_id=<?php echo base64_encode($user_id); ?>&msg=<?php echo $msg; ?>";
             </script>
         <?php
 

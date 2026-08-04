@@ -11,6 +11,14 @@ if (!$permissionObj->hasPermission($userrow["user_id"], 15)) {
     exit();
 }
 
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 23)) {
+    header("Location: access_denied.php");
+    exit();
+}
+
 class OrderRefundReport extends FPDF
 {
     public $startDate;

@@ -22,6 +22,13 @@ if (isset($_GET["company_id"])) {
     }
 }
 
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 16)) {
+    header("Location: access_denied.php");
+    exit();
+}
+
 $buyerResult = $buyerObj->getAllBuyers();
 
 $priceObj = new Price();

@@ -55,6 +55,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <?php
 
+// get user information from session
+$userrow = $_SESSION["user"];
+
 include_once '../model/permission_model.php';
 $permissionObj = new Permission();
 if (!$permissionObj->hasPermission($userrow["user_id"], 10)) {

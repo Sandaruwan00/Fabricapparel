@@ -3,6 +3,16 @@ include_once '../commons/session.php';
 include_once '../model/order_model.php';
 include '../commons/fpdf186/fpdf.php';
 
+// get user information from session
+$userrow = $_SESSION["user"];
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 23)) {
+    header("Location: access_denied.php");
+    exit();
+}
+
 class OrderStageReport extends FPDF
 {
     public $startDate;

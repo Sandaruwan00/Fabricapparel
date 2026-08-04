@@ -8,6 +8,13 @@ $orderObj = new Order();
 $orderPaymentResult = $orderObj->getAllOrderPayments();
 $pendingCount = $orderObj->getPendingOrderPaymentsCount();
 $badge = $pendingCount->fetch_assoc();
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 21)) {
+    header("Location: access_denied.php");
+    exit();
+}
 ?>
 
 <html>
