@@ -26,7 +26,7 @@ $moduleResult = $moduleObj->getRoleModules($userrow["user_role"]);
         <?php $pageName = "DASHBOARD"; ?>
         <?php include_once "../includes/header_row_includes.php"; ?>
 
-        <div class="row g-4 mt-1">
+        <div class="row g-4">
             <?php while ($module_row = $moduleResult->fetch_assoc()) { ?> 
                 <div class="col-md-3">
                     <a href="<?php echo $module_row['module_url']; ?>" class="text-decoration-none text-dark">

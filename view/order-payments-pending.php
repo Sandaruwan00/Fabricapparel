@@ -65,6 +65,24 @@ $badge = $pendingCount->fetch_assoc();
 
         <div class="row">&nbsp;</div>
 
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label class="form-label">From Date</label>
+                <input type="date" id="minDate" class="form-control">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">To Date</label>
+                <input type="date" id="maxDate" class="form-control">
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-secondary" id="clearDate">
+                    Clear
+                </button>
+            </div>
+        </div>
+
         <!-- Table -->
         <div class="row">
             <div class="col-md-12">
@@ -249,9 +267,50 @@ document.addEventListener("DOMContentLoaded", function () {
 <script src="../js/datatable/dataTables.js"></script>
 
 <script>
-    $(document).ready(function() {
-        $("#ordertable").DataTable();
+    $(document).ready(function () {
+
+    // Custom filter
+    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+
+        let min = $("#minDate").val();
+        let max = $("#maxDate").val();
+
+        // Payment Date column (second column = index 1)
+        let paymentDate = data[1].substring(0,10);
+
+        if (paymentDate.includes("/")) {
+            let parts = paymentDate.split("/");
+            paymentDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+        }
+
+        if (min === "" && max === "")
+            return true;
+
+        if (min === "" && paymentDate <= max)
+            return true;
+
+        if (max === "" && paymentDate >= min)
+            return true;
+
+        if (paymentDate >= min && paymentDate <= max)
+            return true;
+
+        return false;
     });
+
+    let table = $("#ordertable").DataTable();
+
+    $("#minDate,#maxDate").change(function () {
+        table.draw();
+    });
+
+    $("#clearDate").click(function () {
+        $("#minDate").val("");
+        $("#maxDate").val("");
+        table.draw();
+    });
+
+});
 
     // Hide message
     setTimeout(() => {
