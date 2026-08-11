@@ -3,6 +3,8 @@ include '../commons/session.php';
 include '../model/planning_model.php';
 include '../model/stock_model.php';
 include '../model/order_model.php';
+include_once '../model/permission_model.php';
+
 
 $userrow = $_SESSION["user"];
 
@@ -20,6 +22,7 @@ $status = $_GET["status"];
 $planObj = new Planning();
 $stockObj = new Stock();
 $orderObj = new Order();
+$permissionObj = new Permission();
 
 switch ($status) {
     case "add_plan":
@@ -33,6 +36,9 @@ switch ($status) {
         $qtys = $_POST['qty'] ?? [];
 
         try {
+            if (!$permissionObj->hasPermission($userrow["user_id"], 24)) {
+                throw new Exception("Access Denied");
+            }
 
             if (empty($stock_item_ids)) {
                 throw new Exception("Stock items cannot be empty!");
@@ -92,6 +98,9 @@ switch ($status) {
 
 
         try {
+            if (!$permissionObj->hasPermission($userrow["user_id"], 27)) {
+                throw new Exception("Access Denied");
+            }
 
             if (!$remarks) {
                 throw new Exception("Remarks cannot be empty!");
@@ -108,13 +117,13 @@ switch ($status) {
             $plan_id = base64_encode($plan_id);
 
 
-            ?>
+        ?>
             <script>
                 window.location = "../view/view-plan.php?plan_id=<?php echo $plan_id; ?>&msg=<?php echo $msg; ?>";
             </script>
         <?php
-            
-            
+
+
         } catch (Exception $ex) {
             $msg = $ex->getMessage();
             $msg = base64_encode($msg);
@@ -127,10 +136,10 @@ switch ($status) {
         }
 
         break;
-    
-    
-    
-        case "approve_plan":
+
+
+
+    case "approve_plan":
 
         $plan_id = $_POST["plan_id"];
         $stock_request_id = $_POST["stock_request_id"];
@@ -141,6 +150,10 @@ switch ($status) {
 
 
         try {
+
+            if (!$permissionObj->hasPermission($userrow["user_id"], 27)) {
+                throw new Exception("Access Denied");
+            }
 
             $planObj->approvePlan($plan_id, "Approved");
             $orderObj->updateOrderStatus($order_id, $user_id, $status_id, $remarks);
@@ -153,13 +166,13 @@ switch ($status) {
             $plan_id = base64_encode($plan_id);
 
 
-            ?>
+        ?>
             <script>
                 window.location = "../view/view-plan.php?plan_id=<?php echo $plan_id; ?>&msg=<?php echo $msg; ?>";
             </script>
         <?php
-            
-            
+
+
         } catch (Exception $ex) {
             $msg = $ex->getMessage();
             $msg = base64_encode($msg);
@@ -168,7 +181,7 @@ switch ($status) {
             <script>
                 window.location = "../view/view-plan.php?plan_id=<?php echo $plan_id; ?>&msg=<?php echo $msg; ?>";
             </script>
-        <?php
+<?php
         }
 
         break;

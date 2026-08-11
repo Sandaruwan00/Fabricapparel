@@ -7,6 +7,13 @@ $userrow = $_SESSION["user"];
 
 $orderObj = new Order();
 $orderResult = $orderObj->getAllConfirmedOrders();
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 24)) {
+    header("Location: access_denied.php");
+    exit();
+}
 ?>
 
 <html>

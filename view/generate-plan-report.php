@@ -5,6 +5,16 @@ include_once '../model/planning_model.php';
 include_once '../model/stock_model.php';
 include '../commons/fpdf186/fpdf.php';
 
+// get user information from session
+$userrow = $_SESSION["user"];
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 28)) {
+    header("Location: access_denied.php");
+    exit();
+}
+
 class PlanReport extends FPDF
 {
     public $startDate;

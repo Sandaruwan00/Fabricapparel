@@ -9,6 +9,12 @@ $userrow = $_SESSION["user"];
 $planObj = new Planning();
 $planResult = $planObj->getAllPlans();
 
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 25)) {
+    header("Location: access_denied.php");
+    exit();
+}
 ?>
 
 <html>

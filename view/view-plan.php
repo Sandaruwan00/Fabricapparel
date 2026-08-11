@@ -21,6 +21,13 @@ $stockRequest = $stockObj->getStockRequest($plan_id);
 $stockRequestRow = $stockRequest->fetch_assoc();
 
 $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 26)) {
+    header("Location: access_denied.php");
+    exit();
+}
 ?>
 
 <html>
@@ -212,6 +219,8 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
                             <!-- Buttons -->
                             <div class="row justify-content-end">
 
+                                <?php if ($permissionObj->hasPermission($userrow["user_id"], 27)) { ?>
+
                                 <div class="col-md-3">
                                     <button href="#" class="btn btn-success w-100"
                                         data-bs-toggle="modal"
@@ -226,6 +235,10 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
                                         <i class="bi bi-slash-circle"></i> Reject Plan
                                     </button>
                                 </div>
+
+                                <?php } ?>
+
+                                
                                 <div class="col-md-3">
                                     <button href="#" class="btn btn-primary w-100"
                                         data-bs-toggle="modal"
@@ -255,7 +268,7 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title">Reject Plam</h5>
+                    <h5 class="modal-title">Reject Plan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -410,32 +423,32 @@ $stockRequestResult = $stockObj->getStockRequestItems($plan_id);
     </script>
 
     <div class="modal fade" id="viewModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
 
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title">Order Details</h5>
-                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div id="display_data">
-                <div class="modal-body text-center">
-                    <div class="spinner-border text-secondary" role="status"></div>
-                    <p class="mt-2 text-muted">Loading order details...</p>
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Order Details</h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+
+                <div id="display_data">
+                    <div class="modal-body text-center">
+                        <div class="spinner-border text-secondary" role="status"></div>
+                        <p class="mt-2 text-muted">Loading order details...</p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+
             </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-
-
         </div>
     </div>
-</div>
 
 
-<script>
+    <script>
         function loadorder(order_id) {
 
             var url = "../controller/order_controller.php?status=load_order";
