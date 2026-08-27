@@ -6,6 +6,9 @@ $userrow = $_SESSION["user"];
 
 $stockObj = new Stock();
 $lowStockItems = $stockObj->getLowStockItems();
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
 ?>
 
 <html>
@@ -83,12 +86,14 @@ $lowStockItems = $stockObj->getLowStockItems();
                                 <td><?= $row['quantity'] . " " . $row['stock_unit_short_name']; ?></td>
                                 <td><?= $row['min_stock_level'] . " " . $row['stock_unit_short_name']; ?></td>
                                 <td>
+                                    <?php if ($permissionObj->hasPermission($userrow["user_id"], 31)) { ?>
                                     <button class="btn btn-warning btn-sm"
                                         data-bs-toggle="modal"
                                         data-bs-target="#requestModal"
                                         onclick="loadRequest('<?= $row['stock_item_id']; ?>')">
                                         Request Purchase
                                     </button>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php } ?>

@@ -6,6 +6,13 @@ $userrow = $_SESSION["user"];
 
 $stockObj = new Stock();
 $stockResult = $stockObj->getAllStocks(); // JOIN query
+
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 30)) {
+    header("Location: access_denied.php");
+    exit();
+}
 ?>
 
 <html>
@@ -32,7 +39,7 @@ $stockResult = $stockObj->getAllStocks(); // JOIN query
                     <a href="stock-list.php" class="btn btn-outline-success active">Inventory</a>
                     <a href="stock-material-request.php" class="btn btn-outline-info">Stock Requests</a>
                     <a href="stock-purchase-requests.php" class="btn btn-outline-secondary">Purchase Requests</a>
-                    <a href="generate-stock-list-report.php" class="btn btn-outline-warning">Generate Reports</a>
+                    <a href="generate-stock-list-report.php" class="btn btn-outline-warning">Generate Report</a>
                 </div>
             </div>
 
@@ -52,10 +59,11 @@ $stockResult = $stockObj->getAllStocks(); // JOIN query
                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#stockOutModal">
                     <i class="bi bi-dash-lg"></i> Stock Out
                 </button>
-
-                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#transactionModal">
-                    View Transactions
-                </button>
+                <?php if ($permissionObj->hasPermission($userrow["user_id"], 33)) { ?>
+                    <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#transactionModal">
+                        View Transactions
+                    </button>
+                <?php } ?>
             </div>
         </div>
 
@@ -106,12 +114,15 @@ $stockResult = $stockObj->getAllStocks(); // JOIN query
                                 <td class="text-center <?php echo $status_color; ?>"><?php echo $status; ?></td>
                                 <td><?php echo $row['last_updated']; ?></td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#requestModal"
-                                        onclick="loadRequest('<?= $row['stock_item_id']; ?>')">
-                                        Request Purchase
-                                    </button>
+                                    <?php if ($permissionObj->hasPermission($userrow["user_id"], 31)) { ?>
+                                        <button class="btn btn-warning btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#requestModal"
+                                            onclick="loadRequest('<?= $row['stock_item_id']; ?>')">
+                                            Request Purchase
+                                        </button>
+                                    <?php } ?>
+
                                 </td>
                             </tr>
                         <?php

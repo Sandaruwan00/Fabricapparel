@@ -8,6 +8,13 @@ $stockItemResult = $stockObj->getAllStockItems();
 $stockCategoryResult = $stockObj->getAllStockCategories();
 $stockUnitResult = $stockObj->getAllStockUnits();
 
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+if (!$permissionObj->hasPermission($userrow["user_id"], 29)) {
+    header("Location: access_denied.php");
+    exit();
+}
+
 ?>
 
 <html>
@@ -33,7 +40,7 @@ $stockUnitResult = $stockObj->getAllStockUnits();
                     <a href="stock-list.php" class="btn btn-outline-success">Inventory</a>
                     <a href="stock-material-request.php" class="btn btn-outline-info">Stock Requests</a>
                     <a href="stock-purchase-requests.php" class="btn btn-outline-secondary">Purchase Requests</a>
-                    <a href="generate-stock-material-items-report.php" class="btn btn-outline-warning">Generate Reports</a>
+                    <a href="generate-stock-material-items-report.php" class="btn btn-outline-warning">Generate Report</a>
                 </div>
             </div>
 

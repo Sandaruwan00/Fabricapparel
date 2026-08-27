@@ -16,6 +16,9 @@ $status = $_GET["status"];
 include '../model/stock_model.php';
 include '../model/order_model.php';
 
+include_once '../model/permission_model.php';
+$permissionObj = new Permission();
+
 $stockObj = new Stock();
 $orderObj = new Order();
 
@@ -527,10 +530,11 @@ switch ($status) {
                 if ($stock_request_status == "Pending") {
 
                     if (!$hasOutOfStock) {
+                        if ($permissionObj->hasPermission($userrow["user_id"], 32)) {
                 ?>
                         <button type="submit" class="btn btn-success">Issue</button>
                     <?php
-                    } else {
+                    } } else {
                     ?>
                         <span class="text-danger fw-bold">
                             Cannot issue stock because one or more requested items are out of stock.
